@@ -178,6 +178,147 @@ def get_rootdir():
 
     return rootdir
 
+
+def get_hostname():
+    hostname_pattern_found = 0
+    hostname = ""
+    hostname_pattern = r'(\w+)'
+    hostname_cmd = subprocess.Popen(['hostname'], stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    with hostname_cmd.stdout:
+        for line in iter(hostname_cmd.stdout.readline, ""):
+            line_contains_pattern = re.search(hostname_pattern, line)
+            if (line_contains_pattern):
+                hostname = line_contains_pattern.group(1)
+                hostname_pattern_found = 1
+    hostname_cmd.wait()
+    command_success = hostname_cmd.poll()
+    if (command_success == 0):
+        if (hostname_pattern_found):
+            logger.debug(f"Function hostname_get has returned successfully with return value {command_success}.")
+            logger.debug(f"Hostname is: {hostname}.")
+        else:
+            logger.error(f"WARNING: Hostname command has not returned successfully.  Returned:{command_success}")
+            hostname = "Unnamed_Host"
+            logger.error(f"         Script {os.path.basename(__file__)} will use name: {hostname}.")
+    else:
+        logger.error(f"WARNING: Hostname command has not returned successfully.  Returned:{command_success}")
+        hostname = "Unnamed_Host"
+        logger.error(f"         Script {os.path.basename(__file__)} will use name: {hostname}.")
+    return hostname
+
+
+def get_linux_distro():
+    linux_distro_pattern_found = 0
+    linux_distro = ""
+    linux_distro_pattern = r'Description\s*:\s*(\w+.*)'
+    linux_distro_cmd = subprocess.Popen(['lsb_release', '-a'], stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    with linux_distro_cmd.stdout:
+        for line in iter(linux_distro_cmd.stdout.readline, ""):
+            line_contains_pattern = re.search(linux_distro_pattern, line)
+            if (line_contains_pattern):
+                linux_distro = line_contains_pattern.group(1)
+                linux_distro_pattern_found = 1
+    linux_distro_cmd.wait()
+    command_success = linux_distro_cmd.poll()
+    if (command_success == 0):
+        if (linux_distro_pattern_found):
+            logger.debug(f"Function linux_distro_get has returned successfully with return value {command_success}.")
+            logger.debug(f"Linux Distro version is: {linux_distro}.")
+        else:
+            logger.error(f"WARNING: Linux Distro command has not returned successfully.  Returned:{command_success}")
+            linux_distro = "Unknown"
+            logger.error(f"         Script {os.path.basename(__file__)} will use Linux Distro name: {linux_distro}.")
+    else:
+        logger.error(f"WARNING: Linux Distro command has not returned successfully.  Returned:{command_success}")
+        linux_distro = "Unknown"
+        logger.error(f"         Script {os.path.basename(__file__)} will use Linux Distro name: {linux_distro}.")
+    return linux_distro
+
+
+def get_gcc_version():
+    gcc_version_pattern_found = 0
+    gcc_version = ""
+    gcc_version_pattern = r'(gcc\s+.*)'
+    gcc_version_cmd = subprocess.Popen(['gcc', '--version'], stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    with gcc_version_cmd.stdout:
+        for line in iter(gcc_version_cmd.stdout.readline, ""):
+            line_contains_pattern = re.search(gcc_version_pattern, line)
+            if (line_contains_pattern):
+                gcc_version = line_contains_pattern.group(1)
+                gcc_version_pattern_found = 1
+    gcc_version_cmd.wait()
+    command_success = gcc_version_cmd.poll()
+    if (command_success == 0):
+        if (gcc_version_pattern_found):
+            logger.debug(f"Function gcc_version_get has returned successfully with return value {command_success}.")
+            logger.debug(f"GCC version is: {gcc_version}.")
+        else:
+            logger.error(f"ERROR: GCC Compiler was not found with the pattern:{gcc_version_pattern}.")
+            logger.error(f"       Script {os.path.basename(__file__)} execution has been halted.")
+            sys.exit(1)
+    else:
+        logger.error(f"ERROR: GCC Compiler was not found with the pattern:{gcc_version_pattern}.")
+        logger.error(f"       Script {os.path.basename(__file__)} execution has been halted.")
+        sys.exit(1)
+    return gcc_version
+
+
+def get_vcs_version():
+    vcs_version_pattern_found = 0
+    vcs_version = ""
+    vcs_version_pattern = r'Compiler version = (.*)'
+    vcs_version_cmd = subprocess.Popen(['vcs', '-ID'], stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    with vcs_version_cmd.stdout:
+        for line in iter(vcs_version_cmd.stdout.readline, ""):
+            line_contains_pattern = re.search(vcs_version_pattern, line)
+            if (line_contains_pattern):
+                vcs_version = line_contains_pattern.group(1)
+                vcs_version_pattern_found = 1
+    vcs_version_cmd.wait()
+    command_success = vcs_version_cmd.poll()
+    if (command_success == 0):
+        if (vcs_version_pattern_found):
+            logger.debug(f"Function vcs_version_get has returned successfully with return value {command_success}.")
+            logger.debug(f"Synopsys VCS version is: {vcs_version}.")
+        else:
+            logger.error(f"WARNING: VCS command has not returned successfully.  Returned:{command_success}")
+            vcs_version = "Unknown"
+            logger.error(f"         Script {os.path.basename(__file__)} will use VCS version name: {vcs_version}.")
+    else:
+        logger.error(f"WARNING: VCS command has not returned successfully.  Returned:{command_success}")
+        vcs_version = "Unknown"
+        logger.error(f"         Script {os.path.basename(__file__)} will use VCS version name: {vcs_version}.")
+    return vcs_version
+
+
+def get_msim_version():
+    msim_version_pattern_found = 0
+    msim_version = ""
+    msim_version_pattern = r'(\w+.*)'
+    msim_version_cmd = subprocess.Popen(['vsim', '-version'], stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    with msim_version_cmd.stdout:
+        for line in iter(msim_version_cmd.stdout.readline, ""):
+            line_contains_pattern = re.search(msim_version_pattern, line)
+            if (line_contains_pattern):
+                msim_version = line_contains_pattern.group(1)
+                msim_version_pattern_found = 1
+    msim_version_cmd.wait()
+    command_success = msim_version_cmd.poll()
+    if (command_success == 0):
+        if (msim_version_pattern_found):
+            logger.debug(f"Function msim_version_get has returned successfully with return value {command_success}.")
+            logger.debug(f"Mentor Simulator version is: {msim_version}.")
+        else:
+            logger.error(f"WARNING: Mentor Graphics msim command has not returned successfully.  Returned:{command_success}")
+            msim_version = "Unknown"
+            logger.error(f"         Script {os.path.basename(__file__)} will use Mentor Simulator version name: {msim_version}.")
+    else:
+        logger.error(f"WARNING: Mentor Graphics msim command has not returned successfully.  Returned:{command_success}")
+        msim_version = "Unknown"
+        logger.error(f"         Script {os.path.basename(__file__)} will use Mentor Simulator version name: {msim_version}.")
+    return msim_version
+
+
 def get_email_list():
     email_list = os.getenv('EMAIL_LIST')
     if email_list is not None:
@@ -367,7 +508,7 @@ def send_email_report():
     # Get User Info for e-mail 
     #------------------------------------------------------------
     whoami_pattern = r'(^\w+)'
-    finger_pattern   = r'Name:\s*(\S+)'
+    getent_pattern   = r'\w+:\w+:\w+:\w+:(\S+),\w+:\S+:\S+'
     whoami_command = subprocess.Popen(['whoami'], stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
     with whoami_command.stdout:
         for line in iter(whoami_command.stdout.readline, ""):
@@ -378,15 +519,15 @@ def send_email_report():
     whoami_success = whoami_command.poll()
     if (whoami_success == 0):
         logger.debug(f"Found User Name: {user_name}")
-        finger_command = subprocess.Popen(['finger', user_name], stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
-        with finger_command.stdout:
-            for line in iter(finger_command.stdout.readline, ""):
-                line_contains_full_name = re.search(finger_pattern, line)
+        getent_command = subprocess.Popen(['getent', 'passwd', user_name], stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
+        with getent_command.stdout:
+            for line in iter(getent_command.stdout.readline, ""):
+                line_contains_full_name = re.search(getent_pattern, line)
                 if (line_contains_full_name):
                     user_full_name = line_contains_full_name.group(1)
-        finger_command.wait()
-        finger_success = finger_command.poll()
-        if (finger_success == 0):
+        getent_command.wait()
+        getent_success = getent_command.poll()
+        if (getent_success == 0):
             logger.debug(f"Found Full User Name: {user_full_name}")
         else:
             logger.debug(f"WARNING: User Name Not Found.  Setting name to 'user' and full name to 'user.name'.")
@@ -521,6 +662,9 @@ def send_email_report():
     html_data += html_body_text_header
     html_data += f"    Simulator used for run........................: {args.simulator}"
     html_data += html_body_text_ender
+    html_data += html_body_text_header
+    html_data += f"    Simulator Version used for run................: {simulator_version}"
+    html_data += html_body_text_ender
     if args.run_regression_locally:
         html_data += html_body_text_header
         html_data += f"    Simulation environment........................: Local"
@@ -530,7 +674,16 @@ def send_email_report():
         html_data += f"    Simulation environment........................: Farm"
         html_data += html_body_text_ender
     html_data += html_body_text_header
+    html_data += f"    Hostname of machine running simulation........: {hostname}"
+    html_data += html_body_text_ender
+    html_data += html_body_text_header
     html_data += f"    Number of CPUs/Processes selected.............: {args.max_parallel_running_process_count}"
+    html_data += html_body_text_ender
+    html_data += html_body_text_header
+    html_data += f"    Linux Distribution Running on host............: {linux_distro}"
+    html_data += html_body_text_ender
+    html_data += html_body_text_header
+    html_data += f"    GCC Compiler Version on host..................: {gcc_version}"
     html_data += html_body_text_ender
     html_data += html_body_text_header
     html_data += f"    Package of tests run..........................: {args.package}"
@@ -935,11 +1088,11 @@ def sim_farm_process_normal(index, test, test_dir_top, simulator):
     logger.info(f"   Farm process {index_string} for test <{test_name_extracted:.<{longest_test_name}}> date/time started....: {sim_start}")
     if (os.path.exists(test_file)):
         if (simulator == 'vcs'):
-            arc_submit_command_line = f"arc submit -PE flow/sw/bigmem mem=20000 -- sh {test_file} {test_param}"
+            arc_submit_command_line = f"arc submit -PE flow/sw/bigmem ostype/suse15 mem=20000 -- sh {test_file} {test_param}"
         elif (simulator == 'vcsmx'):
-            arc_submit_command_line  = f"arc submit -PE flow/sw/bigmem mem=20000 -- sh {test_file} {test_param} VCSMX=1"
+            arc_submit_command_line  = f"arc submit -PE flow/sw/bigmem ostype/suse15 mem=20000 -- sh {test_file} {test_param} VCSMX=1"
         else:
-            arc_submit_command_line = f"arc submit -PE flow/sw/bigmem mem=20000 -- sh {test_file} {test_param} MSIM=1"
+            arc_submit_command_line = f"arc submit -PE flow/sw/bigmem ostype/suse15 mem=20000 -- sh {test_file} {test_param} MSIM=1"
         arc_submit = subprocess.Popen(arc_submit_command_line.split(), stdout=subprocess.PIPE, bufsize=1, universal_newlines=True, env=dict(os.environ))
         with arc_submit.stdout:
             for line in iter(arc_submit.stdout.readline, ""):
@@ -1028,11 +1181,11 @@ def sim_farm_process_pmci(index, test, test_dir_top, simulator):
     logger.info(f"   Farm process {index_string} for test <{test_name_extracted:.<{longest_test_name}}> date/time started....: {sim_start}")
     if (os.path.exists(test_file)):
         if (simulator == 'vcs'):
-            arc_submit_command_line = f"arc submit -PE flow/sw/bigmem mem=20000 -- sh {test_file} {test_param}"
+            arc_submit_command_line = f"arc submit -PE flow/sw/bigmem ostype/suse15 mem=20000 -- sh {test_file} {test_param}"
         elif (simulator == 'vcsmx'):
-            arc_submit_command_line  = f"arc submit -PE flow/sw/bigmem mem=20000 -- sh {test_file} {test_param} VCSMX=1"
+            arc_submit_command_line  = f"arc submit -PE flow/sw/bigmem ostype/suse15 mem=20000 -- sh {test_file} {test_param} VCSMX=1"
         else:
-            arc_submit_command_line = f"arc submit -PE flow/sw/bigmem mem=20000 -- sh {test_file} {test_param} MSIM=1"
+            arc_submit_command_line = f"arc submit -PE flow/sw/bigmem ostype/suse15 mem=20000 -- sh {test_file} {test_param} MSIM=1"
         arc_submit = subprocess.Popen(arc_submit_command_line.split(), stdout=subprocess.PIPE, bufsize=1, universal_newlines=True, env=dict(os.environ))
         with arc_submit.stdout:
             for line in iter(arc_submit.stdout.readline, ""):
@@ -1134,16 +1287,28 @@ if __name__ == "__main__":
     parser.add_argument('-b', '--board_name', dest='board_name', choices=['n6000','n6001','fseries-dk','iseries-dk'], default='n6001',  help='Board name. (Default: %(default)s)')
     parser.add_argument('-e', '--email_list', dest='email_list', action='store_true', help='To send mail to multiple receipients')
     args = parser.parse_args()
+    rootdir = get_rootdir()
+    hostname = get_hostname()
+    linux_distro = get_linux_distro()
+    gcc_version = get_gcc_version()
+    if ((args.simulator == 'vcs') or (args.simulator == 'vcsmx')):
+        simulator_version = get_vcs_version()
+    else:
+        simulator_version = get_msim_version()
     logger.info(f">>> Running Unit Test Regression Run Python Script: {os.path.basename(__file__)}")
     logger.info(f"    Begin running at date/time..............: {regression_run_start}")
     logger.info(f"    Simulator used for run..................: {args.simulator}")
+    logger.info(f"    Simulator Version used for run..........: {simulator_version}")
     if args.run_regression_locally:
         logger.info(f"    Simulation environment..................: Local")
     else:
         logger.info(f"    Simulation environment..................: Farm")
+
+    logger.info(f"    Hostname of machine running simulation..: {hostname}")
     logger.info(f"    Number of CPUs/Processes selected.......: {args.max_parallel_running_process_count}")
+    logger.info(f"    Linux Distrubution Running on host......: {linux_distro}")
+    logger.info(f"    GCC Compiler Version on host............: {gcc_version}")
     logger.info(f"    Package of Tests to run.................: {args.package}")
-    rootdir = get_rootdir()
     logger.info(f"      OFS Root Directory is........: {rootdir}")
     if args.email_list:
        email_list = get_email_list()
