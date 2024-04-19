@@ -5,6 +5,7 @@
 import argparse
 import subprocess
 import logging
+from logging.handlers import QueueHandler, QueueListener
 import multiprocessing
 import time
 import datetime
@@ -319,6 +320,32 @@ def get_msim_version():
     return msim_version
 
 
+def scan_qsf_for_include(item):
+    qsf_dir = rootdir + "/sim/scripts/qip_gen/quartus_proj_dir"
+    qsf_file = qsf_dir + "/" + "ofs_top.qsf"
+    item_pattern = r'^\s*set_global_assignment\s+-name\s+VERILOG_MACRO\s+"' + f"{item}" + r'"'
+    is_item_found = False
+    if (os.path.exists(qsf_file)):
+        logger.debug(f"QSF SCAN: File:{qsf_file}")
+    else:
+        logger.error(f"ERROR: Generated Simulation/Project QSF File NOT found...: {qsf_file}")
+        logger.error(f"       Script {os.path.basename(__file__)} execution has been halted.") 
+        sys.exit(1)
+    try:
+        with open(qsf_file) as file_object:
+            for line in file_object:
+                line = line.rstrip()
+                item_pattern_found = re.search(item_pattern,line)
+                if (item_pattern_found):
+                    is_item_found = True
+                    break
+    except FileNotFoundError:
+        logger.error(f"ERROR: Generated Simulation/Project QSF File NOT found...: {qsf_file}")
+        logger.error(f"       Script {os.path.basename(__file__)} execution has been halted.") 
+        sys.exit(1)
+    return is_item_found
+
+
 def get_email_list():
     email_list = os.getenv('EMAIL_LIST')
     if email_list is not None:
@@ -331,7 +358,6 @@ def get_email_list():
         logger.error(f"ERROR: OFS root directory variable $email_list is not set in this shell.")
         sys.exit(1)
     return email_list
-            
 
 
 def get_last_commit():
@@ -362,12 +388,43 @@ def get_last_commit():
     return commit
 
 
+def get_fim_variant():
+    #top_fim_gen_dir = rootdir + "/sim/scripts"
+    fim_variant_cmd_line = f"stat {top_fim_gen_dir}/qip_gen"
+    fim_variant_found = 0
+    fim_variant = ""
+    fim_variant_pattern = r'File:\s+.*qip_gen\s*->\s*.*qip_gen_(\w+)'
+    fim_variant_discovery_command = subprocess.Popen(fim_variant_cmd_line.split(), stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    with fim_variant_discovery_command.stdout:
+        for line in iter(fim_variant_discovery_command.stdout.readline, ""):
+            line_contains_pattern = re.search(fim_variant_pattern,line)
+            if (line_contains_pattern):
+                fim_variant = line_contains_pattern.group(1)
+                fim_variant_found = 1
+    fim_variant_discovery_command.wait()
+    command_success = fim_variant_discovery_command.poll()
+    if (command_success == 0):
+        if (fim_variant_found):
+            logger.debug(f"FIM Variant search has returned successfully with return value {command_success}.")
+            logger.debug(f"FIM Variant is: {fim_variant}.")
+        else:
+            logger.error(f"ERROR: FIM Variant could not be found.")
+            logger.error(f"       Script {os.path.basename(__file__)} execution has been halted.") 
+            sys.exit(1)
+    else:
+        logger.error(f"ERROR: FIM Variant directory stat command has failed: {fim_variant_cmd_line}")
+        logger.error(f"       Script {os.path.basename(__file__)} execution has been halted.") 
+        sys.exit(1)
+    return fim_variant
+
+
 def find_files(filename, search_top_dir):
     found_file_list = []
     for root_dir, dir_local, files in os.walk(search_top_dir):
         if filename in files:
             found_file_list.append(root_dir)
     return found_file_list
+
 
 def generate_sim_files():
     sim_files_path=rootdir+ "/" + "ofs-common" + "/" + "scripts" + "/" + "common" + "/" + "sim" + "/" + "gen_sim_files.sh"
@@ -381,8 +438,23 @@ def generate_sim_files():
     files = subprocess.Popen(sim_files.split(), stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
     files.wait()
 
+
+def remove_matching_tests(working_test_list,patterns):
+    local_test_list = working_test_list.copy()
+    logger.debug(">>> Removing tests...")
+    for pattern in patterns:
+        logger.debug(f"        Pattern:[{pattern}]")
+        for test in local_test_list[:]:
+            test_contains_pattern = re.search(pattern,test)
+            if (test_contains_pattern):
+                local_test_list.remove(test)
+                logger.debug(f"            Removing test:{test}")
+    return local_test_list
+
+
 def create_test_list():
     working_test_list = []
+    pre_filtered_test_list = []
     filtered_test_list = []
     logger.debug(f"CTL: Package - {args.package}")
     test_list_file = top_test_dir + "/list.txt"
@@ -445,9 +517,42 @@ def create_test_list():
         else:
             working_test_list = find_files("set_params.sh",top_test_dir)
             if (args.package == "all"):
+                test_remove_patterns = []
                 for test in working_test_list:
                     test_path_split = test.split("/")
-                    filtered_test_list.append(test_path_split[-1])                
+                    pre_filtered_test_list.append(test_path_split[-1])                
+                if (fim_variant == "fseries-dk"):
+                    if not qsf_includes_pmci:
+                        test_remove_patterns.append(r'^pmci')
+                    if not qsf_includes_ddr4:
+                        test_remove_patterns.append(r'he_mem_lb')
+                        test_remove_patterns.append(r'^mem_')
+                    if not qsf_includes_hssi:
+                        test_remove_patterns.append(r'^he_null')
+                        test_remove_patterns.append(r'^hssi_')
+                    filtered_test_list = remove_matching_tests(pre_filtered_test_list,test_remove_patterns)
+                elif (fim_variant == "iseries-dk"):
+                    if not qsf_includes_pmci:
+                        test_remove_patterns.append(r'^pmci')
+                    if not qsf_includes_ddr4:
+                        test_remove_patterns.append(r'he_mem_lb')
+                        test_remove_patterns.append(r'^mem_')
+                    if not qsf_includes_hssi:
+                        test_remove_patterns.append(r'^he_null')
+                        test_remove_patterns.append(r'^hssi_')
+                    filtered_test_list = remove_matching_tests(pre_filtered_test_list,test_remove_patterns)
+                else:
+                    test_remove_patterns.append(r'pmci_multi_master')
+                    test_remove_patterns.append(r'pmci_qsfp_telemetry')
+                    if not qsf_includes_pmci:
+                        test_remove_patterns.append(r'^pmci')
+                    if not qsf_includes_ddr4:
+                        test_remove_patterns.append(r'he_mem_lb')
+                        test_remove_patterns.append(r'^mem_')
+                    if not qsf_includes_hssi:
+                        test_remove_patterns.append(r'^he_null')
+                        test_remove_patterns.append(r'^hssi_')
+                    filtered_test_list = remove_matching_tests(pre_filtered_test_list,test_remove_patterns)
             else:
                 test_dir_pattern = "\/(" + args.package + r'\w+)$'
                 logger.debug(f"Unit Test Search Pattern: {test_dir_pattern}")
@@ -659,6 +764,33 @@ def send_email_report():
     html_data += html_body_text_header
     html_data += f">>> Running Unit Test Regression Run Python Script: {os.path.basename(__file__)}"
     html_data += html_body_text_ender
+    html_data += html_body_text_header
+    html_data += f"    FIM Variant detected in sim generation........: {fim_variant}"
+    html_data += html_body_text_ender
+    if (qsf_includes_ddr4):
+        html_data += html_body_text_header
+        html_data += f"    Design contains DDR4..........................:   DDR4 Included"
+        html_data += html_body_text_ender
+    else:
+        html_data += html_body_text_header
+        html_data += f"    Design contains DDR4..........................:   None"
+        html_data += html_body_text_ender
+    if (qsf_includes_pmci):
+        html_data += html_body_text_header
+        html_data += f"    Design contains PMCI..........................:   PMCI Included"
+        html_data += html_body_text_ender
+    else:
+        html_data += html_body_text_header
+        html_data += f"    Design contains PMCI..........................:   None"
+        html_data += html_body_text_ender
+    if (qsf_includes_hssi):
+        html_data += html_body_text_header
+        html_data += f"    Design contains HSSI..........................:   HSSI Included"
+        html_data += html_body_text_ender
+    else:
+        html_data += html_body_text_header
+        html_data += f"    Design contains HSSI..........................:   None"
+        html_data += html_body_text_ender
     html_data += html_body_text_header
     html_data += f"    Simulator used for run........................: {args.simulator}"
     html_data += html_body_text_ender
@@ -986,6 +1118,7 @@ def print_results():
 
 
 def sim_process_normal(index, test, test_dir_top, simulator):
+    logger = logging.getLogger('coms')
     sim_elapsed = datetime.timedelta(seconds = 0)
     total_processes = len(all_tests)-1
     length_index_field = len(str(total_processes))
@@ -1024,6 +1157,7 @@ def sim_process_normal(index, test, test_dir_top, simulator):
 
 
 def sim_process_pmci(index, test, test_dir_top, simulator):
+    logger = logging.getLogger('coms')
     sim_elapsed = datetime.timedelta(seconds = 0)
     total_processes = len(all_tests)-1
     length_index_field = len(str(total_processes))
@@ -1062,6 +1196,7 @@ def sim_process_pmci(index, test, test_dir_top, simulator):
 
 
 def sim_farm_process_normal(index, test, test_dir_top, simulator):
+    logger = logging.getLogger('coms')
     arc_submit_return = r'(\w+)'
     arc_submit_return_found = False
     arc_job_pattern = r'id\s*:\s*(\w+)'
@@ -1125,7 +1260,7 @@ def sim_farm_process_normal(index, test, test_dir_top, simulator):
                             arc_job_status = line_contains_arc_job_status_pattern.group(1)
                             if (arc_job_status != arc_job_last_status):
                                 logger.info(f"   Farm process {index_string} for test <{test_name_extracted:.<{longest_test_name}}> process_status.......: {arc_job_status}")
-                                if (arc_job_status == "done") or (arc_job_status == "error"):
+                                if (arc_job_status == "done") or (arc_job_status == "error") or (arc_job_status == "dying") or (arc_job_status == "killed"):
                                     arc_job_done = True
                         if (line_contains_arc_job_start_time_pattern):
                             arc_job_start_time = line_contains_arc_job_start_time_pattern.group(1)
@@ -1154,6 +1289,7 @@ def sim_farm_process_normal(index, test, test_dir_top, simulator):
 
 
 def sim_farm_process_pmci(index, test, test_dir_top, simulator):
+    logger = logging.getLogger('coms')
     arc_submit_return = r'(\w+)'
     arc_submit_return_found = False
     arc_job_pattern = r'id\s*:\s*(\w+)'
@@ -1218,7 +1354,7 @@ def sim_farm_process_pmci(index, test, test_dir_top, simulator):
                             arc_job_status = line_contains_arc_job_status_pattern.group(1)
                             if (arc_job_status != arc_job_last_status):
                                 logger.info(f"   Farm process {index_string} for test <{test_name_extracted:.<{longest_test_name}}> process_status.......: {arc_job_status}")
-                                if (arc_job_status == "done") or (arc_job_status == "error"):
+                                if (arc_job_status == "done") or (arc_job_status == "error") or (arc_job_status == "dying") or (arc_job_status == "killed"):
                                     arc_job_done = True
                         if (line_contains_arc_job_start_time_pattern):
                             arc_job_start_time = line_contains_arc_job_start_time_pattern.group(1)
@@ -1246,15 +1382,23 @@ def sim_farm_process_pmci(index, test, test_dir_top, simulator):
     queue_pmci.put((test_name_extracted, sim_elapsed, arc_job_id, arc_job_status, arc_job_host_name, arc_job_return_code))
 
 
+def process_init(q):
+    queue_handler = QueueHandler(q)
+    logger = logging.getLogger('coms')
+    logger.setLevel(logging.INFO)
+    logger.addHandler(queue_handler)
+
+
 if __name__ == "__main__":
     test_times_dict = {}
     test_info_dict = {}
     test_results = []
+    qsf_includes_ddr4 = False
+    qsf_includes_pmci = False
+    qsf_includes_hssi = False
     regression_run_start = datetime.datetime.now()
+    msg_queue = multiprocessing.Queue()
     format = "%(asctime)s: %(message)s"
-    logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
-    #logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter(format)
     stdout_handler = logging.StreamHandler(sys.stdout)
     stdout_handler.setLevel(logging.INFO)
@@ -1264,6 +1408,12 @@ if __name__ == "__main__":
     file_handler.setLevel(logging.INFO)
     #file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
+    queue_listener = QueueListener(msg_queue,stdout_handler,file_handler)
+    queue_listener.start()
+    queue_handler = QueueHandler(msg_queue)
+    logger = logging.getLogger('std')
+    logger.setLevel(logging.INFO)
+    #logger.setLevel(logging.DEBUG)
     logger.addHandler(file_handler)
     logger.addHandler(stdout_handler)
     parser = argparse.ArgumentParser(
@@ -1288,15 +1438,33 @@ if __name__ == "__main__":
     parser.add_argument('-e', '--email_list', dest='email_list', action='store_true', help='To send mail to multiple receipients')
     args = parser.parse_args()
     rootdir = get_rootdir()
+    top_fim_gen_dir = rootdir + "/sim/scripts"
     hostname = get_hostname()
     linux_distro = get_linux_distro()
     gcc_version = get_gcc_version()
+    fim_variant = get_fim_variant()
+    qsf_includes_ddr4 = scan_qsf_for_include("INCLUDE_DDR4")
+    qsf_includes_pmci = scan_qsf_for_include("INCLUDE_PMCI")
+    qsf_includes_hssi = scan_qsf_for_include("INCLUDE_HSSI")
     if ((args.simulator == 'vcs') or (args.simulator == 'vcsmx')):
         simulator_version = get_vcs_version()
     else:
         simulator_version = get_msim_version()
     logger.info(f">>> Running Unit Test Regression Run Python Script: {os.path.basename(__file__)}")
     logger.info(f"    Begin running at date/time..............: {regression_run_start}")
+    logger.info(f"    FIM Variant detected in sim generation..: {fim_variant}")
+    if (qsf_includes_ddr4):
+        logger.info(f"      Design contains DDR4..................:   DDR4 Included")
+    else:
+        logger.info(f"      Design contains DDR4..................:   None")
+    if (qsf_includes_pmci):
+        logger.info(f"      Design contains PMCI..................:   PMCI Included")
+    else:
+        logger.info(f"      Design contains PMCI..................:   None")
+    if (qsf_includes_hssi):
+        logger.info(f"      Design contains HSSI..................:   HSSI Included")
+    else:
+        logger.info(f"      Design contains HSSI..................:   None")
     logger.info(f"    Simulator used for run..................: {args.simulator}")
     logger.info(f"    Simulator Version used for run..........: {simulator_version}")
     if args.run_regression_locally:
@@ -1309,7 +1477,7 @@ if __name__ == "__main__":
     logger.info(f"    Linux Distrubution Running on host......: {linux_distro}")
     logger.info(f"    GCC Compiler Version on host............: {gcc_version}")
     logger.info(f"    Package of Tests to run.................: {args.package}")
-    logger.info(f"      OFS Root Directory is........: {rootdir}")
+    logger.info(f"      OFS Root Directory is.......: {rootdir}")
     if args.email_list:
        email_list = get_email_list()
     git_commit = get_last_commit()
@@ -1350,7 +1518,9 @@ if __name__ == "__main__":
             logger.info(f"          Beginning Test Regression with {total_processes_to_run} processes.")
             logger.info(f"          Parallel Running Process Count limited to {args.max_parallel_running_process_count} processes.")
             queue_normal = multiprocessing.Queue()
-            pool_normal = multiprocessing.Pool(processes=args.max_parallel_running_process_count)
+            #pool_normal = multiprocessing.Pool(processes=args.max_parallel_running_process_count)
+            #pool_normal = multiprocessing.Pool(processes=args.max_parallel_running_process_count,process_init,[msg_queue])
+            pool_normal = multiprocessing.Pool(args.max_parallel_running_process_count,process_init,[msg_queue])
             test_items_normal = []
             for i in range(len(list_of_tests)):
                 item_normal = pool_normal.apply_async(sim_process_normal, (i, list_of_tests[i], top_test_dir, args.simulator))
@@ -1371,7 +1541,8 @@ if __name__ == "__main__":
             pool_normal.close()
             pool_normal.terminate()
             queue_pmci = multiprocessing.Queue()
-            pool_pmci = multiprocessing.Pool(2)
+            #pool_pmci = multiprocessing.Pool(2)
+            pool_pmci = multiprocessing.Pool(2,process_init,[msg_queue])
             test_items_pmci = []
             for i in range(len(pmci_problem_list_of_tests)):
                 item_pmci = pool_pmci.apply_async(sim_process_pmci, (i+ilast+1, pmci_problem_list_of_tests[i], top_test_dir, args.simulator))
@@ -1392,7 +1563,8 @@ if __name__ == "__main__":
         else:
             logger.info(f"          Beginning Farm Test Regression with {total_processes_to_run} processes.")
             queue_normal = multiprocessing.Queue()
-            pool_normal = multiprocessing.Pool(len(list_of_tests))
+            #pool_normal = multiprocessing.Pool(len(list_of_tests))
+            pool_normal = multiprocessing.Pool(len(list_of_tests),process_init,[msg_queue])
             test_items_normal = []
             for i in range(len(list_of_tests)):
                 item_normal = pool_normal.apply_async(sim_farm_process_normal, (i, list_of_tests[i], top_test_dir, args.simulator))
@@ -1413,7 +1585,8 @@ if __name__ == "__main__":
             pool_normal.close()
             pool_normal.terminate()
             queue_pmci = multiprocessing.Queue()
-            pool_pmci = multiprocessing.Pool(2)
+            #pool_pmci = multiprocessing.Pool(2)
+            pool_pmci = multiprocessing.Pool(2,process_init,[msg_queue])
             test_items_pmci = []
             for i in range(len(pmci_problem_list_of_tests)):
                 item_pmci = pool_pmci.apply_async(sim_farm_process_pmci, (i+ilast+1, pmci_problem_list_of_tests[i], top_test_dir, args.simulator))
@@ -1451,4 +1624,5 @@ if __name__ == "__main__":
         send_email_report()
     else:
         logger.info(f"Number of Unit Tests is less than or equal to zero -- there is nothing to do.")
+    queue_listener.stop()
 
