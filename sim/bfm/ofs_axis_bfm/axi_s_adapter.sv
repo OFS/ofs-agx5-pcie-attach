@@ -1754,7 +1754,7 @@ module axi_s_adapter #(
   // ---------------------------------------------------------------------------
   // Requester ID RAM 
   // ---------------------------------------------------------------------------
-  ram_1r1w  
+  fim_ram_1r1w  
   #(.DEPTH             ( NUM_TAGS_B2 )         ,// number of bits of address bus
     .WIDTH             ( 16          )         ,// number of bits of data bus
     .GRAM_MODE         ( 2'd2        )         ,// RdLatency = 1 and Wr2RdLatency = 2 
