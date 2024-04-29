@@ -54,11 +54,8 @@ logic [NUM_CH-1:0]                  in_tready;
 
 generate
    for (genvar c = 0; c < NUM_CH; c = c + 1) begin : in_pipe
-      ofs_fim_axis_pipeline #(
-             .TDATA_WIDTH(TDATA_WIDTH),
-             .TUSER_WIDTH(TUSER_WIDTH),
-             .PL_DEPTH(2) )
-       skid (
+      ofs_fim_axis_pipeline
+        skid (
              .clk,
              .rst_n,
              .axis_s(sink[c]),

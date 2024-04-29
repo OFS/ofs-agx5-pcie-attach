@@ -233,30 +233,21 @@ for(genvar p = 0; p < NUM_MUX_PORTS; p++) begin : afu_gen
          ce_rx_b_if (.clk(clk), .rst_n(rst_n[0])),
          ce_tx_a_if (.clk(clk), .rst_n(rst_n[0]));
       
-      ofs_fim_axis_pipeline #(
-         .TUSER_WIDTH (TUSER_WIDTH),
-         .TDATA_WIDTH (TDATA_WIDTH)
-      ) ce_rx_a_bridge (
+      ofs_fim_axis_pipeline ce_rx_a_bridge (
          .clk,
          .rst_n   (rst_n[0]),
          .axis_s  (mux_rx_a_if[p]),
          .axis_m  (ce_rx_a_if)
       );
 
-      ofs_fim_axis_pipeline #(
-         .TUSER_WIDTH (TUSER_WIDTH),
-         .TDATA_WIDTH (TDATA_WIDTH)
-      ) ce_rx_b_bridge (
+      ofs_fim_axis_pipeline ce_rx_b_bridge (
          .clk,
          .rst_n   (rst_n[0]),
          .axis_s  (mux_rx_b_if[p]),
          .axis_m  (ce_rx_b_if)
       );
 
-      ofs_fim_axis_pipeline #(
-         .TUSER_WIDTH (TUSER_WIDTH),
-         .TDATA_WIDTH (TDATA_WIDTH)
-      ) ce_tx_a_bridge (
+      ofs_fim_axis_pipeline ce_tx_a_bridge (
          .clk,
          .rst_n   (rst_n[0]),
          .axis_s  (ce_tx_a_if),

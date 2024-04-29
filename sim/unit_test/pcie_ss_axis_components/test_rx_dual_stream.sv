@@ -224,9 +224,9 @@ module test_rx_dual_stream
                 end
             end
         end else begin : no_crdt
-            ofs_fim_axis_pipeline #(.PL_DEPTH(0), .TDATA_WIDTH(DATA_WIDTH), .TUSER_WIDTH($bits(out_cpld_tuser)))
+            ofs_fim_axis_pipeline #(.PL_DEPTH(0))
                 conn_cpld (.clk, .rst_n, .axis_s(split_cpld), .axis_m(out_cpld));
-            ofs_fim_axis_pipeline #(.PL_DEPTH(0), .TDATA_WIDTH(DATA_WIDTH), .TUSER_WIDTH($bits(out_req_tuser)))
+            ofs_fim_axis_pipeline #(.PL_DEPTH(0))
                 conn_req (.clk, .rst_n, .axis_s(split_req), .axis_m(out_req));
         end
     endgenerate
