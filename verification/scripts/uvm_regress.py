@@ -184,6 +184,146 @@ def get_rootdir():
         sys.exit(1)
     return rootdir
 
+
+def get_hostname():
+    hostname_pattern_found = 0
+    hostname = ""
+    hostname_pattern = r'(\w+)'
+    hostname_cmd = subprocess.Popen(['hostname'], stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    with hostname_cmd.stdout:
+        for line in iter(hostname_cmd.stdout.readline, ""):
+            line_contains_pattern = re.search(hostname_pattern, line)
+            if (line_contains_pattern):
+                hostname = line_contains_pattern.group(1)
+                hostname_pattern_found = 1
+    hostname_cmd.wait()
+    command_success = hostname_cmd.poll()
+    if (command_success == 0):
+        if (hostname_pattern_found):
+            logger.debug(f"Function hostname_get has returned successfully with return value {command_success}.")
+            logger.debug(f"Hostname is: {hostname}.")
+        else:
+            logger.error(f"WARNING: Hostname command has not returned successfully.  Returned:{command_success}")
+            hostname = "Unnamed_Host"
+            logger.error(f"         Script {os.path.basename(__file__)} will use name: {hostname}.")
+    else:
+        logger.error(f"WARNING: Hostname command has not returned successfully.  Returned:{command_success}")
+        hostname = "Unnamed_Host"
+        logger.error(f"         Script {os.path.basename(__file__)} will use name: {hostname}.")
+    return hostname
+
+
+def get_linux_distro():
+    linux_distro_pattern_found = 0
+    linux_distro = ""
+    linux_distro_pattern = r'Description\s*:\s*(\w+.*)'
+    linux_distro_cmd = subprocess.Popen(['lsb_release', '-a'], stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    with linux_distro_cmd.stdout:
+        for line in iter(linux_distro_cmd.stdout.readline, ""):
+            line_contains_pattern = re.search(linux_distro_pattern, line)
+            if (line_contains_pattern):
+                linux_distro = line_contains_pattern.group(1)
+                linux_distro_pattern_found = 1
+    linux_distro_cmd.wait()
+    command_success = linux_distro_cmd.poll()
+    if (command_success == 0):
+        if (linux_distro_pattern_found):
+            logger.debug(f"Function linux_distro_get has returned successfully with return value {command_success}.")
+            logger.debug(f"Linux Distro version is: {linux_distro}.")
+        else:
+            logger.error(f"WARNING: Linux Distro command has not returned successfully.  Returned:{command_success}")
+            linux_distro = "Unknown"
+            logger.error(f"         Script {os.path.basename(__file__)} will use Linux Distro name: {linux_distro}.")
+    else:
+        logger.error(f"WARNING: Linux Distro command has not returned successfully.  Returned:{command_success}")
+        linux_distro = "Unknown"
+        logger.error(f"         Script {os.path.basename(__file__)} will use Linux Distro name: {linux_distro}.")
+    return linux_distro
+
+
+def get_gcc_version():
+    gcc_version_pattern_found = 0
+    gcc_version = ""
+    gcc_version_pattern = r'(gcc\s+.*)'
+    gcc_version_cmd = subprocess.Popen(['gcc', '--version'], stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    with gcc_version_cmd.stdout:
+        for line in iter(gcc_version_cmd.stdout.readline, ""):
+            line_contains_pattern = re.search(gcc_version_pattern, line)
+            if (line_contains_pattern):
+                gcc_version = line_contains_pattern.group(1)
+                gcc_version_pattern_found = 1
+    gcc_version_cmd.wait()
+    command_success = gcc_version_cmd.poll()
+    if (command_success == 0):
+        if (gcc_version_pattern_found):
+            logger.debug(f"Function gcc_version_get has returned successfully with return value {command_success}.")
+            logger.debug(f"GCC version is: {gcc_version}.")
+        else:
+            logger.error(f"ERROR: GCC Compiler was not found with the pattern:{gcc_version_pattern}.")
+            logger.error(f"       Script {os.path.basename(__file__)} execution has been halted.")
+            sys.exit(1)
+    else:
+        logger.error(f"ERROR: GCC Compiler was not found with the pattern:{gcc_version_pattern}.")
+        logger.error(f"       Script {os.path.basename(__file__)} execution has been halted.")
+        sys.exit(1)
+    return gcc_version
+
+
+def get_vcs_version():
+    vcs_version_pattern_found = 0
+    vcs_version = ""
+    vcs_version_pattern = r'Compiler version = (.*)'
+    vcs_version_cmd = subprocess.Popen(['vcs', '-ID'], stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    with vcs_version_cmd.stdout:
+        for line in iter(vcs_version_cmd.stdout.readline, ""):
+            line_contains_pattern = re.search(vcs_version_pattern, line)
+            if (line_contains_pattern):
+                vcs_version = line_contains_pattern.group(1)
+                vcs_version_pattern_found = 1
+    vcs_version_cmd.wait()
+    command_success = vcs_version_cmd.poll()
+    if (command_success == 0):
+        if (vcs_version_pattern_found):
+            logger.debug(f"Function vcs_version_get has returned successfully with return value {command_success}.")
+            logger.debug(f"Synopsys VCS version is: {vcs_version}.")
+        else:
+            logger.error(f"WARNING: VCS command has not returned successfully.  Returned:{command_success}")
+            vcs_version = "Unknown"
+            logger.error(f"         Script {os.path.basename(__file__)} will use VCS version name: {vcs_version}.")
+    else:
+        logger.error(f"WARNING: VCS command has not returned successfully.  Returned:{command_success}")
+        vcs_version = "Unknown"
+        logger.error(f"         Script {os.path.basename(__file__)} will use VCS version name: {vcs_version}.")
+    return vcs_version
+
+
+def get_msim_version():
+    msim_version_pattern_found = 0
+    msim_version = ""
+    msim_version_pattern = r'(\w+.*)'
+    msim_version_cmd = subprocess.Popen(['vsim', '-version'], stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    with msim_version_cmd.stdout:
+        for line in iter(msim_version_cmd.stdout.readline, ""):
+            line_contains_pattern = re.search(msim_version_pattern, line)
+            if (line_contains_pattern):
+                msim_version = line_contains_pattern.group(1)
+                msim_version_pattern_found = 1
+    msim_version_cmd.wait()
+    command_success = msim_version_cmd.poll()
+    if (command_success == 0):
+        if (msim_version_pattern_found):
+            logger.debug(f"Function msim_version_get has returned successfully with return value {command_success}.")
+            logger.debug(f"Mentor Simulator version is: {msim_version}.")
+        else:
+            logger.error(f"WARNING: Mentor Graphics msim command has not returned successfully.  Returned:{command_success}")
+            msim_version = "Unknown"
+            logger.error(f"         Script {os.path.basename(__file__)} will use Mentor Simulator version name: {msim_version}.")
+    else:
+        logger.error(f"WARNING: Mentor Graphics msim command has not returned successfully.  Returned:{command_success}")
+        msim_version = "Unknown"
+        logger.error(f"         Script {os.path.basename(__file__)} will use Mentor Simulator version name: {msim_version}.")
+    return msim_version
+
 def get_email_list():
     email_list = os.getenv('EMAIL_LIST')
     if email_list is not None:
@@ -593,10 +733,22 @@ def send_email_report():
     html_data += f"    Simulator used for run..................: {args.simulator}"
     html_data += html_body_text_ender
     html_data += html_body_text_header
+    html_data += f"    Simulator Version used for run..........: {simulator_version}"
+    html_data += html_body_text_ender
+    html_data += html_body_text_header
     html_data += f"    Begin running at date/time..............: {regression_run_start}"
     html_data += html_body_text_ender
     html_data += html_body_text_header
     html_data += f"    Regression run by user..................: {user_name} --> {full_name_caps}"
+    html_data += html_body_text_ender
+    html_data += html_body_text_header
+    html_data += f"    Hostname of machine running simulation..: {hostname}"
+    html_data += html_body_text_ender
+    html_data += html_body_text_header
+    html_data += f"    Linux Distribution Running on host......: {linux_distro}"
+    html_data += html_body_text_ender
+    html_data += html_body_text_header
+    html_data += f"    GCC Compiler Version on host............: {gcc_version}"
     html_data += html_body_text_ender
     html_data += html_body_text_header
     html_data += f"    Git Repo Root Directory is..............: {rootdir}"
@@ -1332,9 +1484,20 @@ if __name__ == "__main__":
     args = parser.parse_args()
     rootdir = get_rootdir()
     top_fim_gen_dir = rootdir + "/sim/scripts"
+    hostname = get_hostname()
+    linux_distro = get_linux_distro()
+    gcc_version = get_gcc_version()
+    if ((args.simulator == 'vcs') or (args.simulator == 'vcsmx')):
+        simulator_version = get_vcs_version()
+    else:
+        simulator_version = get_msim_version()
     logger.info(f">>> Running UVM Regression Run Python Script: {os.path.basename(__file__)}")
     logger.info(f"    Begin running at date/time..............: {regression_run_start}")
     logger.info(f"    Simulator used for run..................: {args.simulator}")
+    logger.info(f"    Simulator Version used for run..........: {simulator_version}")
+    logger.info(f"    Hostname of machine running simulation..: {hostname}")
+    logger.info(f"    Linux Distrubution Running on host......: {linux_distro}")
+    logger.info(f"    GCC Compiler Version on host............: {gcc_version}")
     logger.info(f"      Git Repo Root Directory is..: {rootdir}")
     if args.email_list:
        email_list = get_email_list()
