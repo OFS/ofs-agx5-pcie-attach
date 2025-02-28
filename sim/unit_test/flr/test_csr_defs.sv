@@ -11,6 +11,8 @@
 `ifndef __TEST_CSR_DEFS__
 `define __TEST_CSR_DEFS__
 
+`include "ofs_ip_cfg_db.vh"
+
 package test_csr_defs;
    localparam FME_DFH            = 32'h0;
    localparam FME_SCRATCHPAD0    = FME_DFH + 32'h28;
@@ -32,6 +34,8 @@ package test_csr_defs;
    //localparam EMIF_DFH_VALUE     = 64'h3000000010000009; 
    //localparam HSSI_DFH_VALUE     = 64'h300000001000100f; 
    //localparam USER_CLK_DFH_VALUE = 64'h3000010000000014;
+
+   localparam NUMBER_OF_LINKS = `OFS_FIM_IP_CFG_PCIE_SS_NUM_LINKS;
 
 endpackage
 

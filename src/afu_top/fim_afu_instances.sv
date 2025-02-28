@@ -20,8 +20,8 @@
 // HE-NULL will be instantiated on each function of LINK 1+
 
 `include "fpga_defines.vh"
+`include "ofs_ip_cfg_db.vh"
 import top_cfg_pkg::*;
-import pcie_ss_axis_pkg::*;
 
 module fim_afu_instances # (
    // System PF/VF configuration info for generating port reset vectors.
@@ -40,8 +40,8 @@ module fim_afu_instances # (
    input  logic clk,
    input  logic [PCIE_NUM_LINKS-1:0] rst_n,
 
-   input  t_axis_pcie_flr flr_req [PCIE_NUM_LINKS-1:0],
-   output t_axis_pcie_flr flr_rsp [PCIE_NUM_LINKS-1:0],
+   input  pcie_ss_axis_pkg::t_axis_pcie_flr flr_req [PCIE_NUM_LINKS-1:0],
+   output pcie_ss_axis_pkg::t_axis_pcie_flr flr_rsp [PCIE_NUM_LINKS-1:0],
 
    input  logic clk_csr,
    input  logic [PCIE_NUM_LINKS-1:0] rst_n_csr,
@@ -84,6 +84,11 @@ localparam HPS_PID = (top_cfg_pkg::PG_VFS > 0) ? 3 : 2;
 localparam TDATA_WIDTH = afu_axi_rx_a_if[0].DATA_W;
 localparam TUSER_WIDTH = afu_axi_rx_a_if[0].USER_W;
 
+`ifdef OFS_FIM_IP_CFG_PCIE_SS_FUNC_MODE_IS_DM
+  localparam PCIE_DM_ENCODING = 1;
+`else
+  localparam PCIE_DM_ENCODING = 0;
+`endif
 
 // Get the VF function level reset if VF is active for the function.
 // If VF is not active, return a constant: not in reset.
@@ -147,6 +152,7 @@ pf_vf_mux_w_params   #(
 //
 logic [NUM_MUX_PORTS-1:0]       func_pf_rst_n;
 logic [NUM_MUX_PORTS-1:0]       func_vf_rst_n;
+logic [NUM_MUX_PORTS-1:0]       port_rst_in_n;
 logic [NUM_MUX_PORTS-1:0]       port_rst_n;
 
 logic [NUM_PF-1:0]              pf_flr_rst_n;
@@ -182,7 +188,19 @@ for (genvar p = 0; p < NUM_MUX_PORTS; p++) begin : port_map
    // - PF Flr 
    // - VF Flr
    // - PCIe system reset
-   always @(posedge clk) port_rst_n[p] <= func_pf_rst_n[p] && func_vf_rst_n[p] && rst_n[0];
+   always @(posedge clk) port_rst_in_n[p] <= func_pf_rst_n[p] && func_vf_rst_n[p] && rst_n[0];
+
+   // Build a multi-cycle duplication reset tree
+   fim_dup_tree
+    #(
+      .TREE_DEPTH(3)
+      )
+     dup
+      (
+       .clk,
+       .din(port_rst_in_n[p]),
+       .dout(port_rst_n[p])
+       );
 end : port_map
    
 // ---------------------------------------------------------------------------
@@ -255,6 +273,7 @@ for(genvar p = 0; p < NUM_MUX_PORTS; p++) begin : afu_gen
       );
 
       ce_top #(
+         .PCIE_DM_ENCODING       (PCIE_DM_ENCODING),
          .CE_PF_ID               (PFVF_ROUTING_TABLE[p].pf),
          .CE_VF_ID               (PFVF_ROUTING_TABLE[p].vf),
          .CE_VF_ACTIVE           (PFVF_ROUTING_TABLE[p].vf_active),

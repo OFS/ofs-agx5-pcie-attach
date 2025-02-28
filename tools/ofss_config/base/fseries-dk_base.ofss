@@ -1,0 +1,13 @@
+[ip]
+type = ofs
+
+[settings]
+platform = n6001
+family = agilex
+fim = base_x16
+part = AGFB027R24C2E2VR2
+device_id = 6001
+
+[pcie]
+subsys_dev_id = 1
+exvf_subsysid = 1

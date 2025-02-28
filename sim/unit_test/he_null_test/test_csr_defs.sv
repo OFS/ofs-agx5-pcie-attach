@@ -12,6 +12,8 @@
 `ifndef __TEST_CSR_DEFS__
 `define __TEST_CSR_DEFS__
 
+`include "ofs_ip_cfg_db.vh"
+
 package test_csr_defs;
 
    localparam HE_NULL_SCRATCHPAD = 32'h18;
@@ -19,6 +21,7 @@ package test_csr_defs;
    localparam VIRTIO_GUID_L      = VIRTIO_DFH + 32'h8;
    localparam VIRTIO_GUID_H      = VIRTIO_DFH + 32'h10;
    localparam VIRTIO_SCRATCHPAD  = VIRTIO_DFH + 32'h18;
+   localparam NUMBER_OF_LINKS = `OFS_FIM_IP_CFG_PCIE_SS_NUM_LINKS;
 
    localparam HEM_TG_PF          = 0; 
    localparam HEM_TG_VF          = 2; 

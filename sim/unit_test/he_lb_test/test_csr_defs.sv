@@ -11,6 +11,8 @@
 `ifndef __TEST_CSR_DEFS__
 `define __TEST_CSR_DEFS__
 
+`include "ofs_ip_cfg_db.vh"
+
 package test_csr_defs;
    localparam DFH                = 64'h0;
    localparam ID_L               = 64'h8;
@@ -32,7 +34,27 @@ package test_csr_defs;
    localparam STATUS1            = 64'h168;
    localparam ERROR              = 64'h170;
    localparam STRIDE             = 64'h178;
+   localparam INFO0              = 32'h180;
+   localparam NUMBER_OF_LINKS = `OFS_FIM_IP_CFG_PCIE_SS_NUM_LINKS;
 
+   typedef struct packed {
+      logic [31:0] rsvd;
+      logic [4:0]  local_mem_bus_width_shift; // Local memory bus width (4 bytes << value)
+      logic [1:0]  bus_width_shift;           // PCIe bus width (32 bytes << value)
+      logic        atomics_supported;
+      logic [7:0]  he_lb_api_version;
+      logic [15:0] clk_mhz;
+   } t_info0;
+
+   // Host channel bus width (PCIe)
+   function automatic int bus_bytes(input t_info0 info0);
+       return 32 << info0.bus_width_shift;
+   endfunction
+
+   // Local memory bus width
+   function automatic int local_mem_bus_bytes(input t_info0 info0);
+       return 4 << info0.local_mem_bus_width_shift;
+   endfunction
 endpackage
 
 `endif

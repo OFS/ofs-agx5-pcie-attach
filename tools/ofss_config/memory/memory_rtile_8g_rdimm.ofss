@@ -1,0 +1,7 @@
+[ip]
+type = memory
+
+[settings]
+output_name = mem_ss
+preset = iseries-dk-8g-rdimm
+memory_groups = 2 

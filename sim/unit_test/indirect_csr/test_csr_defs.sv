@@ -11,6 +11,8 @@
 `ifndef __TEST_CSR_DEFS__
 `define __TEST_CSR_DEFS__
 
+`include "ofs_ip_cfg_db.vh"
+
 package test_csr_defs;
    localparam DFH           = 32'h0;
    localparam SCRATCHPAD    = DFH + 32'h8;

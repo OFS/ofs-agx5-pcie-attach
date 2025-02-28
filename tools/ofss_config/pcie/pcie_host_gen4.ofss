@@ -1,0 +1,27 @@
+##
+## Standard OFS configuration except for forcing PCIe to Gen4.
+## On Gen5-capable hardware, such as R-Tile, this configures
+## a single link using all available lanes, e.g. 1 x Gen4x16.
+## The data bus width is narrowed for Gen4, typically to 512 bits.
+##
+
+[ip]
+type = pcie
+
+[settings]
+output_name = pcie_ss
+pcie_gen = 4
+
+[pf0]
+num_vfs = 3
+bar0_address_width = 20
+vf_bar0_address_width = 20
+
+[pf1]
+
+[pf2]
+bar0_address_width = 18
+
+[pf3]
+
+[pf4]

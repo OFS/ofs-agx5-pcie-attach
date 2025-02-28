@@ -19,7 +19,6 @@
 
 `ifdef INCLUDE_HSSI
                    `include  "ofs_fim_eth_plat_defines.svh"
-                    import   ofs_fim_eth_if_pkg::*   ;
 `endif
 
 //-----------------------------------------------------------------------------------------------
@@ -29,16 +28,32 @@
 module top 
    import ofs_fim_mem_if_pkg::*;
    import top_cfg_pkg::*;
+ `ifdef INCLUDE_HSSI
+   import ofs_fim_eth_if_pkg::*;
+ `endif
 (
-                    input                                       SYS_REFCLK                        ,// System Reference Clock (100MHz)
+                    input                                       SYS_REFCLK,   // System Reference Clock (100MHz)
                                       
+// Local Memory technology interfaces
+`ifdef INCLUDE_LOCAL_MEM
 `ifdef INCLUDE_DDR4
-                    ofs_fim_emif_ddr4_if.emif                      ddr4_mem     [NUM_DDR4_CHANNELS-1:0]      ,// EMIF DDR4 x32 RDIMM (x8)
+`ifdef OFS_FIM_IP_CFG_LOCAL_MEM_DEFINES_EMIF_DDR4_PARAM_GROUP_0
+                     ofs_fim_emif_ddr4_if.emif                 ddr4_mem          [NUM_GROUP_0_DDR4_CHANNELS-1:0],
+`endif // OFS_FIM_IP_CFG_LOCAL_MEM_DEFINES_EMIF_DDR4_PARAM_GROUP_0
+`ifdef OFS_FIM_IP_CFG_LOCAL_MEM_DEFINES_EMIF_DDR4_PARAM_GROUP_1
+                     ofs_fim_emif_ddr4_group_1_if.emif         ddr4_mem_group_1     [NUM_GROUP_1_DDR4_CHANNELS-1:0],
+`endif // OFS_FIM_IP_CFG_LOCAL_MEM_DEFINES_EMIF_DDR4_PARAM_GROUP_1
 `ifdef INCLUDE_HPS
-                    ofs_fim_hps_ddr4_if.emif                       ddr4_hps                          ,
-`endif
-`endif
-
+                     ofs_fim_hps_ddr4_if.emif                  ddr4_hps,
+`endif // INCLUDE_HPS
+`endif // INCLUDE_DDR4
+`ifdef INCLUDE_HBM
+                     input                                     hbm_cattrip       [NUM_HBM_DEVICES-1:0],
+                     input [2:0]                               hbm_temp          [NUM_HBM_DEVICES-1:0],
+                     input                                     uib_refclk        [NUM_HBM_DEVICES-1:0],
+                     input                                     noc_ctrl_refclk   [NUM_HBM_DEVICES-1:0],
+`endif // INCLUDE_HBM
+`endif // INCLUDE_LOCAL_MEM
 
 `ifdef INCLUDE_HSSI                                                                              
                     //QSFP control signals
@@ -125,10 +140,11 @@ localparam PCIE_NUM_LINKS = top_cfg_pkg::FIM_NUM_LINKS;
 //-----------------------------------------------------------------------------------------------
 
 // clock signals
-wire clk_sys, clk_sys_div2, clk_sys_div4, clk_ptp_slv;
+wire clk_sys, clk_sys_div2, clk_sys_div4;
 wire clk_100m;
 wire clk_50m;
 wire clk_csr;
+wire clk_noc_fab, clk_noc_fab_wr;
 
 logic h2f_reset, h2f_reset_q;
 
@@ -147,7 +163,6 @@ logic rst_n_sys_mem;
 logic rst_n_sys_hps;
 logic [PCIE_NUM_LINKS-1:0] rst_n_100m;
 logic [PCIE_NUM_LINKS-1:0] rst_n_50m;
-logic [PCIE_NUM_LINKS-1:0] rst_n_ptp_slv;
 logic [PCIE_NUM_LINKS-1:0] rst_n_csr;
 logic [PCIE_NUM_LINKS-1:0] pwr_good_n;
 logic [PCIE_NUM_LINKS-1:0] pwr_good_csr_clk_n;
@@ -156,12 +171,15 @@ logic [PCIE_NUM_LINKS-1:0] pwr_good_csr_clk_n;
 logic         p0_ss_app_st_ctrlshadow_tvalid;
 logic [39:0]  p0_ss_app_st_ctrlshadow_tdata;
 
-always_ff @(posedge clk_sys) begin
-  rst_n_sys_pcie <= rst_n_sys;
-  rst_n_sys_afu  <= rst_n_sys;
-  rst_n_sys_mem  <= rst_n_sys[0];
-  rst_n_sys_hps  <= rst_n_sys[0];
+// These used to be registers for explicit reset duplication. Now that
+// rst_ctrl() automatically adds a duplication tree, they are simple
+// assignment. Adding a register here would just get in the way.
+assign rst_n_sys_pcie = rst_n_sys;
+assign rst_n_sys_afu  = rst_n_sys;
+assign rst_n_sys_mem  = rst_n_sys[0];
+assign rst_n_sys_hps  = rst_n_sys[0];
 
+always_ff @(posedge clk_sys) begin
   h2f_reset_q <= h2f_reset;
 end
 
@@ -209,25 +227,18 @@ ofs_fim_axi_lite_if #(.AWADDR_WIDTH(fabric_width_pkg::bpf_emif_slv_address_width
 
 
 // AXIS PCIe Subsystem Interface
-pcie_ss_axis_if   pcie_ss_axis_rx_if [PCIE_NUM_LINKS-1:0] (.clk (clk_sys));
-pcie_ss_axis_if   pcie_ss_axis_tx_if [PCIE_NUM_LINKS-1:0] (.clk (clk_sys));
-pcie_ss_axis_if   pcie_ss_axis_rxreq_if [PCIE_NUM_LINKS-1:0] (.clk (clk_sys));
+pcie_ss_axis_if   pcie_ss_axis_rx_if [PCIE_NUM_LINKS-1:0] (.clk (clk_sys),.rst_n(rst_n_sys_pcie));
+pcie_ss_axis_if   pcie_ss_axis_tx_if [PCIE_NUM_LINKS-1:0] (.clk (clk_sys),.rst_n(rst_n_sys_pcie));
+pcie_ss_axis_if   pcie_ss_axis_rxreq_if [PCIE_NUM_LINKS-1:0] (.clk (clk_sys),.rst_n(rst_n_sys_pcie));
 // TXREQ is only headers (read requests)
 pcie_ss_axis_if #(
    .DATA_W(pcie_ss_hdr_pkg::HDR_WIDTH),
    .USER_W(ofs_fim_cfg_pkg::PCIE_TUSER_WIDTH)
-) pcie_ss_axis_txreq_if[PCIE_NUM_LINKS-1:0] (.clk (clk_sys));
+) pcie_ss_axis_txreq_if[PCIE_NUM_LINKS-1:0] (.clk (clk_sys),.rst_n(rst_n_sys_pcie));
 
-// Assign correct rst_n
-for (genvar j=0; j<PCIE_NUM_LINKS; j++) begin : RST_N
-    assign pcie_ss_axis_rx_if[j].rst_n = rst_n_sys_pcie[j];
-    assign pcie_ss_axis_tx_if[j].rst_n = rst_n_sys_pcie[j];
-    assign pcie_ss_axis_rxreq_if[j].rst_n = rst_n_sys_pcie[j];
-    assign pcie_ss_axis_txreq_if[j].rst_n = rst_n_sys_pcie[j];
-end
 
-t_axis_pcie_flr   pcie_flr_req[PCIE_NUM_LINKS-1:0];
-t_axis_pcie_flr   pcie_flr_rsp[PCIE_NUM_LINKS-1:0];
+pcie_ss_axis_pkg::t_axis_pcie_flr pcie_flr_req[PCIE_NUM_LINKS-1:0];
+pcie_ss_axis_pkg::t_axis_pcie_flr pcie_flr_rsp[PCIE_NUM_LINKS-1:0];
 
 // Partial Reconfiguration FIFO Parity Error from PR Controller
 logic pr_parity_error;
@@ -242,11 +253,11 @@ ofs_uart_if hps_uart_if();
 ofs_uart_if host_uart_if();
 `endif
 
-//Completion Timeout Interface
-t_axis_pcie_cplto         axis_cpl_timeout[PCIE_NUM_LINKS-1:0];
+// Completion Timeout Interface
+pcie_ss_axis_pkg::t_axis_pcie_cplto axis_cpl_timeout[PCIE_NUM_LINKS-1:0];
 
-//Tag Mode
-t_pcie_tag_mode    tag_mode[PCIE_NUM_LINKS-1:0];
+// Tag Mode
+pcie_ss_axis_pkg::t_pcie_tag_mode tag_mode[PCIE_NUM_LINKS-1:0];
 
 
 `ifdef INCLUDE_LOCAL_MEM
@@ -259,12 +270,21 @@ logic          emif2hps_gp;
 
 //AFU EMIF AXI-MM IF
 ofs_fim_emif_axi_mm_if #(
-   .WDATA_WIDTH (ofs_fim_mem_if_pkg::AXI_MEM_WDATA_WIDTH),
-   .RDATA_WIDTH (ofs_fim_mem_if_pkg::AXI_MEM_RDATA_WIDTH),
-   .AWID_WIDTH  (ofs_fim_mem_if_pkg::AXI_MEM_ID_WIDTH),
-   .ARID_WIDTH  (ofs_fim_mem_if_pkg::AXI_MEM_ID_WIDTH),
-   .AWADDR_WIDTH(ofs_fim_mem_if_pkg::AXI_MEM_ADDR_WIDTH),
-   .ARADDR_WIDTH(ofs_fim_mem_if_pkg::AXI_MEM_ADDR_WIDTH)
+   .AWID_WIDTH   (ofs_fim_mem_if_pkg::AXI_MEM_AWID_WIDTH),
+   .AWADDR_WIDTH (ofs_fim_mem_if_pkg::AXI_MEM_AWADDR_WIDTH),
+   .AWUSER_WIDTH (ofs_fim_mem_if_pkg::AXI_MEM_AWUSER_WIDTH),
+   .AWLEN_WIDTH  (ofs_fim_mem_if_pkg::AXI_MEM_BURST_LEN_WIDTH),
+   .WDATA_WIDTH  (ofs_fim_mem_if_pkg::AXI_MEM_WDATA_WIDTH),
+   .WUSER_WIDTH  (ofs_fim_mem_if_pkg::AXI_MEM_WUSER_WIDTH),
+   .BID_WIDTH    (ofs_fim_mem_if_pkg::AXI_MEM_BID_WIDTH),
+   .BUSER_WIDTH  (ofs_fim_mem_if_pkg::AXI_MEM_BUSER_WIDTH),
+   .ARID_WIDTH   (ofs_fim_mem_if_pkg::AXI_MEM_ARID_WIDTH),
+   .ARADDR_WIDTH (ofs_fim_mem_if_pkg::AXI_MEM_ARADDR_WIDTH),
+   .ARUSER_WIDTH (ofs_fim_mem_if_pkg::AXI_MEM_ARUSER_WIDTH),
+   .ARLEN_WIDTH  (ofs_fim_mem_if_pkg::AXI_MEM_BURST_LEN_WIDTH),
+   .RDATA_WIDTH  (ofs_fim_mem_if_pkg::AXI_MEM_RDATA_WIDTH),
+   .RID_WIDTH    (ofs_fim_mem_if_pkg::AXI_MEM_RID_WIDTH),
+   .RUSER_WIDTH  (ofs_fim_mem_if_pkg::AXI_MEM_RUSER_WIDTH)
 ) afu_ext_mem_if [AFU_MEM_CHANNELS-1:0] ();
 
 `endif
@@ -464,6 +484,8 @@ qsfp_top #(
 // Configuration reset release IP
 //-----------------------------------------------------------------------------------------------
 `ifdef SIM_MODE
+   // The simulation flow may manage ninit_done in the testbench, holding it
+   // high at the start.
    assign ninit_done = 1'b0;
 `else
    cfg_mon cfg_mon (
@@ -486,9 +508,10 @@ sys_pll sys_pll (
    .outclk_0           (clk_sys                   ), // 350 MHz for x8 and 470 MHz for x16
    .outclk_1           (clk_100m                  ), // 100 MHz
    .outclk_2           (clk_sys_div2              ), // 175 MHz for x8 and 235 MHz for x16
-   .outclk_3           (clk_ptp_slv               ), // 155.56MHz
+   .outclk_3           (clk_noc_fab_wr            ), // 600 MHz for driving wr fabric internal to NOC 
    .outclk_4           (clk_50m                   ), // 50 MHz
-   .outclk_5           (clk_sys_div4              )  // 87.5 MHz for x8 and 117.5 MHz for x16
+   .outclk_5           (clk_sys_div4              ), // 87.5 MHz for x8 and 117.5 MHz for x16
+   .outclk_6           (clk_noc_fab               )  // 350 MHz for driving fabric side of NoC
 );
 
 //-----------------------------------------------------------------------------------------------
@@ -500,7 +523,6 @@ for (genvar j=0; j<PCIE_NUM_LINKS; j++) begin : PCIE_RST_CTRL
     .clk_sys             (clk_sys                  ),
     .clk_100m            (clk_100m                 ),
     .clk_50m             (clk_50m                  ),
-    .clk_ptp_slv         (clk_ptp_slv              ),
     .pll_locked          (pll_locked               ),
     .pcie_reset_status   (pcie_reset_status[j]     ),
     .pcie_cold_rst_ack_n (pcie_cold_rst_ack_n[j]   ),
@@ -510,7 +532,6 @@ for (genvar j=0; j<PCIE_NUM_LINKS; j++) begin : PCIE_RST_CTRL
     .rst_n_sys           (rst_n_sys[j]             ),  // system reset synchronous to clk_sys
     .rst_n_100m          (rst_n_100m[j]            ),  // system reset synchronous to clk_100m
     .rst_n_50m           (rst_n_50m[j]             ),  // system reset synchronous to clk_50m
-    .rst_n_ptp_slv       (rst_n_ptp_slv[j]         ),  // system reset synchronous to clk_ptp_slv 
     .pwr_good_n          (pwr_good_n[j]            ),  // system reset synchronous to clk_100m
     .pwr_good_csr_clk_n  (pwr_good_csr_clk_n[j]    ),  // power good reset synchronous to clk_sys 
     .pcie_cold_rst_n     (pcie_cold_rst_n[j]       ),
@@ -519,17 +540,38 @@ for (genvar j=0; j<PCIE_NUM_LINKS; j++) begin : PCIE_RST_CTRL
 end 
 
 //-----------------------------------------------------------------------------------------------
+// Wrap PCIe pins in an interface
+//-----------------------------------------------------------------------------------------------
+
+ofs_fim_pcie_ss_pins_if #(.PCIE_LANES(ofs_fim_cfg_pkg::PCIE_LANES)) pin_pcie();
+assign pin_pcie.refclk0_p = PCIE_REFCLK0;
+assign pin_pcie.refclk1_p = PCIE_REFCLK1;
+assign pin_pcie.in_perst_n = PCIE_RESET_N;
+assign pin_pcie.rx_p = PCIE_RX_P;
+assign pin_pcie.rx_n = PCIE_RX_N;
+assign PCIE_TX_P = pin_pcie.tx_p;
+assign PCIE_TX_N = pin_pcie.tx_n;
+
+`ifdef CONFIG_AGILEX5
+   // PCIe GTS reset sequencer
+   agilex5_srcss_gts srcss_gts (
+      .o_pma_cu_clk(pin_pcie.in_flux_clk[0])
+     );
+
+   assign pin_pcie.in_flux_clk[1] = 1'b0;
+`else
+   // Unused
+   assign pin_pcie.in_flux_clk = '0;
+`endif
+
+//-----------------------------------------------------------------------------------------------
 // PCIe Subsystem - this IP instantiates the QHIP and builds various features around it such
 // as a standard AXI interface, standardized register interface for the driver, interrupt support
 // data mover mode(hides complexity of TLPs while implementing functionality such as completion 
 // combining etc). The AXI user clock is asynchronous to the reference and the QHIP clock.
 //-----------------------------------------------------------------------------------------------
  pcie_wrapper #(  
-`ifdef INCLUDE_PCIE_SS
      .PCIE_LANES       (ofs_fim_cfg_pkg::PCIE_LANES),
-`else
-     .PCIE_LANES       (16),
-`endif
      .PCIE_NUM_LINKS   (PCIE_NUM_LINKS),
      .MM_ADDR_WIDTH    (MM_ADDR_WIDTH),
      .MM_DATA_WIDTH    (MM_DATA_WIDTH),
@@ -548,13 +590,7 @@ end
    .subsystem_warm_rst_n        (pcie_warm_rst_n          ),
    .subsystem_cold_rst_ack_n    (pcie_cold_rst_ack_n      ),
    .subsystem_warm_rst_ack_n    (pcie_warm_rst_ack_n      ),
-   .pin_pcie_refclk0_p             (PCIE_REFCLK0             ),
-   .pin_pcie_refclk1_p             (PCIE_REFCLK1             ),
-   .pin_pcie_in_perst_n            (PCIE_RESET_N             ),   // connected to HIP
-   .pin_pcie_rx_p                  (PCIE_RX_P                ),
-   .pin_pcie_rx_n                  (PCIE_RX_N                ),
-   .pin_pcie_tx_p                  (PCIE_TX_P                ),                
-   .pin_pcie_tx_n                  (PCIE_TX_N                ),  
+   .pin_pcie                       (pin_pcie                 ),
    .ss_app_st_ctrlshadow_tvalid     (ss_app_st_ctrlshadow_tvalid ),
    .ss_app_st_ctrlshadow_tdata      (ss_app_st_ctrlshadow_tdata  ),
    .axi_st_rxreq_if                (pcie_ss_axis_rxreq_if    ),
@@ -684,6 +720,9 @@ pmci_wrapper #(
           .PCIE_NUM_LINKS      (PCIE_NUM_LINKS)
 `ifdef INCLUDE_LOCAL_MEM
          ,.AFU_MEM_CHANNEL     (AFU_MEM_CHANNELS   )
+`endif
+`ifdef INCLUDE_HBM
+         ,.MEM_PL_DEPTH        (3)
 `endif
   )afu_top(
          .SYS_REFCLK          (SYS_REFCLK                   ),
@@ -1190,7 +1229,25 @@ endgenerate
        // AFU ext mem interfaces
       .afu_mem_if   (afu_ext_mem_if),
 `ifdef INCLUDE_DDR4
+`ifdef OFS_FIM_IP_CFG_LOCAL_MEM_DEFINES_EMIF_DDR4_PARAM_GROUP_0
       .ddr4_mem_if  (ddr4_mem),
+`endif
+`ifdef OFS_FIM_IP_CFG_LOCAL_MEM_DEFINES_EMIF_DDR4_PARAM_GROUP_1
+      .ddr4_mem_if_group_1  (ddr4_mem_group_1),
+`endif
+`endif
+
+`ifdef INCLUDE_HBM
+      // universal interface bus clk (PIN EC36)
+      .uib_refclk      (uib_refclk),
+      // Fabric clk (350MHz for full bandwidth)
+      .fab_clk         ('{default:clk_noc_fab}),
+      .fab_clk_wr      ('{default:clk_noc_fab_wr}),
+      // NoC clk
+      .noc_ctrl_refclk (noc_ctrl_refclk),
+      // HBM status signals
+      .hbm_cattrip     (hbm_cattrip),
+      .hbm_temp        (hbm_temp),
 `endif
 
 `ifdef INCLUDE_HPS

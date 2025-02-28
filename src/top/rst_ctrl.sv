@@ -17,7 +17,6 @@ module rst_ctrl (
    input    logic clk_sys,             // Global clock
    input    logic clk_100m,            // Clock 100 MHz
    input    logic clk_50m,             // Clock 50 MHz
-   input    logic clk_ptp_slv,         // Clock 155.56Mhz
    input    logic clk_sys_div2,        // Global clock half freq
    input    logic pll_locked,          // PLL locked flag
    input    logic pcie_reset_status,   // PCIe SRC reset status
@@ -29,7 +28,6 @@ module rst_ctrl (
    output   logic rst_n_100m,          // System reset synchronous to clk_100m
    output   logic rst_n_50m,           // System reset synchronous to clk_50m
    output   logic rst_n_sys_div2,      // System reset synchronous to clk_sys_div2
-   output   logic rst_n_ptp_slv,
    output   logic pwr_good_n,          // Hardware reset synchronous to clk_sys
    output   logic pwr_good_csr_clk_n,  // power_good resetsynchronous to csr_clk (clk_100m)  
    output   logic pcie_cold_rst_n,     // PCIe cold reset synchronous to clk_sys
@@ -212,7 +210,8 @@ fim_resync #(
    .SYNC_CHAIN_LENGTH(3),
    .WIDTH(1),
    .INIT_VALUE(0),
-   .NO_CUT(1)
+   .NO_CUT(1),
+   .TURN_OFF_ADD_PIPELINE(0)
 ) rst_clk_sys_resync (
    .clk   (clk_sys),
    .reset (~rst_warm_n | ~fim_rst_n),
@@ -225,7 +224,8 @@ fim_resync #(
    .SYNC_CHAIN_LENGTH(3),
    .WIDTH(1),
    .INIT_VALUE(0),
-   .NO_CUT(1)
+   .NO_CUT(1),
+   .TURN_OFF_ADD_PIPELINE(0)
 ) rst_clk100m_resync (
    .clk   (clk_100m),
    .reset (~rst_warm_n | ~fim_rst_n),
@@ -238,7 +238,8 @@ fim_resync #(
    .SYNC_CHAIN_LENGTH(3),
    .WIDTH(1),
    .INIT_VALUE(0),
-   .NO_CUT(1)
+   .NO_CUT(1),
+   .TURN_OFF_ADD_PIPELINE(0)
 ) rst_clk50m_resync (
    .clk   (clk_50m),
    .reset (~rst_warm_n | ~fim_rst_n),
@@ -251,7 +252,8 @@ fim_resync #(
    .SYNC_CHAIN_LENGTH(3),
    .WIDTH(1),
    .INIT_VALUE(0),
-   .NO_CUT(1)
+   .NO_CUT(1),
+   .TURN_OFF_ADD_PIPELINE(0)
 ) rst_clk_sys_div2_resync (
    .clk   (clk_sys_div2),
    .reset (~fim_rst_n),
@@ -259,17 +261,6 @@ fim_resync #(
    .q     (rst_n_sys_div2)
 );
 
-fim_resync #(
-   .SYNC_CHAIN_LENGTH(3),
-   .WIDTH(1),
-   .INIT_VALUE(0),
-   .NO_CUT(1)
-) rst_clk_ptp_slv_resync (
-   .clk   (clk_ptp_slv),
-   .reset (~rst_warm_n | ~fim_rst_n),
-   .d     (1'b1),
-   .q     (rst_n_ptp_slv)
-);
 
 // FIM power good reset synchronous to clk_sys
 fim_resync #(

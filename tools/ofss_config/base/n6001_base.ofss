@@ -1,0 +1,13 @@
+[ip]
+type = ofs
+
+[settings]
+platform = n6001
+family = agilex
+fim = base_x16
+part = AGFB014R24A2E2V
+device_id = 6001
+
+[pcie.settings]
+# Default settings may be overriden by PCIe-specific OFSS files
+pcie_gen = 4

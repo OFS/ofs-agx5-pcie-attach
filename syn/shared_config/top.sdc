@@ -49,9 +49,7 @@ set_clock_groups -asynchronous -group {sys_pll|iopll_0_clk_100m } -group {pcie_w
 set_clock_groups -asynchronous -group {pcie_wrapper|pcie_ss.top|*|pcie_ss|avmm_clock0} -group {pcie_wrapper|pcie_ss.top|*|pcie_ss|*|inst|inst|maib_and_tile|xcvr_hip_native|rx_ch15}
 set_clock_groups -asynchronous -group {sys_pll|iopll_0_clk_100m} -group {pcie_wrapper|pcie_ss.top|*|pcie_ss|*|inst|inst|maib_and_tile|xcvr_hip_native|rx_ch15}
 set_clock_groups -asynchronous -group {sys_pll|iopll_0_clk_100m} -group {pcie_wrapper|pcie_ss.top|*|pcie_ss|avmm_clock0}
-# temporary constraint while mem_tg is fixed to not instantiate dbg fabric
-set_clock_groups -asynchronous -group {sys_pll|iopll_0_clk_100m} -group {mem_ss_top|mem_ss_fm_inst|mem_ss_fm_0|intf_0_core_usr_clk}
-
+set_clock_groups -asynchronous -group {sys_pll|iopll_0_clk_100m} -group {local_mem_wrapper|mem_ss_top|mem_ss_inst|mem_ss|emif_*|emif_*_phy_clk*}
 
 #**************************************************************
 # Set Multicycle Path

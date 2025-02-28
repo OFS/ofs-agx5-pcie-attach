@@ -13,6 +13,8 @@
 `define __TEST_CSR_DEFS__
 
 import top_cfg_pkg::*;
+`include "ofs_ip_cfg_db.vh"
+
 package test_csr_defs;
    localparam FME_DFH            = 64'h0;
    localparam FME_SCRATCHPAD0    = FME_DFH + 64'h28;
@@ -56,6 +58,8 @@ package test_csr_defs;
    localparam ST2MM_PF           = 0; 
    localparam ST2MM_VF           = 0; 
    localparam ST2MM_VA           = 0; 
+   localparam NUMBER_OF_LINKS    = `OFS_FIM_IP_CFG_PCIE_SS_NUM_LINKS;
+
 
 endpackage
 

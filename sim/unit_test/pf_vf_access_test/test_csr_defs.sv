@@ -10,7 +10,7 @@
 //-----------------------------------------------------------------------------
 `ifndef __TEST_CSR_DEFS__
 `define __TEST_CSR_DEFS__
-
+`include "ofs_ip_cfg_db.vh"
 package test_csr_defs;
 
    typedef struct { string name; int scratch; } t_feature;
@@ -43,6 +43,9 @@ package test_csr_defs;
    localparam t_feature HE_NULL = { name: "he_null" , scratch: HE_NULL_SCRATCH_ADDR  };
    localparam t_feature VIO     = { name: "virtio"  , scratch: VIO_SCRATCH_ADDR      };
    localparam t_feature CE      = { name: "hps_ce"  , scratch: CE_SCRATCH_ADDR       };
+
+   localparam NUMBER_OF_LINKS = `OFS_FIM_IP_CFG_PCIE_SS_NUM_LINKS;
+
 endpackage
 
 `endif

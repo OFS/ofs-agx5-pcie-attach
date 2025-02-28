@@ -58,8 +58,12 @@ module test_tx_merge
         log_in_txreq_fd = $fopen($sformatf("%0s_%0d_%0d_%0s_txreq_in.tsv", FILE_PREFIX, DATA_WIDTH, NUM_OF_SEG, SB_STRING), "w");
         log_out_fd = $fopen($sformatf("%0s_%0d_%0d_%0s_out.tsv", FILE_PREFIX, DATA_WIDTH, NUM_OF_SEG, SB_STRING), "w");
         tlp_stream_in_tx = new(1, 0);
+        // TX stream must be guaranteed dense (required by HIP)
+        tlp_stream_in_tx.disable_empty_cycles();
         tlp_stream_in_txreq = new(1, 1, 1, rand_tlp_pkg::rand_tlp::TLP_NO_DATA);
-        tlp_stream_out = new();
+
+        // Gen5x16 controller has 4 segments but SOP only on segments 0 and 2
+        tlp_stream_out = new(NUM_OF_SEG > 2 ? 2 : NUM_OF_SEG);
     end
 
 

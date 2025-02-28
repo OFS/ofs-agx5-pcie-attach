@@ -1,0 +1,19 @@
+##
+## Bifurcated PCIe configuration, partitioning the lanes into
+## two links.
+##
+## 1 PF and 1VF per link.
+##
+
+[ip]
+type = pcie
+
+[settings]
+output_name = pcie_ss
+pcie_instances = 2
+pcie_instances_enabled = 2
+
+[pf0]
+num_vfs = 1
+bar0_address_width = 20
+vf_bar0_address_width = 20

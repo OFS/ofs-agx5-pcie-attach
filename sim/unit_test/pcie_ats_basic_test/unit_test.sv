@@ -7,14 +7,13 @@
 // Test module for the simulation. 
 //---------------------------------------------------------
 
-import host_bfm_types_pkg::*;
 
 module unit_test #(
    parameter SOC_ATTACH = 0,
    parameter LINK_NUMBER = 0,
-   parameter type pf_type = default_pfs, 
+   parameter type pf_type = host_bfm_types_pkg::default_pfs, 
    parameter pf_type pf_list = '{1'b1}, 
-   parameter type vf_type = default_vfs, 
+   parameter type vf_type = host_bfm_types_pkg::default_vfs, 
    parameter vf_type vf_list = '{0}
 )(
     input logic clk,
@@ -24,24 +23,21 @@ module unit_test #(
 );
 
 import pfvf_class_pkg::*;
-import host_memory_class_pkg::*;
+import host_ofs_bfm_memory_class_pkg::*;
 import tag_manager_class_pkg::*;
 import pfvf_status_class_pkg::*;
 import packet_class_pkg::*;
 import host_axis_send_class_pkg::*;
 import host_axis_receive_class_pkg::*;
 import host_transaction_class_pkg::*;
+import host_bfm_types_pkg::*;
 import host_bfm_class_pkg::*;
 import host_flr_class_pkg::*;
+import test_csr_defs::*;
 
 // Configured PCIe capabilities. These parameters are read from the PCIe SS IP
 // and written as macros to a header file included by ofs_ip_cfg_db.vh as
 // part of the Quartus project.
-localparam PCIE_NUM_PFS = `OFS_FIM_IP_CFG_PCIE_SS_NUM_PFS;
-localparam logic PCIE_ATS_CAP_EN[PCIE_NUM_PFS] = { `OFS_FIM_IP_CFG_PCIE_SS_ATS_CAP_VEC };
-localparam logic PCIE_VF_ATS_CAP_EN[PCIE_NUM_PFS] = { `OFS_FIM_IP_CFG_PCIE_SS_VF_ATS_CAP_VEC };
-localparam logic PCIE_PRS_CAP_EN[PCIE_NUM_PFS] = { `OFS_FIM_IP_CFG_PCIE_SS_PRS_CAP_VEC };
-localparam logic PCIE_PASID_CAP_EN[PCIE_NUM_PFS] = { `OFS_FIM_IP_CFG_PCIE_SS_PASID_CAP_VEC };
 
 //---------------------------------------------------------
 //  BEGIN: Test Tasks and Utilities
@@ -49,7 +45,6 @@ localparam logic PCIE_PASID_CAP_EN[PCIE_NUM_PFS] = { `OFS_FIM_IP_CFG_PCIE_SS_PAS
 parameter MAX_TEST = 100;
 parameter TIMEOUT = 10.0ms;
 parameter RP_MAX_TAGS = 64;
-localparam NUMBER_OF_LINKS = `OFS_FIM_IP_CFG_PCIE_SS_NUM_LINKS;
 localparam string unit_test_name = "PCIe ATS Basic Test";
 
 //---------------------------------------------------------
@@ -101,8 +96,9 @@ function automatic pfvf_struct pfvf_type_from_pfvf(int pf, int vf, bit vf_active
     PFVFClass#(pf_type, vf_type, pf_list, vf_list) pfvf;
 
     pfvf = new(pf,vf,vf_active);
+    pfvf_idx = pfvf.create_pfvf_struct(pf,vf,vf_active);
 
-    if (pfvf.pfvf_exists(pf,vf,vf_active))
+    if (pfvf.pfvf_exists(pfvf_idx))
     begin
        return (pfvf.get_attr());
     end

@@ -1,0 +1,19 @@
+[ip]
+type = ofs
+
+[settings]
+platform = n6001
+family = agilex
+fim = base_x16
+part = AGIB027R29A1E1VB
+device_id = 6001
+
+[pcie.settings]
+# Default settings may be overriden by PCIe-specific OFSS files
+pcie_gen = 5
+# PIPE mode simulation is not supported in OFS on R-Tile
+pipemode_sim = 0
+
+[pcie]
+subsys_dev_id = 1
+exvf_subsysid = 1

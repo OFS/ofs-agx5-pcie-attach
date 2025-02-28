@@ -19,7 +19,10 @@ module pcie_ats_query
 
     parameter pcie_ss_hdr_pkg::ReqHdr_pf_num_t PF_ID,
     parameter pcie_ss_hdr_pkg::ReqHdr_vf_num_t VF_ID,
-    parameter logic VF_ACTIVE
+    parameter logic VF_ACTIVE,
+
+    parameter TDATA_WIDTH = ofs_pcie_ss_cfg_pkg::TDATA_WIDTH,
+    parameter TUSER_WIDTH = ofs_pcie_ss_cfg_pkg::TUSER_WIDTH
     )  
    (
     input  logic clk,
@@ -40,6 +43,12 @@ module pcie_ats_query
 
     localparam COUNTER_BITS = 40;
     typedef logic [COUNTER_BITS-1 : 0] t_counter;
+
+    typedef struct packed {
+        pcie_ss_hdr_pkg::ReqHdr_vf_num_t vf_num;
+        logic vf_active;
+        pcie_ss_hdr_pkg::ReqHdr_pf_num_t pf_num;
+    } pf_vf_info_t;
 
     logic rd_req_arb_en;
     logic counter_rst_n;
@@ -138,9 +147,9 @@ module pcie_ats_query
     //
     // ====================================================================
 
-    pcie_ss_axis_if rx_mmio_if(clk, rst_n);
-    pcie_ss_axis_if tx_a_if(clk, rst_n);
-    pcie_ss_axis_if tx_b_if(clk, rst_n);
+    pcie_ss_axis_if#(.DATA_W(TDATA_WIDTH), .USER_W(TUSER_WIDTH)) rx_mmio_if(clk, rst_n);
+    pcie_ss_axis_if#(.DATA_W(TDATA_WIDTH), .USER_W(TUSER_WIDTH)) tx_a_if(clk, rst_n);
+    pcie_ss_axis_if#(.DATA_W(TDATA_WIDTH), .USER_W(TUSER_WIDTH)) tx_b_if(clk, rst_n);
 
     pcie_ats_inval_cpl ats_inval
        (
@@ -416,7 +425,7 @@ module pcie_ats_query
 
     localparam MSG_HDR_BYTES = $bits(pcie_ss_hdr_pkg::PCIe_PUMsgHdr_t) / 8;
     pcie_ss_hdr_pkg::PCIe_PUMsgHdr_t page_req_hdr;
-    pcie_ss_hdr_pkg::ReqHdr_pf_vf_info_t page_requestor_id;
+    pf_vf_info_t page_requestor_id;
     logic page_req_arb_en;
 
     assign page_requestor_id.pf_num = PF_ID;
@@ -483,7 +492,7 @@ module pcie_ats_query
     // ====================================================================
 
     pcie_ss_hdr_pkg::PCIe_PUReqHdr_t rd_req_hdr;
-    pcie_ss_hdr_pkg::ReqHdr_pf_vf_info_t rd_requestor_id;
+    pf_vf_info_t rd_requestor_id;
     logic [$clog2(ofs_pcie_ss_cfg_pkg::PCIE_EP_MAX_TAGS)-1 : 0] rd_req_tag;
 
     lib_counter_multicycle

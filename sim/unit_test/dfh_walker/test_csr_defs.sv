@@ -11,6 +11,8 @@
 `ifndef __TEST_CSR_DEFS__
 `define __TEST_CSR_DEFS__
 
+`include "ofs_ip_cfg_db.vh"
+
 package test_csr_defs;
 
 import fme_csr_pkg::*;
@@ -52,6 +54,7 @@ import pg_csr_pkg::*;
 
    localparam BAR = 3'h0; 
    localparam DFH_START_OFFSET = 32'h0; 
+   localparam NUMBER_OF_LINKS = `OFS_FIM_IP_CFG_PCIE_SS_NUM_LINKS;
    
    function automatic dfh_name[MAX_DFH_IDX-1:0] get_dfh_names();
       dfh_name[MAX_DFH_IDX-1:0] dfh_names;
@@ -118,7 +121,7 @@ import pg_csr_pkg::*;
       dfh_values[PG_PORT_DFH_IDX]     = 64'h4_00000_xxxxxx_2001;
       dfh_values[PG_PORT_DFH_IDX][39:16] = pg_csr_pkg::FME_CSR_FME_PR_NEXT_DFH_OFFSET;
 
-      dfh_values[PG_USER_CLK_DFH_IDX] = 64'h3_00000_xxxxxx_1014;
+      dfh_values[PG_USER_CLK_DFH_IDX] = 64'h3_00000_xxxxxx_2014;
       dfh_values[PG_USER_CLK_DFH_IDX][39:16] = pg_csr_pkg::PORT_CSR_NEXT_DFH_OFFSET;
 
       dfh_values[PG_REMOTE_STP_DFH_IDX] = 64'h3_00000_xxxxxx_2013;

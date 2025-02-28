@@ -1,8 +1,17 @@
 <?xml version="1.0" ?>
-<!--
-  Copyright (C) 2023-2024 Intel Corporation
-  SPDX-License-Identifier: MIT
-  -->
+<!--Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details, at
+https://fpgasoftware.intel.com/eula.-->
 <ipxact:design xmlns:altera="http://www.altera.com/XMLSchema/IPXact2014/extensions" xmlns:ipxact="http://www.accellera.org/XMLSchema/IPXACT/1685-2014">
   <ipxact:vendor>Altera Corporation</ipxact:vendor>
   <ipxact:library>bpf</ipxact:library>
@@ -590,6 +599,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readAcceptanceCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -873,6 +898,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -883,6 +924,14 @@
                         &lt;entry&gt;
                             &lt;key&gt;combinedIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;enableConcurrentSubordinateAccess&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;noRepeatedIdsBetweenSubordinates&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
                         &lt;/entry&gt;
                     &lt;/parameterValueMap&gt;
                 &lt;/parameters&gt;
@@ -1878,6 +1927,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readAcceptanceCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -2161,6 +2226,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -2171,6 +2252,14 @@
                         &lt;entry&gt;
                             &lt;key&gt;combinedIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;enableConcurrentSubordinateAccess&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;noRepeatedIdsBetweenSubordinates&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
                         &lt;/entry&gt;
                     &lt;/parameterValueMap&gt;
                 &lt;/parameters&gt;
@@ -3475,6 +3564,22 @@
                             &lt;value&gt;1&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readAcceptanceCapability&lt;/key&gt;
                             &lt;value&gt;1&lt;/value&gt;
                         &lt;/entry&gt;
@@ -4289,6 +4394,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readAcceptanceCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -4572,6 +4693,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -4582,6 +4719,14 @@
                         &lt;entry&gt;
                             &lt;key&gt;combinedIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;enableConcurrentSubordinateAccess&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;noRepeatedIdsBetweenSubordinates&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
                         &lt;/entry&gt;
                     &lt;/parameterValueMap&gt;
                 &lt;/parameters&gt;
@@ -5577,6 +5722,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readAcceptanceCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -5860,6 +6021,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -5870,6 +6047,14 @@
                         &lt;entry&gt;
                             &lt;key&gt;combinedIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;enableConcurrentSubordinateAccess&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;noRepeatedIdsBetweenSubordinates&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
                         &lt;/entry&gt;
                     &lt;/parameterValueMap&gt;
                 &lt;/parameters&gt;
@@ -6865,6 +7050,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readAcceptanceCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -7148,6 +7349,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -7158,6 +7375,14 @@
                         &lt;entry&gt;
                             &lt;key&gt;combinedIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;enableConcurrentSubordinateAccess&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;noRepeatedIdsBetweenSubordinates&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
                         &lt;/entry&gt;
                     &lt;/parameterValueMap&gt;
                 &lt;/parameters&gt;
@@ -8153,6 +8378,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readAcceptanceCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -8436,6 +8677,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -8446,6 +8703,14 @@
                         &lt;entry&gt;
                             &lt;key&gt;combinedIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;enableConcurrentSubordinateAccess&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;noRepeatedIdsBetweenSubordinates&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
                         &lt;/entry&gt;
                     &lt;/parameterValueMap&gt;
                 &lt;/parameters&gt;
@@ -9441,6 +9706,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readAcceptanceCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -9724,6 +10005,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -9734,6 +10031,14 @@
                         &lt;entry&gt;
                             &lt;key&gt;combinedIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;enableConcurrentSubordinateAccess&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;noRepeatedIdsBetweenSubordinates&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
                         &lt;/entry&gt;
                     &lt;/parameterValueMap&gt;
                 &lt;/parameters&gt;
@@ -10729,6 +11034,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readAcceptanceCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -11012,6 +11333,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -11022,6 +11359,14 @@
                         &lt;entry&gt;
                             &lt;key&gt;combinedIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;enableConcurrentSubordinateAccess&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;noRepeatedIdsBetweenSubordinates&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
                         &lt;/entry&gt;
                     &lt;/parameterValueMap&gt;
                 &lt;/parameters&gt;
@@ -12017,6 +12362,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readAcceptanceCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -12300,6 +12661,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -12310,6 +12687,14 @@
                         &lt;entry&gt;
                             &lt;key&gt;combinedIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;enableConcurrentSubordinateAccess&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;noRepeatedIdsBetweenSubordinates&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
                         &lt;/entry&gt;
                     &lt;/parameterValueMap&gt;
                 &lt;/parameters&gt;
@@ -13305,6 +13690,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readAcceptanceCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -13588,6 +13989,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -13598,6 +14015,14 @@
                         &lt;entry&gt;
                             &lt;key&gt;combinedIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;enableConcurrentSubordinateAccess&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;noRepeatedIdsBetweenSubordinates&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
                         &lt;/entry&gt;
                     &lt;/parameterValueMap&gt;
                 &lt;/parameters&gt;
@@ -14593,6 +15018,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readAcceptanceCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -14876,6 +15317,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -14886,6 +15343,14 @@
                         &lt;entry&gt;
                             &lt;key&gt;combinedIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;enableConcurrentSubordinateAccess&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;noRepeatedIdsBetweenSubordinates&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
                         &lt;/entry&gt;
                     &lt;/parameterValueMap&gt;
                 &lt;/parameters&gt;
@@ -15881,6 +16346,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readAcceptanceCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -16164,6 +16645,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -16174,6 +16671,14 @@
                         &lt;entry&gt;
                             &lt;key&gt;combinedIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;enableConcurrentSubordinateAccess&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;noRepeatedIdsBetweenSubordinates&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
                         &lt;/entry&gt;
                     &lt;/parameterValueMap&gt;
                 &lt;/parameters&gt;
@@ -17169,6 +17674,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readAcceptanceCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -17452,6 +17973,22 @@
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
+                            &lt;key&gt;dataCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;addressCheck&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;securityAttribute&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;userData&lt;/key&gt;
+                            &lt;value&gt;false&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
                             &lt;key&gt;readIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
                         &lt;/entry&gt;
@@ -17462,6 +17999,14 @@
                         &lt;entry&gt;
                             &lt;key&gt;combinedIssuingCapability&lt;/key&gt;
                             &lt;value&gt;16&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;enableConcurrentSubordinateAccess&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;noRepeatedIdsBetweenSubordinates&lt;/key&gt;
+                            &lt;value&gt;0&lt;/value&gt;
                         &lt;/entry&gt;
                     &lt;/parameterValueMap&gt;
                 &lt;/parameters&gt;
@@ -18503,7 +19048,7 @@
       </altera:module>
     </altera:modules>
     <altera:connections>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_apf_mst.altera_axi4lite_master" altera:end="bpf_default_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_apf_mst.altera_axi4lite_master" altera:end="bpf_default_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x0000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="true"></altera:connection_parameter>
@@ -18524,7 +19069,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_apf_mst.altera_axi4lite_master" altera:end="bpf_fme_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_apf_mst.altera_axi4lite_master" altera:end="bpf_fme_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x0000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18545,7 +19090,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_apf_mst.altera_axi4lite_master" altera:end="bpf_pcie_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_apf_mst.altera_axi4lite_master" altera:end="bpf_pcie_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x00010000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18566,7 +19111,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_apf_mst.altera_axi4lite_master" altera:end="bpf_pmci_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_apf_mst.altera_axi4lite_master" altera:end="bpf_pmci_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x00020000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18587,7 +19132,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_apf_mst.altera_axi4lite_master" altera:end="bpf_qsfp0_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_apf_mst.altera_axi4lite_master" altera:end="bpf_qsfp0_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x00012000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18608,7 +19153,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_apf_mst.altera_axi4lite_master" altera:end="bpf_qsfp1_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_apf_mst.altera_axi4lite_master" altera:end="bpf_qsfp1_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x00013000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18629,7 +19174,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_apf_mst.altera_axi4lite_master" altera:end="bpf_emif_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_apf_mst.altera_axi4lite_master" altera:end="bpf_emif_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x00015000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18650,7 +19195,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_apf_mst.altera_axi4lite_master" altera:end="bpf_hssi_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_apf_mst.altera_axi4lite_master" altera:end="bpf_hssi_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x00014000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18671,7 +19216,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_fme_mst.altera_axi4lite_master" altera:end="bpf_default_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_fme_mst.altera_axi4lite_master" altera:end="bpf_default_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x0000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="true"></altera:connection_parameter>
@@ -18692,7 +19237,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_fme_mst.altera_axi4lite_master" altera:end="bpf_apf_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_fme_mst.altera_axi4lite_master" altera:end="bpf_apf_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x0000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18713,7 +19258,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_default_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_default_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x0000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="true"></altera:connection_parameter>
@@ -18734,7 +19279,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_fme_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_fme_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x0000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18755,7 +19300,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_pcie_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_pcie_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x00010000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18776,7 +19321,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_pmci_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_pmci_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x00020000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18797,7 +19342,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_qsfp0_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_qsfp0_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x00012000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18818,7 +19363,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_qsfp1_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_qsfp1_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x00013000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18839,7 +19384,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_pmci_lpbk_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_pmci_lpbk_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x00100000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18860,7 +19405,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_emif_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_emif_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x00015000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18881,7 +19426,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_hssi_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_pmci_mst.altera_axi4lite_master" altera:end="bpf_hssi_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x00014000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18902,7 +19447,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_pmci_lpbk_mst.altera_axi4lite_master" altera:end="bpf_default_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_pmci_lpbk_mst.altera_axi4lite_master" altera:end="bpf_default_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x0000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="true"></altera:connection_parameter>
@@ -18923,7 +19468,7 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="avalon" altera:version="24.1" altera:start="bpf_pmci_lpbk_mst.altera_axi4lite_master" altera:end="bpf_apf_slv.altera_axi4lite_slave">
+      <altera:connection altera:kind="avalon" altera:version="24.3" altera:start="bpf_pmci_lpbk_mst.altera_axi4lite_master" altera:end="bpf_apf_slv.altera_axi4lite_slave">
         <altera:connection_parameter altera:parameter_name="arbitrationPriority" altera:parameter_value="1"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="baseAddress" altera:parameter_value="0x0000"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="defaultConnection" altera:parameter_value="false"></altera:connection_parameter>
@@ -18944,35 +19489,35 @@
         <altera:connection_parameter altera:parameter_name="qsys_mm.syncResets" altera:parameter_value="FALSE"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="qsys_mm.widthAdapterImplementation" altera:parameter_value="GENERIC_CONVERTER"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="clock" altera:version="24.1" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_reset_bridge.clk"></altera:connection>
-      <altera:connection altera:kind="clock" altera:version="24.1" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_default_slv.clock"></altera:connection>
-      <altera:connection altera:kind="clock" altera:version="24.1" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_fme_slv.clock"></altera:connection>
-      <altera:connection altera:kind="clock" altera:version="24.1" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_apf_slv.clock"></altera:connection>
-      <altera:connection altera:kind="clock" altera:version="24.1" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_pcie_slv.clock"></altera:connection>
-      <altera:connection altera:kind="clock" altera:version="24.1" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_qsfp0_slv.clock"></altera:connection>
-      <altera:connection altera:kind="clock" altera:version="24.1" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_qsfp1_slv.clock"></altera:connection>
-      <altera:connection altera:kind="clock" altera:version="24.1" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_hssi_slv.clock"></altera:connection>
-      <altera:connection altera:kind="clock" altera:version="24.1" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_emif_slv.clock"></altera:connection>
-      <altera:connection altera:kind="clock" altera:version="24.1" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_pmci_slv.clock"></altera:connection>
-      <altera:connection altera:kind="clock" altera:version="24.1" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_pmci_lpbk_slv.clock"></altera:connection>
-      <altera:connection altera:kind="clock" altera:version="24.1" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_apf_mst.clock"></altera:connection>
-      <altera:connection altera:kind="clock" altera:version="24.1" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_fme_mst.clock"></altera:connection>
-      <altera:connection altera:kind="clock" altera:version="24.1" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_pmci_mst.clock"></altera:connection>
-      <altera:connection altera:kind="clock" altera:version="24.1" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_pmci_lpbk_mst.clock"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="24.1" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_default_slv.reset"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="24.1" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_fme_slv.reset"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="24.1" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_apf_slv.reset"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="24.1" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_pcie_slv.reset"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="24.1" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_qsfp0_slv.reset"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="24.1" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_qsfp1_slv.reset"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="24.1" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_hssi_slv.reset"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="24.1" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_emif_slv.reset"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="24.1" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_pmci_slv.reset"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="24.1" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_pmci_lpbk_slv.reset"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="24.1" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_apf_mst.reset"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="24.1" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_fme_mst.reset"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="24.1" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_pmci_mst.reset"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="24.1" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_pmci_lpbk_mst.reset"></altera:connection>
+      <altera:connection altera:kind="clock" altera:version="24.3" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_reset_bridge.clk"></altera:connection>
+      <altera:connection altera:kind="clock" altera:version="24.3" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_default_slv.clock"></altera:connection>
+      <altera:connection altera:kind="clock" altera:version="24.3" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_fme_slv.clock"></altera:connection>
+      <altera:connection altera:kind="clock" altera:version="24.3" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_apf_slv.clock"></altera:connection>
+      <altera:connection altera:kind="clock" altera:version="24.3" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_pcie_slv.clock"></altera:connection>
+      <altera:connection altera:kind="clock" altera:version="24.3" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_qsfp0_slv.clock"></altera:connection>
+      <altera:connection altera:kind="clock" altera:version="24.3" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_qsfp1_slv.clock"></altera:connection>
+      <altera:connection altera:kind="clock" altera:version="24.3" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_hssi_slv.clock"></altera:connection>
+      <altera:connection altera:kind="clock" altera:version="24.3" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_emif_slv.clock"></altera:connection>
+      <altera:connection altera:kind="clock" altera:version="24.3" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_pmci_slv.clock"></altera:connection>
+      <altera:connection altera:kind="clock" altera:version="24.3" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_pmci_lpbk_slv.clock"></altera:connection>
+      <altera:connection altera:kind="clock" altera:version="24.3" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_apf_mst.clock"></altera:connection>
+      <altera:connection altera:kind="clock" altera:version="24.3" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_fme_mst.clock"></altera:connection>
+      <altera:connection altera:kind="clock" altera:version="24.3" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_pmci_mst.clock"></altera:connection>
+      <altera:connection altera:kind="clock" altera:version="24.3" altera:start="bpf_clock_bridge.out_clk" altera:end="bpf_pmci_lpbk_mst.clock"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="24.3" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_default_slv.reset"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="24.3" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_fme_slv.reset"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="24.3" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_apf_slv.reset"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="24.3" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_pcie_slv.reset"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="24.3" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_qsfp0_slv.reset"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="24.3" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_qsfp1_slv.reset"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="24.3" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_hssi_slv.reset"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="24.3" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_emif_slv.reset"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="24.3" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_pmci_slv.reset"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="24.3" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_pmci_lpbk_slv.reset"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="24.3" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_apf_mst.reset"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="24.3" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_fme_mst.reset"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="24.3" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_pmci_mst.reset"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="24.3" altera:start="bpf_reset_bridge.out_reset" altera:end="bpf_pmci_lpbk_mst.reset"></altera:connection>
     </altera:connections>
     <altera:interconnect_requirements></altera:interconnect_requirements>
     <altera:wire_level_connections></altera:wire_level_connections>
@@ -19005,39 +19550,39 @@
         <ipxact:busInterfaces>
           <ipxact:busInterface>
             <ipxact:name>bpf_default_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_fme_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_pcie_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_pmci_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_qsfp0_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_qsfp1_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_emif_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_hssi_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_apf_mst.altera_axi4lite_master</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
             <ipxact:master>
               <ipxact:addressSpaceRef addressSpaceRef="bpf_apf_mst.altera_axi4lite_master">
                 <ipxact:baseAddress>0x0000_0000</ipxact:baseAddress>
@@ -19046,25 +19591,25 @@
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_apf_slv.altera_axi4lite_master</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
             <ipxact:master></ipxact:master>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_emif_slv.altera_axi4lite_master</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
             <ipxact:master></ipxact:master>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_default_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_apf_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_fme_mst.altera_axi4lite_master</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
             <ipxact:master>
               <ipxact:addressSpaceRef addressSpaceRef="bpf_fme_mst.altera_axi4lite_master">
                 <ipxact:baseAddress>0x0000_0000</ipxact:baseAddress>
@@ -19073,30 +19618,30 @@
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_fme_slv.altera_axi4lite_master</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
             <ipxact:master></ipxact:master>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_hssi_slv.altera_axi4lite_master</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
             <ipxact:master></ipxact:master>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_pcie_slv.altera_axi4lite_master</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
             <ipxact:master></ipxact:master>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_default_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_apf_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_pmci_lpbk_mst.altera_axi4lite_master</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
             <ipxact:master>
               <ipxact:addressSpaceRef addressSpaceRef="bpf_pmci_lpbk_mst.altera_axi4lite_master">
                 <ipxact:baseAddress>0x0000_0000</ipxact:baseAddress>
@@ -19105,48 +19650,48 @@
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_pmci_lpbk_slv.altera_axi4lite_master</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
             <ipxact:master></ipxact:master>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_default_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_fme_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_pcie_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_pmci_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_qsfp0_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_qsfp1_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_pmci_lpbk_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_emif_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_hssi_slv.altera_axi4lite_slave</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_pmci_mst.altera_axi4lite_master</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
             <ipxact:master>
               <ipxact:addressSpaceRef addressSpaceRef="bpf_pmci_mst.altera_axi4lite_master">
                 <ipxact:baseAddress>0x0000_0000</ipxact:baseAddress>
@@ -19155,17 +19700,17 @@
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_pmci_slv.altera_axi4lite_master</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
             <ipxact:master></ipxact:master>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_qsfp0_slv.altera_axi4lite_master</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
             <ipxact:master></ipxact:master>
           </ipxact:busInterface>
           <ipxact:busInterface>
             <ipxact:name>bpf_qsfp1_slv.altera_axi4lite_master</ipxact:name>
-            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.1"></ipxact:busType>
+            <ipxact:busType vendor="intel" library="intel" name="axi4lite" version="24.3"></ipxact:busType>
             <ipxact:master></ipxact:master>
           </ipxact:busInterface>
         </ipxact:busInterfaces>

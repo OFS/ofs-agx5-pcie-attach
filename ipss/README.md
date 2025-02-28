@@ -23,3 +23,7 @@ This directory contains the code and supporting files that define or set up the 
    - A set of Control and Status Registers (CSRs) are also defined here.
       - The RTL defining these registers and their function is included here.
       - An Excel spreadsheet is also contained here that provides a better human-readable format describing the CSRs and their intended function.
+
+### Reset sequencers ([***reset***](reset/))
+   - Some architectures require top-level control of transceiver reset sequencing.
+   - Sequencers are typically instantiated at top-level and control wires are distributed to individual devices.

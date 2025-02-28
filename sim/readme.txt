@@ -8,7 +8,7 @@ Initial Setup:
 1)  Get a "bash" shell (e.g. xterm)
 2)  Go to the OFS Repo root directory.
 3)  Set all tool paths vcs, questasim, python etc. 
-4)	Set the required environment and directory Structure variables (as shown below)
+4)  Set the required environment and directory Structure variables (as shown below)
     export OFS_ROOTDIR=<FIM's root directory>
     export WORKDIR=<FIM's root directory>
 5) Generate the sim files. 
@@ -16,24 +16,25 @@ Initial Setup:
    In order to do this, run the following steps
     a. Got to $OFS_ROOTDIR/ofs-common/scripts/common/sim
     b  Run the script "sh gen_sim_files.sh <target>" 
-	for n6001 8x25G default configuration 	-"gen_sim_files.sh --ofss $OFS_ROOTDIR/tools/ofss_config/n6001.ofss,tools/ofss_config/hssi/hssi_8x25.ofss n6001"
+      n6001 8x25G default       -"gen_sim_files.sh n6001"
 
-        for fseries-dk 8x25G configuration	- "gen_sim_files.sh --ofss $OFS_ROOTDIR/tools/ofss_config/fseries-dk.ofss fseries-dk"
-	
-        for iseries-dk 8x25G configuration	- "gen_sim_files.sh --ofss $OFS_ROOTDIR/tools/ofss_config/iseries-dk.ofss,tools/ofss_config/hssi/hssi_8x25_ftile.ofss iseries-dk"
-    	for iseries-dk 200G congifuration	- "gen_sim_files.sh --ofss $OFS_ROOTDIR/tools/ofss_config/iseries-dk.ofss,tools/ofss_config/hssi/hssi_2x200_ftile.ofss iseries-dk"
-	for iseries-dk 400G congifuration	- "gen_sim_files.sh --ofss $OFS_ROOTDIR/tools/ofss_config/iseries-dk.ofss,tools/ofss_config/hssi/hssi_1x400_ftile.ofss iseries-dk"
+      fseries-dk 8x25G          - "gen_sim_files.sh fseries-dk"
+
+      iseries-dk Gen5 2x8 8x25G - "gen_sim_files.sh --ofss $OFS_ROOTDIR/tools/ofss_config/pcie/pcie_host_2link.ofss iseries-dk"
+      iseries-dk Gen5 2x8 200G  - "gen_sim_files.sh --ofss $OFS_ROOTDIR/tools/ofss_config/pcie/pcie_host_2link.ofss,tools/ofss_config/hssi/hssi_2x200_ftile.ofss iseries-dk"
+      iseries-dk Gen5 2x8 400G  - "gen_sim_files.sh --ofss $OFS_ROOTDIR/tools/ofss_config/pcie/pcie_host_2link.ofss,tools/ofss_config/hssi/hssi_1x400_ftile.ofss iseries-dk"
              
-        for n6000 100G congifuration 		- "gen_sim_files.sh --ofss $(OFS_ROOTDIR)/tools/ofss_config/n6000.ofss,"$(OFS_ROOTDIR)"/tools/ofss_config/hssi/hssi_4x100.ofss n6000"
+      n6000 100G                - "gen_sim_files.sh n6000"
+      mseries-dk                - "gen_sim_files.sh --ofss  $OFS_ROOTDIR/tools/ofss_config/mseries-dk.ofss mseries-dk"
  
 
 6) **Running Test******
     Unit tests are placed under $OFS_ROOTDIR/sim/unit_test, for example $OFS_ROOTDIR/sim/unit_test/he_lb_test
     To run the simulation for each test: 
     Go to $OFS_ROOTDIR/ofs-common/scripts/common/sim, run the following command
-	  VCS        : sh run_sim.sh TEST=<test_name>
-	  VCSMX      : sh run_sim.sh TEST=<test_name> VCSMX=1
-	  QuestaSim  : sh run_sim.sh TEST=<test_name> MSIM=1
+      VCS        : sh run_sim.sh TEST=<test_name>
+      VCSMX      : sh run_sim.sh TEST=<test_name> VCSMX=1
+      QuestaSim  : sh run_sim.sh TEST=<test_name> MSIM=1
     Please refer readme under respective testcase for more info.
 
 *****How to Run Unit tests Regressions?******

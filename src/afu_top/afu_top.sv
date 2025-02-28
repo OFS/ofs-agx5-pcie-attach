@@ -8,21 +8,21 @@
 //-----------------------------------------------------------------------------
 `ifdef INCLUDE_HSSI
    `include "ofs_fim_eth_plat_defines.svh"
-   import ofs_fim_eth_if_pkg::*;
-`endif 
+`endif
 
-import pcie_ss_axis_pkg::*;
-
-module afu_top #(
+module afu_top
+#(
    parameter PCIE_NUM_LINKS = 1,
-   parameter AFU_MEM_CHANNEL = 1
+   parameter AFU_MEM_CHANNEL = 1,
+   parameter PCIE_PL_DEPTH = 1,
+   parameter MEM_PL_DEPTH = 1
 )(
    input wire                            SYS_REFCLK,
    input wire                            clk,
    input wire [PCIE_NUM_LINKS-1:0]       rst_n,
    input wire                            clk_div2,
    input wire                            clk_div4,
-      
+
    input wire                            clk_csr,
    input wire [PCIE_NUM_LINKS-1:0]       rst_n_csr,
    input wire                            pwr_good_csr_clk_n,
@@ -32,11 +32,11 @@ module afu_top #(
    input wire                            cpri_refclk_184_32m, // CPRI reference clock 184.32 MHz
    input wire                            cpri_refclk_153_6m , // CPRI reference clock 153.6 MHz
 
-   // FLR 
-   input  t_axis_pcie_flr                pcie_flr_req [PCIE_NUM_LINKS-1:0],
-   output t_axis_pcie_flr                pcie_flr_rsp [PCIE_NUM_LINKS-1:0],
+   // FLR
+   input  pcie_ss_axis_pkg::t_axis_pcie_flr pcie_flr_req [PCIE_NUM_LINKS-1:0],
+   output pcie_ss_axis_pkg::t_axis_pcie_flr pcie_flr_rsp [PCIE_NUM_LINKS-1:0],
    output logic                          pr_parity_error,
-   input  t_pcie_tag_mode                tag_mode [PCIE_NUM_LINKS-1:0],
+   input  pcie_ss_axis_pkg::t_pcie_tag_mode tag_mode [PCIE_NUM_LINKS-1:0],
 
    ofs_fim_axi_lite_if.master            apf_bpf_slv_if,
    ofs_fim_axi_lite_if.slave             apf_bpf_mst_if,
@@ -51,17 +51,17 @@ module afu_top #(
 `endif
 
 `ifdef INCLUDE_HPS
-   //HPS Interfaces 
+   //HPS Interfaces
    ofs_fim_axi_mmio_if.slave            hps_axi4_mm_if ,
    ofs_fim_ace_lite_if.master           hps_ace_lite_if,
    input                                h2f_reset,
 `endif
 
 `ifdef INCLUDE_HSSI
-   ofs_fim_hssi_ss_tx_axis_if.client      hssi_ss_st_tx [MAX_NUM_ETH_CHANNELS-1:0],
-   ofs_fim_hssi_ss_rx_axis_if.client      hssi_ss_st_rx [MAX_NUM_ETH_CHANNELS-1:0],
-   ofs_fim_hssi_fc_if.client              hssi_fc [MAX_NUM_ETH_CHANNELS-1:0],
-   input logic [MAX_NUM_ETH_CHANNELS-1:0] i_hssi_clk_pll,
+   ofs_fim_hssi_ss_tx_axis_if.client      hssi_ss_st_tx [ofs_fim_eth_if_pkg::MAX_NUM_ETH_CHANNELS-1:0],
+   ofs_fim_hssi_ss_rx_axis_if.client      hssi_ss_st_rx [ofs_fim_eth_if_pkg::MAX_NUM_ETH_CHANNELS-1:0],
+   ofs_fim_hssi_fc_if.client              hssi_fc [ofs_fim_eth_if_pkg::MAX_NUM_ETH_CHANNELS-1:0],
+   input logic [ofs_fim_eth_if_pkg::MAX_NUM_ETH_CHANNELS-1:0] i_hssi_clk_pll,
 `endif
 
    // PCIE AXI-S interfaces
@@ -76,6 +76,7 @@ module afu_top #(
 //-----------------------------------------------------------------------------------------------
 import ofs_fim_cfg_pkg::*;
 import top_cfg_pkg::*;
+import pcie_ss_axis_pkg::*;
 
 localparam MM_ADDR_WIDTH        = ofs_fim_cfg_pkg::MMIO_ADDR_WIDTH;
 localparam MM_DATA_WIDTH        = ofs_fim_cfg_pkg::MMIO_DATA_WIDTH;
@@ -191,12 +192,12 @@ end
 //-----------------------------------------------------------------------------------------------
 //                                  Modules instances
 //-----------------------------------------------------------------------------------------------
-// PF/VF Top-level routing Table 
+// PF/VF Top-level routing Table
 //
 //    +---------------------------------+
 //    + Module          | PF/VF         +
 //    +---------------------------------+
-//    | ST2MM           | PF0           | 
+//    | ST2MM           | PF0           |
 //    | PG-AFU          | PF0-VF0-2     |
 //    |    HE-MEM       |    -VF0       |
 //    |    HE-HSSI      |    -VF1       |
@@ -238,12 +239,17 @@ flr_mux #(
 assign pf0_flr_req[l] = afu_flr_req[PF0_MGMT_PID];
 assign afu_flr_rsp[PF0_MGMT_PID] = pf0_flr_rsp[l];
 
-assign sr_flr_req[l] = afu_flr_req[SR_SHARED_PFVF_PID];
-assign afu_flr_rsp[SR_SHARED_PFVF_PID] = sr_flr_rsp[l];
+if (top_cfg_pkg::NUM_SR_PORTS > 0) begin : sr_port
+   assign sr_flr_req[l] = afu_flr_req[SR_SHARED_PFVF_PID];
+   assign afu_flr_rsp[SR_SHARED_PFVF_PID] = sr_flr_rsp[l];
+end
 
 // Connect PR region AFU FLR
-assign pg_flr_req[l] = afu_flr_req[PG_SHARED_VF_PID];
-assign afu_flr_rsp[PG_SHARED_VF_PID] = pg_flr_rsp[l];
+if (top_cfg_pkg::PG_AFU_NUM_PORTS > 0) begin : pg_port
+   assign pg_flr_req[l] = afu_flr_req[PG_SHARED_VF_PID];
+   assign afu_flr_rsp[PG_SHARED_VF_PID] = pg_flr_rsp[l];
+end
+
 end : afu_pcie_flr
 endgenerate
 
@@ -296,19 +302,24 @@ ofs_fim_pcie_ats_inval_cpl ats_inval
    .o_rxreq_if   (ats2intf_rx[l])
    );
 end // block: afu_pcie_ats_inval
-endgenerate 
+endgenerate
 //-----------------------------------------------------------------------------------------------
 // AFU Interface and Protocol Checker
 //-----------------------------------------------------------------------------------------------
 // Provides protection to the host PCIe channel from erroneous downstream behavior including:
 //    - Malformed requests
 //    - Data overrun/underrun
-//    - Unsolicited completions   
+//    - Unsolicited completions
 //    - Completion timeouts
 //-----------------------------------------------------------------------------------------------
 
-afu_intf #( 
-   .ENABLE (1'b1),
+// Enable the protocol checker as long as the data bus is wider than one TLP
+// header. The protocol checker does not support MMIO header in a beat separate
+// from MMIO data.
+localparam ENABLE_PROTOCOL_CHECKER = PCIE_TDATA_WIDTH > pcie_ss_hdr_pkg::HDR_WIDTH;
+
+afu_intf #(
+   .ENABLE (ENABLE_PROTOCOL_CHECKER),
    // The tag mapper is free to use all available tags in the
    // PCIe SS, independent of the limit imposed on AFUs by
    // ofs_pcie_ss_cfg_pkg::PCIE_EP_MAX_TAGS. The maximum tag
@@ -319,21 +330,21 @@ afu_intf #(
    .clk                (clk),
    /* .rst_n              (rst_n[LINK0]), */
    .rst_n              (rst_n[LINK_0]),
-                       
+
    .clk_csr            (clk_csr), // Clock 100 MHz
    .rst_n_csr          (rst_n_csr[LINK_0]),
    .pwr_good_csr_clk_n (pwr_good_csr_clk_n),
-   
+
    .i_afu_softreset    (afu_softreset),
 
    .o_sel_mmio_rsp     ( sel_mmio_rsp    ),
    .o_read_flush_done  ( read_flush_done ),
-   
-   // MMIO req  
+
+   // MMIO req
    .h2a_axis_rx        ( ats2intf_rx        [LINK_0] ),
    .a2h_axis_tx        ( intf2ats_tx        [LINK_0] ),
    .a2h_axis_txreq     ( pcie_ss_axis_txreq [LINK_0] ),
-                       
+
    .afu_axis_rx        ( ho2mx_rxreq_port   [LINK_0] ),
    .afu_axis_tx        ( mx2ho_tx_port      [LINK_0] ),
    .afu_axis_txreq     ( mx2ho_txreq_port   [LINK_0] ),
@@ -358,7 +369,7 @@ endgenerate
 //    - PF/VF Routing
 //-----------------------------------------------------------------------------------------------
 
-// Transformations required by the host PCIe interface: 
+// Transformations required by the host PCIe interface:
 //    - Tag remapping: remap posted transaction tags to a unique tag from a shared tag pool.
 //
 //    - routing & arbitration: Route DMRd from "B" Port to TXREQ
@@ -395,7 +406,7 @@ afu_host_channel afu_host_channel_inst (
 // AFUs down to a single, merged A channel. The RX port from host
 // to FPGA is demultiplexed and individual connections are forwarded
 // to AFUs.
-pf_vf_mux_w_params  #(
+pf_vf_mux_tree #(
    .MUX_NAME("A"),
    .NUM_PORT(NUM_MUX_PORTS),
    .NUM_RTABLE_ENTRIES(NUM_RTABLE_ENTRIES),
@@ -415,7 +426,7 @@ pf_vf_mux_w_params  #(
 // single RX stream is sufficient. The RX input to the MUX is tied off.
 // AFU B TX ports are multiplexed into a single TX B channel that is
 // passed to the A/B MUX above.
-pf_vf_mux_w_params   #(
+pf_vf_mux_tree #(
    .MUX_NAME ("B"),
    .NUM_PORT(NUM_MUX_PORTS),
    .NUM_RTABLE_ENTRIES(NUM_RTABLE_ENTRIES),
@@ -444,10 +455,15 @@ if (top_cfg_pkg::NUM_SR_PORTS > 0) begin : sr_port
    ofs_fim_axis_pipeline #(.PL_DEPTH(1)) conn_sr_tx_a (.clk, .rst_n(rst_n[l]), .axis_s(sr_tx_a[l]), .axis_m(fn2mx_tx_a_port[SR_SHARED_PFVF_PID]));
    ofs_fim_axis_pipeline #(.PL_DEPTH(1)) conn_sr_tx_b (.clk, .rst_n(rst_n[l]), .axis_s(sr_tx_b[l]), .axis_m(fn2mx_tx_b_port[SR_SHARED_PFVF_PID]));
 end else begin
+   // Tie-off
    assign sr_tx_a[l].tvalid = '0;
    assign sr_tx_b[l].tvalid = '0;
    assign sr_rx_a[l].tvalid = '0;
    assign sr_rx_b[l].tvalid = '0;
+   assign sr_tx_a[l].tready = '1;
+   assign sr_tx_b[l].tready = '1;
+   assign sr_rx_a[l].tready = '1;
+   assign sr_rx_b[l].tready = '1;
 end
 
 // Connect the generated routing to the PR region port
@@ -461,20 +477,24 @@ end else begin
    assign pg_tx_b[l].tvalid = '0;
    assign pg_rx_a[l].tvalid = '0;
    assign pg_rx_b[l].tvalid = '0;
+   assign pg_tx_a[l].tready = '1;
+   assign pg_tx_b[l].tready = '1;
+   assign pg_rx_a[l].tready = '1;
+   assign pg_rx_b[l].tready = '1;
 end
 
 end : afu_pcie_routing
 endgenerate
-   
+
 //-----------------------------------------------------------------------------------------------
 // PCIe Streaming-to-AXI-Lite (ST2MM)
 //-----------------------------------------------------------------------------------------------
-// ST2MM translates the PCIe Subsystem TLP-over-AXI-ST channel to AXI-Lite transfers. This feature 
+// ST2MM translates the PCIe Subsystem TLP-over-AXI-ST channel to AXI-Lite transfers. This feature
 // is required to be routed to PF0 on Link 0, which is reflected in the default routing configuration:
 // top_cfg_pkg::TOP_PF_VF_RTABLE
 //
 // This block maps all MMIO transfers to the `axi_m_if` port which manages device features connected
-// to APF/BPF. Management Component Transport Protocol (MCTP) messages are mapped to the 
+// to APF/BPF. Management Component Transport Protocol (MCTP) messages are mapped to the
 // `axi_m_pmci_vdm_if` port and routed through the peripheral fabric components to the PMCI feature
 // VDM_OFFSET address region.
 //-----------------------------------------------------------------------------------------------
@@ -485,8 +505,8 @@ st2mm #(
    .MM_ADDR_WIDTH   (MM_ADDR_WIDTH),
    .MM_DATA_WIDTH   (MM_DATA_WIDTH),
    .PMCI_BASEADDR   (fabric_width_pkg::bpf_pmci_slv_baseaddress),
-   .TX_VDM_OFFSET   (16'h2000), 
-   .RX_VDM_OFFSET   (16'h2000), 
+   .TX_VDM_OFFSET   (16'h2000),
+   .RX_VDM_OFFSET   (16'h2000),
    .READ_ALLOWANCE  (1),
    .WRITE_ALLOWANCE (1),
    .FEAT_ID         (12'h14),
@@ -513,7 +533,7 @@ logic pf0_flr_rst_n [PCIE_NUM_LINKS-1:0];
 logic pg_flr_rst_n  [PCIE_NUM_LINKS-1:0];
 
 generate for (genvar l = 1; l < PCIE_NUM_LINKS; l++) begin : pcie_pf0_null
-   // Attach a null component to each PCIe Link PF0. VF creation requires the driver to bind, 
+   // Attach a null component to each PCIe Link PF0. VF creation requires the driver to bind,
    // which requires a discoverable feature
    he_null #(
       .PF_ID     (0),
@@ -530,7 +550,7 @@ generate for (genvar l = 1; l < PCIE_NUM_LINKS; l++) begin : pcie_pf0_null
    assign pf0_rx_b[l].tready = 1'b1;
 end : pcie_pf0_null
 endgenerate
-   
+
 generate for(genvar l = 0; l < PCIE_NUM_LINKS; l++) begin : pcie_pf0_flr
 flr_rst_mgr #(
    .NUM_PF (1),
@@ -548,13 +568,13 @@ flr_rst_mgr #(
 assign pg_flr_rst_n[l] = (top_cfg_pkg::PG_VFS > 0) ? pf0_flr_rst_n[l] : 1'b1;
 end : pcie_pf0_flr
 endgenerate
-   
+
 //-----------------------------------------------------------------------------------------------
 // Static Region (SR) AFU (fim_afu_instances)
 //-----------------------------------------------------------------------------------------------
-// This block implements the static region AFU. In the reference implementation separate 
-// physical interfaces are created for each function mapped to this region. They are ST2MM (PF0) 
-// and HE-LB (PF1). For the SoC attach design the host attached side only implements static region 
+// This block implements the static region AFU. In the reference implementation separate
+// physical interfaces are created for each function mapped to this region. They are ST2MM (PF0)
+// and HE-LB (PF1). For the SoC attach design the host attached side only implements static region
 // logic.
 //-----------------------------------------------------------------------------------------------
 generate if(top_cfg_pkg::NUM_SR_PORTS > 0) begin : sr_afu
@@ -587,14 +607,14 @@ generate if(top_cfg_pkg::NUM_SR_PORTS > 0) begin : sr_afu
    );
 end : sr_afu
 endgenerate
-   
+
 //-----------------------------------------------------------------------------------------------
 // Port Gasket (PG) AFU
 //-----------------------------------------------------------------------------------------------
-// The port gasket implements the Partial Reconfiguration (PR) region AFU and supporting 
-// infrastucture including freeze bridges, the PR controller feature, user clock feature, and remote 
-// signal tap feature. The reference implementation connects a single physical interface routed to 
-// 3VFs on PF0. In the PR region the VFs are then routed to HE-MEM (PF0-VF0), HE-HSSI(PF0-VF1), 
+// The port gasket implements the Partial Reconfiguration (PR) region AFU and supporting
+// infrastucture including freeze bridges, the PR controller feature, user clock feature, and remote
+// signal tap feature. The reference implementation connects a single physical interface routed to
+// 3VFs on PF0. In the PR region the VFs are then routed to HE-MEM (PF0-VF0), HE-HSSI(PF0-VF1),
 // and MEM-TG (PF0-VF2). The reference routing table is provided in $OFS_ROOTDIR/afu_top/mux/top_cfg_pkg.sv
 //-----------------------------------------------------------------------------------------------
 localparam PG_NUM_RTABLE_ENTRIES = top_cfg_pkg::PG_NUM_RTABLE_ENTRIES;
@@ -618,10 +638,12 @@ localparam pcie_ss_hdr_pkg::ReqHdr_pf_vf_info_t[PG_AFU_NUM_PORTS-1:0] PG_PF_VF_I
 
 generate if (PG_AFU_NUM_PORTS > 0) begin : pg_afu
 port_gasket #(
-   .PG_NUM_LINKS(PCIE_NUM_LINKS), 
+   .PG_NUM_LINKS(PCIE_NUM_LINKS),
    .PG_NUM_PORTS(PG_AFU_NUM_PORTS),              // Number of PCIe ports to PR region
    .PORT_PF_VF_INFO(PG_PF_VF_INFO),              // PCIe port data
    .NUM_MEM_CH(AFU_MEM_CHANNEL),                 // Number of Memory Porst to PR region
+   .MM_PL_DEPTH(MEM_PL_DEPTH),                   // Memory pipeline depth before PR region crossing
+   .ST_PL_DEPTH(PCIE_PL_DEPTH),                  // PCIe Port pipeline depth before PR region crossing
    .END_OF_LIST    (fabric_width_pkg::apf_pr_slv_eol),                       // port_gasket DFH end of list field
    .NEXT_DFH_OFFSET(fabric_width_pkg::apf_pr_slv_next_dfh_offset),                   // Next offset in OFS management DFH
    .PG_NUM_RTABLE_ENTRIES (PG_NUM_RTABLE_ENTRIES),
@@ -647,7 +669,7 @@ port_gasket #(
    .afu_mem_if         (ext_mem_if),             // Memory interface
 `endif
 
-`ifdef INCLUDE_HSSI                               // Instantiates HE-HSSI in PR region   
+`ifdef INCLUDE_HSSI                               // Instantiates HE-HSSI in PR region
    .hssi_ss_st_tx      (hssi_ss_st_tx),           // HSSI Tx
    .hssi_ss_st_rx      (hssi_ss_st_rx),           // HSSI Rx
    .hssi_fc            (hssi_fc),                 // Flow control interface
@@ -680,16 +702,16 @@ end // else: !if(PG_AFU_NUM_PORTS > 0)
 endgenerate
 
 //----------------------------------------------------------------
-// MCTP management interface 
+// MCTP management interface
 //----------------------------------------------------------------
-always_comb 
+always_comb
 begin
    apf_mctp_mst_if.bready  = 1'b1;
    apf_mctp_mst_if.rready  = 1'b1;
 end
 
 //----------------------------------------------------------------
-// vUART interface 
+// vUART interface
 //----------------------------------------------------------------
 `ifdef INCLUDE_UART
 
@@ -701,12 +723,12 @@ end
                               .clk_50m       (clk_50m),
                               .rst_n_50m     (rst_n_50m[LINK_0]),
                               .pwr_good_csr_clk_n (pwr_good_csr_clk_n),
-                              
+
                               .csr_lite_m_if (apf_uart_mst_if),
                               .csr_lite_if   (apf_uart_slv_if),
                               .host_uart_if  (host_uart_if)
                               );
-   
+
 `else
 dummy_csr #(
    .FEAT_ID          (12'h24),
@@ -720,16 +742,16 @@ dummy_csr #(
 );
 
 always_comb
-begin  
+begin
   apf_uart_mst_if.awaddr   = 21'h0;
   apf_uart_mst_if.awprot   = 3'h0;
   apf_uart_mst_if.awvalid  = 1'b0;
   apf_uart_mst_if.wdata    = 32'h0;
   apf_uart_mst_if.wstrb    = 4'h0;
   apf_uart_mst_if.wvalid   = 1'b0;
-  apf_uart_mst_if.bready   = 1'b0;  
+  apf_uart_mst_if.bready   = 1'b0;
   apf_uart_mst_if.araddr   = 21'h0;
-  apf_uart_mst_if.arprot   = 3'h0; 
+  apf_uart_mst_if.arprot   = 3'h0;
   apf_uart_mst_if.arvalid  = 1'b0;
   apf_uart_mst_if.rready   = 1'b0;
 end
@@ -741,25 +763,25 @@ end
 //-----------------------------------------------------------------------------------------------
 // AFU Peripheral Fabric (APF)
 //-----------------------------------------------------------------------------------------------
-// This is the AXI-Lite interconnect fabric associated with PF0. It contains AFU feature interfaces 
+// This is the AXI-Lite interconnect fabric associated with PF0. It contains AFU feature interfaces
 // local to this hierarchy (protocol checker, port gasket, etc.) that are part of the device feature
 // list (DFL), A board peripheral fabric (BPF) interface that exposes board (top) level features in
-// a separate memory map partition (FME, HSSI, Memory, etc.), and services the interconnect 
-// requirements of the OFS FIM (BPF to PF0 MSIX mailbox, Management Component Transport Protocol 
+// a separate memory map partition (FME, HSSI, Memory, etc.), and services the interconnect
+// requirements of the OFS FIM (BPF to PF0 MSIX mailbox, Management Component Transport Protocol
 // (MCTP) messages to board management, etc.)
-//   
-// The fabrics are generated using scripts with a text file, with the components and the address 
+//
+// The fabrics are generated using scripts with a text file, with the components and the address
 // map, as the input. Please refer to the README in $OFS_ROOTDIR/src/pd_qsys for more details. This
-// script also generates the fabric_width_pkg used below so that the widths of address busses are 
-// consistent with the input specified. 
-// In order to remove/add components to the DFL list, modify the qsys fabric in 
-// src/pd_qsys to add/delete the component and then edit the list below to add/remove the interface. 
+// script also generates the fabric_width_pkg used below so that the widths of address busses are
+// consistent with the input specified.
+// In order to remove/add components to the DFL list, modify the qsys fabric in
+// src/pd_qsys to add/delete the component and then edit the list below to add/remove the interface.
 // If adding a component connect up the port to the new instance.
 //-----------------------------------------------------------------------------------------------
 apf apf(
    .clk_clk               (clk_csr     ),
    .rst_n_reset_n         (rst_n_csr[LINK_0]),
-   
+
    .apf_bpf_slv_awaddr    (apf_bpf_slv_if.awaddr   ),
    .apf_bpf_slv_awprot    (apf_bpf_slv_if.awprot   ),
    .apf_bpf_slv_awvalid   (apf_bpf_slv_if.awvalid  ),
@@ -900,7 +922,7 @@ apf apf(
    .apf_st2mm_mst_rresp   (apf_st2mm_mst_if.rresp  ),
    .apf_st2mm_mst_rvalid  (apf_st2mm_mst_if.rvalid ),
    .apf_st2mm_mst_rready  (apf_st2mm_mst_if.rready ),
-   
+
    .apf_st2mm_slv_awaddr  (apf_st2mm_slv_if.awaddr ),
    .apf_st2mm_slv_awprot  (apf_st2mm_slv_if.awprot ),
    .apf_st2mm_slv_awvalid (apf_st2mm_slv_if.awvalid),
@@ -920,7 +942,7 @@ apf apf(
    .apf_st2mm_slv_rresp   (apf_st2mm_slv_if.rresp  ),
    .apf_st2mm_slv_rvalid  (apf_st2mm_slv_if.rvalid ),
    .apf_st2mm_slv_rready  (apf_st2mm_slv_if.rready ),
-      
+
    .apf_achk_slv_awaddr   (apf_achk_slv_if.awaddr  ),
    .apf_achk_slv_awprot   (apf_achk_slv_if.awprot  ),
    .apf_achk_slv_awvalid  (apf_achk_slv_if.awvalid ),

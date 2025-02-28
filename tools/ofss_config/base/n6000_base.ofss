@@ -1,0 +1,17 @@
+[ip]
+type = ofs
+
+[settings]
+platform = n6000
+family = agilex
+fim = base_x16
+part = AGFB014R24A2E2V
+device_id = 6000
+
+[pcie.settings]
+# Default settings may be overriden by PCIe-specific OFSS files
+pcie_gen = 4
+
+[pcie]
+subsys_dev_id = 0x1770
+exvf_subsysid = 0x1770

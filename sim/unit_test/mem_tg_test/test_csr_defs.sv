@@ -10,6 +10,7 @@
 //-----------------------------------------------------------------------------
 `ifndef __TEST_CSR_DEFS__
 `define __TEST_CSR_DEFS__
+`include "ofs_ip_cfg_db.vh"
 
 package test_csr_defs;
    // ******************************************************************************************
@@ -28,6 +29,7 @@ package test_csr_defs;
 
    localparam DFH_START_OFFSET = 64'h0; 
    localparam EMIF_DFH_FEAT_ID = 12'h9; 
+   localparam NUMBER_OF_LINKS = `OFS_FIM_IP_CFG_PCIE_SS_NUM_LINKS;
 
    // ******************************************************************************************
    // EMIF feature registers
@@ -187,11 +189,27 @@ package test_csr_defs;
    localparam TG_BYTEEN_SEL_DEFAULT = '0;
    
    // ******************************************************************************************
+   // TG CSR OPTIONS
+   // ******************************************************************************************
+   localparam TG_ADDR_RAND     = 2'd0;
+   localparam TG_ADDR_SEQ      = 2'd1;
+   localparam TG_ADDR_RAND_SEQ = 2'd2;
+   localparam TG_ADDR_ONE_HOT  = 2'd3;
+
+
+   // ******************************************************************************************
    // AFU Register Default Values
    // ******************************************************************************************
-   localparam AFU_DFH_VAL                        = 64'h1000010000001000;
+   localparam AFU_DFH_VAL                        = 64'h1001010000001000;
    localparam AFU_ID_L_VAL                       = 64'hA3DC5B831F5CECBB;
    localparam AFU_ID_H_VAL                       = 64'h4DADEA342C7848CB;
+
+   // ******************************************************************************************
+   // HBM Values
+   // ******************************************************************************************
+   localparam HBM_CH_OFFSET                      = 64'h400000;
+   localparam HBM_CH_INCR                        = 32'h1;
+
 
 endpackage
 

@@ -4,14 +4,13 @@
 // Test module for the simulation. 
 //---------------------------------------------------------
 
-import host_bfm_types_pkg::*;
 
 module unit_test #(
    parameter SOC_ATTACH = 0,
    parameter LINK_NUMBER = 0,
-   parameter type pf_type = default_pfs, 
+   parameter type pf_type = host_bfm_types_pkg::default_pfs, 
    parameter pf_type pf_list = '{1'b1}, 
-   parameter type vf_type = default_vfs, 
+   parameter type vf_type = host_bfm_types_pkg::default_vfs, 
    parameter vf_type vf_list = '{0}
 )(
    input logic clk,
@@ -21,13 +20,14 @@ module unit_test #(
 );
 
 import pfvf_class_pkg::*;
-import host_memory_class_pkg::*;
+import host_ofs_bfm_memory_class_pkg::*;
 import tag_manager_class_pkg::*;
 import pfvf_status_class_pkg::*;
 import packet_class_pkg::*;
 import host_axis_send_class_pkg::*;
 import host_axis_receive_class_pkg::*;
 import host_transaction_class_pkg::*;
+import host_bfm_types_pkg::*;
 import host_bfm_class_pkg::*;
 import test_csr_defs::*;
 
@@ -81,7 +81,6 @@ pfvf_struct pfvf;
 parameter MAX_TEST = 100;
 parameter TIMEOUT = 10.0ms;
 parameter RP_MAX_TAGS = 64;
-localparam NUMBER_OF_LINKS = `OFS_FIM_IP_CFG_PCIE_SS_NUM_LINKS;
 localparam string unit_test_name = "Port Gasket Test";
 
 //---------------------------------------------------------
@@ -415,34 +414,40 @@ begin
    
    if (LINK_NUMBER == 0)
    begin
-      $display("\n---------------------------------------");
-      $display("Test CSR access to VIRTIO-LB (PF3)");
-      $display("---------------------------------------\n");
       pfvf = '{3,0,0}; // Set PFVF to PF3
-      host_bfm_top.host_bfm.set_pfvf_setting(pfvf);
-      test_csr_read_64(result, addr_mode, VIRTIO_DFH, 64'h1000010000000000); 
+      if (host_bfm_top.host_bfm.pfvf_exists(pfvf))
+      begin
+         $display("\n---------------------------------------");
+         $display("Test CSR access to VIRTIO-LB (PF3)");
+         $display("---------------------------------------\n");
+         host_bfm_top.host_bfm.set_pfvf_setting(pfvf);
+         test_csr_read_64(result, addr_mode, VIRTIO_DFH, 64'h1000010000000000); 
 
-      test_csr_read_64(result, addr_mode, VIRTIO_GUID_L, 64'hB9AB_EFBD_90B9_70C4);
-      test_csr_read_64(result, addr_mode, VIRTIO_GUID_H, 64'h1AAE_155C_ACC5_4210);   
-      
-      test_csr_read_32(result, addr_mode, VIRTIO_DFH, 64'h00000000 );
-      test_csr_read_32(result, addr_mode, VIRTIO_DFH+4, 64'h10000100); 
+         test_csr_read_64(result, addr_mode, VIRTIO_GUID_L, 64'hB9AB_EFBD_90B9_70C4);
+         test_csr_read_64(result, addr_mode, VIRTIO_GUID_H, 64'h1AAE_155C_ACC5_4210);   
+         
+         test_csr_read_32(result, addr_mode, VIRTIO_DFH, 64'h00000000 );
+         test_csr_read_32(result, addr_mode, VIRTIO_DFH+4, 64'h10000100); 
 
-      test_csr_read_32(result, addr_mode, VIRTIO_GUID_L, 64'h90B9_70C4);   
-      test_csr_read_32(result, addr_mode, VIRTIO_GUID_L+4, 64'hB9AB_EFBD);
-      test_csr_read_32(result, addr_mode, VIRTIO_GUID_H, 64'hACC5_4210);
-      test_csr_read_32(result, addr_mode, VIRTIO_GUID_H+4, 64'h1AAE_155C); 
+         test_csr_read_32(result, addr_mode, VIRTIO_GUID_L, 64'h90B9_70C4);   
+         test_csr_read_32(result, addr_mode, VIRTIO_GUID_L+4, 64'hB9AB_EFBD);
+         test_csr_read_32(result, addr_mode, VIRTIO_GUID_H, 64'hACC5_4210);
+         test_csr_read_32(result, addr_mode, VIRTIO_GUID_H+4, 64'h1AAE_155C); 
 
-      test_csr_access_64(result, addr_mode, VIRTIO_SCRATCHPAD, 'h1111_2222_3333_4444);
-      test_csr_access_32(result, addr_mode, VIRTIO_SCRATCHPAD, 'haa08_08aa);   
+         test_csr_access_64(result, addr_mode, VIRTIO_SCRATCHPAD, 'h1111_2222_3333_4444);
+         test_csr_access_32(result, addr_mode, VIRTIO_SCRATCHPAD, 'haa08_08aa);   
+      end
    
-      $display("\n---------------------------------------");
-      $display("Test CSR access to HPS (PF4) CE-NULL");
-      $display("---------------------------------------\n");
       pfvf = '{4,0,0}; // Set PFVF to PF4
-      host_bfm_top.host_bfm.set_pfvf_setting(pfvf);
-      test_csr_access_64(result, addr_mode, HE_NULL_SCRATCHPAD, 'h1111_2222_3333_4444);
-      test_csr_access_32(result, addr_mode, HE_NULL_SCRATCHPAD, 'haa09_09aa);   
+      if (host_bfm_top.host_bfm.pfvf_exists(pfvf))
+      begin
+         $display("\n---------------------------------------");
+         $display("Test CSR access to HPS (PF4) CE-NULL");
+         $display("---------------------------------------\n");
+         host_bfm_top.host_bfm.set_pfvf_setting(pfvf);
+         test_csr_access_64(result, addr_mode, HE_NULL_SCRATCHPAD, 'h1111_2222_3333_4444);
+         test_csr_access_32(result, addr_mode, HE_NULL_SCRATCHPAD, 'haa09_09aa);   
+      end
    end
    post_test_util(old_test_err_count);
 end

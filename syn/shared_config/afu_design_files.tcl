@@ -11,7 +11,6 @@ set_global_assignment -name SYSTEMVERILOG_FILE $::env(BUILD_ROOT_REL)/src/includ
 #-------------------- 
 set_global_assignment -name SYSTEMVERILOG_FILE $::env(BUILD_ROOT_REL)/src/afu_top/dummy_csr.sv
 set_global_assignment -name SYSTEMVERILOG_FILE $::env(BUILD_ROOT_REL)/src/afu_top/apf_top.sv
-set_global_assignment -name SYSTEMVERILOG_FILE $::env(BUILD_ROOT_REL)/src/afu_top/port1_afu_top.sv
 set_global_assignment -name SYSTEMVERILOG_FILE $::env(BUILD_ROOT_REL)/src/afu_top/afu_top.sv
 set_global_assignment -name SYSTEMVERILOG_FILE $::env(BUILD_ROOT_REL)/src/afu_top/afu_host_channel.sv
 
@@ -42,10 +41,13 @@ set_global_assignment -name SYSTEMVERILOG_FILE $::env(BUILD_ROOT_REL)/src/afu_to
 #--------------------
 #set_global_assignment -name SOURCE_TCL_SCRIPT_FILE $::env(BUILD_ROOT_REL)/ofs-common/src/common/mem_tg/mem_tg_design_files.tcl
 
+if { [::config_env::verilog_macro_defined CONFIG_AGILEX5] == 0 } {
+    set_global_assignment -name SOURCE_TCL_SCRIPT_FILE $::env(BUILD_ROOT_REL)/ofs-common/src/common/mem_tg/mem_tg_design_files.tcl
+}
+
 #--------------------
 # PR Gasket modules
 #--------------------
 # Synthetic timing constraints on user clock to achieve user-defined frequencies.
 # *** This must follow the user clock IP. ***
 set_global_assignment -name SDC_FILE $::env(BUILD_ROOT_REL)/syn/shared_config/setup_user_clock_for_pr.sdc
-

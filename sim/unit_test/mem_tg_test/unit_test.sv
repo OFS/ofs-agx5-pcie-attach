@@ -4,14 +4,13 @@
 // Test module for the simulation. 
 //---------------------------------------------------------
 
-import host_bfm_types_pkg::*;
 
 module unit_test #(
    parameter SOC_ATTACH = 0,
    parameter LINK_NUMBER = 0,
-   parameter type pf_type = default_pfs, 
+   parameter type pf_type = host_bfm_types_pkg::default_pfs, 
    parameter pf_type pf_list = '{1'b1}, 
-   parameter type vf_type = default_vfs, 
+   parameter type vf_type = host_bfm_types_pkg::default_vfs, 
    parameter vf_type vf_list = '{0}
 )(
    input logic clk,
@@ -19,15 +18,20 @@ module unit_test #(
    input logic csr_clk,
    input logic csr_rst_n
 );
+`ifdef INCLUDE_HBM
+// TODO: replace with generated file path.
+`include "../../scripts/qip_gen_mseries-dk/ipss/mem/qip/hbm_ss/hbm_ss/sim/hbm_ss_noc_sim.inc"
+`endif
 
 import pfvf_class_pkg::*;
-import host_memory_class_pkg::*;
+import host_ofs_bfm_memory_class_pkg::*;
 import tag_manager_class_pkg::*;
 import pfvf_status_class_pkg::*;
 import packet_class_pkg::*;
 import host_axis_send_class_pkg::*;
 import host_axis_receive_class_pkg::*;
 import host_transaction_class_pkg::*;
+import host_bfm_types_pkg::*;
 import host_bfm_class_pkg::*;
 import test_csr_defs::*;
 
@@ -79,9 +83,8 @@ pfvf_struct pfvf;
 //  BEGIN: Test Tasks and Utilities
 //---------------------------------------------------------
 parameter MAX_TEST = 100;
-//parameter TIMEOUT = 1.5ms;
-parameter TIMEOUT = 10.0ms;
-localparam NUMBER_OF_LINKS = `OFS_FIM_IP_CFG_PCIE_SS_NUM_LINKS;
+parameter TIMEOUT = 1.5ms;
+//parameter TIMEOUT = 10.0ms;
 localparam string unit_test_name = "MEM Test Pattern Generator (TG) Test";
 
 //---------------------------------------------------------
@@ -480,12 +483,6 @@ begin
    test_done = 1'b0;
    all_tests_done = 1'b0;
    test_result = 1'b0;
- `ifdef INCLUDE_DDR4
-   force {top_tb.DUT.local_mem_wrapper.mem_ss_top.mem_ss_inst.i1_app_ss_mm_awaddr[32]} = 1'b0;
-   force {top_tb.DUT.local_mem_wrapper.mem_ss_top.mem_ss_inst.i0_app_ss_mm_awaddr[32]} = 1'b0;
-   force {top_tb.DUT.local_mem_wrapper.mem_ss_top.mem_ss_inst.i1_app_ss_mm_araddr[32]} = 1'b0;
-   force {top_tb.DUT.local_mem_wrapper.mem_ss_top.mem_ss_inst.i0_app_ss_mm_araddr[32]} = 1'b0;
- `endif
 end
 
 
@@ -667,9 +664,9 @@ begin
    test_csr_access_32(result, addr_mode, AFU_SCRATCH_ADDR, 'hAFC0_0001);
    test_csr_access_64(result, addr_mode, AFU_SCRATCH_ADDR, 'hAFC0_0003_AFC0_0002);
 
-   // Test illegal memory read returns CPL
-   test_unused_csr_access_32(result, addr_mode, MEM_TG_STAT_ADDR + 'h8, 'hF00D_0001);
-   test_unused_csr_access_64(result, addr_mode, MEM_TG_STAT_ADDR + 'h8, 'hF00D_0003_F00D_0002);
+   // Test unused addr memory read returns CPL
+   test_unused_csr_access_32(result, addr_mode, tg2_csr_pkg::TG2_CH_BASE - 'h8, 'hF00D_0001);
+   test_unused_csr_access_64(result, addr_mode, tg2_csr_pkg::TG2_CH_BASE - 'h8, 'hF00D_0003_F00D_0002);
 
    post_test_util(old_test_err_count);
 end
@@ -677,7 +674,7 @@ endtask
 
 
 // Test AFU MMIO read write
-`ifdef INCLUDE_DDR4
+`ifdef INCLUDE_LOCAL_MEM
 task mem_tg_test;
    output logic result;
 
@@ -696,6 +693,8 @@ task mem_tg_test;
    logic [31:0] old_test_err_count;
    logic tg_active;
    int 	 ch;
+   longint ch_offset;
+   int  tg_addr_mode;
    cpl_status_t cpl_status;
    enum {
        TG_ACTIVE_BIT,
@@ -729,11 +728,17 @@ begin
          result = 1'b0;
       end
 
+      `ifdef INCLUDE_HBM
+         tg_addr_mode = TG_ADDR_SEQ;
+      `else
+         tg_addr_mode = TG_ADDR_RAND_SEQ;
+      `endif
+
       host_bfm_top.host_bfm.write32((ch+1)*MEM_TG_CFG_OFFSET + TG_LOOP_COUNT,   loops);
       host_bfm_top.host_bfm.write32((ch+1)*MEM_TG_CFG_OFFSET + TG_WRITE_COUNT,  wr);
       host_bfm_top.host_bfm.write32((ch+1)*MEM_TG_CFG_OFFSET + TG_READ_COUNT,   rd);
       host_bfm_top.host_bfm.write32((ch+1)*MEM_TG_CFG_OFFSET + TG_BURST_LENGTH, bls);
-      host_bfm_top.host_bfm.write32((ch+1)*MEM_TG_CFG_OFFSET + TG_ADDR_MODE_WR, 32'h2);
+      host_bfm_top.host_bfm.write32((ch+1)*MEM_TG_CFG_OFFSET + TG_ADDR_MODE_WR, tg_addr_mode);
 
       host_bfm_top.host_bfm.read64_with_completion_status((ch+1)*MEM_TG_CFG_OFFSET + TG_LOOP_COUNT, scratch, error, cpl_status);
       if(scratch[31:0] != loops) begin
@@ -760,12 +765,64 @@ begin
          result = 1'b0;
       end
       host_bfm_top.host_bfm.read64_with_completion_status((ch+1)*MEM_TG_CFG_OFFSET + TG_ADDR_MODE_WR, scratch, error, cpl_status);
-      if(scratch[31:0] != 'h2) begin
-         $display("\nERROR: Unable to configure TG_ADDR_MODE_WR exp=%d act=%d \n",32'h2, scratch[31:0]);
+      if(scratch[31:0] != tg_addr_mode) begin
+         $display("\nERROR: Unable to configure TG_ADDR_MODE_WR exp=%d act=%d \n",tg_addr_mode, scratch[31:0]);
          incr_err_count();
          result = 1'b0;
       end
 
+      `ifdef INCLUDE_HBM
+      ch_offset = HBM_CH_OFFSET*(ch % 16);
+      host_bfm_top.host_bfm.write32((ch+1)*MEM_TG_CFG_OFFSET + TG_SEQ_START_ADDR_WR_H, ch_offset[63:32]);
+      host_bfm_top.host_bfm.write32((ch+1)*MEM_TG_CFG_OFFSET + TG_SEQ_START_ADDR_WR_L, ch_offset[31:0]);
+      host_bfm_top.host_bfm.write32((ch+1)*MEM_TG_CFG_OFFSET + TG_SEQ_START_ADDR_RD_H, ch_offset[63:32]);
+      host_bfm_top.host_bfm.write32((ch+1)*MEM_TG_CFG_OFFSET + TG_SEQ_START_ADDR_RD_L, ch_offset[31:0]);
+      host_bfm_top.host_bfm.write32((ch+1)*MEM_TG_CFG_OFFSET + TG_SEQ_ADDR_INCR, HBM_CH_INCR);
+      host_bfm_top.host_bfm.write32((ch+1)*MEM_TG_CFG_OFFSET + TG_ADDR_MODE_RD, tg_addr_mode);
+
+      host_bfm_top.host_bfm.read64_with_completion_status((ch+1)*MEM_TG_CFG_OFFSET + TG_SEQ_START_ADDR_WR_H, scratch, error, cpl_status);
+      if(scratch[31:0] != ch_offset[63:32]) begin
+         $display("\nERROR: Unable to configure TG_SEQ_START_ADDR_WR_H exp=%d act=%d \n",ch_offset[63:32], scratch[31:0]);
+         incr_err_count();
+         result = 1'b0;
+      end
+      
+      host_bfm_top.host_bfm.read64_with_completion_status((ch+1)*MEM_TG_CFG_OFFSET + TG_SEQ_START_ADDR_WR_L, scratch, error, cpl_status);
+      if(scratch[31:0] != ch_offset[31:0]) begin
+         $display("\nERROR: Unable to configure TG_SEQ_START_ADDR_WR_L exp=%d act=%d \n",ch_offset[31:0], scratch[31:0]);
+         incr_err_count();
+         result = 1'b0;
+      end
+      
+      host_bfm_top.host_bfm.read64_with_completion_status((ch+1)*MEM_TG_CFG_OFFSET + TG_SEQ_START_ADDR_RD_H, scratch, error, cpl_status);
+      if(scratch[31:0] != ch_offset[63:32]) begin
+         $display("\nERROR: Unable to configure TG_SEQ_START_ADDR_RD_H exp=%d act=%d \n",ch_offset[63:32], scratch[31:0]);
+         incr_err_count();
+         result = 1'b0;
+      end
+      
+      host_bfm_top.host_bfm.read64_with_completion_status((ch+1)*MEM_TG_CFG_OFFSET + TG_SEQ_START_ADDR_RD_L, scratch, error, cpl_status);
+      if(scratch[31:0] != ch_offset[31:0]) begin
+         $display("\nERROR: Unable to configure TG_SEQ_START_ADDR_RD_L exp=%d act=%d \n",ch_offset[31:0], scratch[31:0]);
+         incr_err_count();
+         result = 1'b0;
+      end
+      
+      host_bfm_top.host_bfm.read64_with_completion_status((ch+1)*MEM_TG_CFG_OFFSET + TG_SEQ_ADDR_INCR, scratch, error, cpl_status);
+      if(scratch[31:0] != HBM_CH_INCR) begin
+         $display("\nERROR: Unable to configure TG_SEQ_ADDR_INCR exp=%d act=%d \n",HBM_CH_INCR, scratch[31:0]);
+         incr_err_count();
+         result = 1'b0;
+      end
+      
+      host_bfm_top.host_bfm.read64_with_completion_status((ch+1)*MEM_TG_CFG_OFFSET + TG_ADDR_MODE_RD, scratch, error, cpl_status);
+      if(scratch[31:0] != tg_addr_mode) begin
+         $display("\nERROR: Unable to configure TG_ADDR_MODE_RD exp=%d act=%d \n",tg_addr_mode, scratch[31:0]);
+         incr_err_count();
+         result = 1'b0;
+      end
+      `endif
+      
       //host_bfm_top.host_bfm.write64((ch+1)*MEM_TG_CFG_OFFSET + TG_START, 64'h1);
       host_bfm_top.host_bfm.write32((ch+1)*MEM_TG_CFG_OFFSET + TG_START, 32'h1);
    end // for (ch=0; mem_capability[ch] == 1'b1; ch=ch+1)
@@ -817,9 +874,9 @@ begin
    for(ch=0; mem_capability[ch] == 1'b1; ch=ch+1) begin
       host_bfm_top.host_bfm.read64_with_completion_status(MEM_TG_CLOCKS_OFFSET + (32'h8 * ch), tg_status, error, cpl_status);
       $display("\n TG[%d] clocks to completion: %d\n",ch,tg_status);
-      mem_bw = (((real'(loops) * real'(rd) * real'(bls) * 64.0) / real'(tg_status))*0.3); // GB/s @ 300MHz
+      mem_bw = (((real'(loops) * real'(rd) * real'(bls) * 64.0) / real'(tg_status[31:0]))*0.3); // GB/s @ 300MHz
       $display("Rd BW = %0.3f GBps\n",mem_bw);
-      mem_bw = (((real'(loops) * real'(wr) * real'(bls) * 64.0) / real'(tg_status))*0.3); // GB/s @ 300MHz
+      mem_bw = (((real'(loops) * real'(wr) * real'(bls) * 64.0) / real'(tg_status[31:0]))*0.3); // GB/s @ 300MHz
       $display("Wr BW = %0.3f GBps\n",mem_bw);
    end
    post_test_util(old_test_err_count);
@@ -892,8 +949,8 @@ begin
    // Force rd rsp data to 0 to trigger test failure
    // LHS must be a constant in force/release statements => constant index select
    // this test only runs on channel 0
-  `ifdef INCLUDE_DDR4
-   force top_tb.DUT.local_mem_wrapper.mem_ss_top.afu_mem_if[0].rdata = '0;
+  `ifdef INCLUDE_LOCAL_MEM
+   force top_tb.DUT.local_mem_wrapper.afu_mem_if[0].rdata = '0;
   `endif
 
    // Poll TG status for completion
@@ -931,8 +988,8 @@ begin
       result = 1'b0;
    end
    // Release rd rsp data
-  `ifdef INCLUDE_DDR4
-   release top_tb.DUT.local_mem_wrapper.mem_ss_top.afu_mem_if[0].rdata;
+  `ifdef INCLUDE_LOCAL_MEM
+   release top_tb.DUT.local_mem_wrapper.afu_mem_if[0].rdata;
   `endif
    post_test_util(old_test_err_count);
    host_bfm_top.host_bfm.revert_to_last_pfvf_setting();
@@ -956,8 +1013,8 @@ task main_test;
       host_bfm_top.host_bfm.set_pfvf_setting(pfvf);
 
       // wait for cal
-     `ifdef INCLUDE_DDR4
-      wait(top_tb.DUT.local_mem_wrapper.mem_ss_top.mem_ss_cal_success[0] == 1'b1);
+     `ifdef INCLUDE_LOCAL_MEM
+      // wait(top_tb.DUT.local_mem_wrapper.mem_ss_top.mem_ss_cal_success[0] == 1'b1);
       test_emif_calibration ( test_result );   
       pfvf = '{0,2,1}; // Set PFVF to PF0-VF2
       host_bfm_top.host_bfm.set_pfvf_setting(pfvf);

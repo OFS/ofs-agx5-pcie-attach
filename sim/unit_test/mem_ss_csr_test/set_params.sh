@@ -17,8 +17,8 @@ else
     DEFINES="$DEFINES +define+SIM_TIMEOUT=10000000000"
 fi
 
-if [ ! -d $OFS_ROOTDIR/sim/scripts/qip_gen_n6000 ] ; then
-    DEFINES="$DEFINES +define+INCLUDE_DDR4 +define+INCLUDE_LOCAL_MEM"
+if grep -q "INCLUDE_LOCAL_MEM" "${OFS_ROOTDIR}/sim/scripts/generated_rtl_flist_macros.f"; then
+    DEFINES="$DEFINES +define+INCLUDE_LOCAL_MEM"
 fi
 
 # If the design is F-tile devkit then disable the top row IOSSM model

@@ -24,16 +24,17 @@ localparam real MAIN_CLK_MHZ = `OFS_FIM_IP_CFG_SYS_CLK_SYS_MHZ;
 //*****************
 // PCIe host parameters
 //*****************
-`ifdef SIM_USE_PCIE_GEN3X16_BFM
-   localparam PCIE_LANES = 16; 
-`else
-   localparam PCIE_LANES = 16;
-`endif
+localparam PCIE_LANES = `OFS_FIM_IP_CFG_PCIE_SS_TOTAL_NUM_LANES;
 
 localparam NUM_PCIE_HOST      = 1;
 localparam PCIE_HOST_WIDTH    = $clog2(NUM_PCIE_HOST);
 
-localparam PCIE_TDATA_WIDTH  = `OFS_FIM_IP_CFG_PCIE_SS_DWIDTH_BYTE * 8;
+// Native width of the AXI-S TLP stream from the PCIe IP
+localparam PCIE_IP_TDATA_WIDTH = `OFS_FIM_IP_CFG_PCIE_SS_DWIDTH_BYTE * 8;
+// Width of the OFS internal TLP stream. May be transformed to a value
+// different from the IP itself. OFS requires a PCIe bus at least wide enough
+// to hold a complete TLP header.
+localparam PCIE_TDATA_WIDTH  = (PCIE_IP_TDATA_WIDTH >= 256) ? PCIE_IP_TDATA_WIDTH : 256;
 localparam PCIE_TUSER_WIDTH  = 10;
 localparam PCIE_LITE_CSR_WIDTH = 20;
 
@@ -76,17 +77,24 @@ localparam MMIO_ADDR_WIDTH    = `OFS_FIM_IP_CFG_PCIE_SS_PF0_BAR0_ADDR_WIDTH;
   localparam NONPF0_MMIO_ADDR_WIDTH = 12;  // Pick a default
 `endif
 
-
-//MSIX
 `ifdef NUM_AFUS
 localparam   NUM_AFUS    = 2;
 `else
 localparam   NUM_AFUS    = 1;
 `endif
 localparam LNUM_AFUS = NUM_AFUS>1?$clog2(NUM_AFUS):1'h1;
-localparam NUM_AFU_INTERRUPTS = 7;
-localparam L_NUM_AFU_INTERRUPTS = $clog2(NUM_AFU_INTERRUPTS);
 
+
+// MSIX
+
+// Number of interrupts is encoded per-PF/VF from the PCIe IP as a vector
+localparam int MSIX_PF_TABLE_SIZE[8] = '{ `OFS_FIM_IP_CFG_PCIE_SS_MSIX_PF_TABLE_SIZE_VEC };
+localparam int MSIX_VF_TABLE_SIZE[8] = '{ `OFS_FIM_IP_CFG_PCIE_SS_MSIX_VF_TABLE_SIZE_VEC };
+
+// OFS expects each function to have the same MSI-X configuration.
+// Try VF0. Failing that, use PF0.
+localparam NUM_AFU_INTERRUPTS = MSIX_VF_TABLE_SIZE[0] ? MSIX_VF_TABLE_SIZE[0] : MSIX_PF_TABLE_SIZE[0];
+localparam L_NUM_AFU_INTERRUPTS = $clog2(NUM_AFU_INTERRUPTS);
 
 endpackage
 

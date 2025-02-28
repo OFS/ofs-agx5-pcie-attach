@@ -12,6 +12,7 @@ import datetime
 import re
 import os
 import sys
+import random
 import smtplib
 import textwrap
 from email.mime.text import MIMEText
@@ -345,6 +346,55 @@ def scan_qsf_for_include(item):
         sys.exit(1)
     return is_item_found
 
+def scan_verilog_macros_for_include(item):
+    verilog_macro_dir = rootdir + "/sim/scripts"
+    verilog_macro_file = verilog_macro_dir + "/" + "generated_rtl_flist_macros.f"
+    item_pattern = r'^\s*#*\s*\+define\+' + f"{item}"
+    is_item_found = False
+    if (os.path.exists(verilog_macro_file)):
+        logger.debug(f"VERILOG MACRO SCAN: File:{verilog_macro_file}")
+    else:
+        logger.error(f"ERROR: Generated Verilog Macro File NOT found...: {verilog_macro_file}")
+        logger.error(f"       Script {os.path.basename(__file__)} execution has been halted.") 
+        sys.exit(1)
+    try:
+        with open(verilog_macro_file) as file_object:
+            for line in file_object:
+                line = line.rstrip()
+                item_pattern_found = re.search(item_pattern,line)
+                if (item_pattern_found):
+                    is_item_found = True
+                    break
+    except FileNotFoundError:
+        logger.error(f"ERROR: Generated Verilog Macro File NOT found...: {verilog_macro_file}")
+        logger.error(f"       Script {os.path.basename(__file__)} execution has been halted.") 
+        sys.exit(1)
+    return is_item_found
+
+
+def scan_last_generation_command():
+    gen_cmd_dir = rootdir + "/sim/scripts"
+    gen_cmd_file = gen_cmd_dir+"/"+"generated_cmd.f"
+    cmd_pattern = r'\w+'
+    if (os.path.exists(gen_cmd_file)):
+        logger.debug(f"GENERATION COMMAND: File:{gen_cmd_file}")
+    else:
+        logger.error(f"ERROR: Simulation File Generation Command File NOT found...: {gen_cmd_file}")
+        logger.error(f"       Script {os.path.basename(__file__)} execution has been halted.") 
+        sys.exti(1)
+    try:
+        with open(gen_cmd_file) as file_object:
+            for line in file_object:
+                line = line.rstrip()
+                cmd_pattern_found = re.search(cmd_pattern,line)
+                if (cmd_pattern_found):
+                    generation_cmd = line
+    except FileNotFoundError:
+        logger.error(f"ERROR: Generated Verilog Macro File NOT found...: {verilog_macro_file}")
+        logger.error(f"       Script {os.path.basename(__file__)} execution has been halted.") 
+        sys.exit(1)
+    return generation_cmd
+
 
 def get_email_list():
     email_list = os.getenv('EMAIL_LIST')
@@ -389,33 +439,41 @@ def get_last_commit():
 
 
 def get_fim_variant():
-    #top_fim_gen_dir = rootdir + "/sim/scripts"
-    fim_variant_cmd_line = f"stat {top_fim_gen_dir}/qip_gen"
+    qip_gen_dir = f"{top_fim_gen_dir}/qip_gen"
+    fim_variant_cmd_line = f"stat {qip_gen_dir}"
     fim_variant_found = 0
     fim_variant = ""
-    fim_variant_pattern = r'File:\s+.*qip_gen\s*->\s*.*qip_gen_(\w+)'
-    fim_variant_discovery_command = subprocess.Popen(fim_variant_cmd_line.split(), stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
-    with fim_variant_discovery_command.stdout:
-        for line in iter(fim_variant_discovery_command.stdout.readline, ""):
-            line_contains_pattern = re.search(fim_variant_pattern,line)
-            if (line_contains_pattern):
-                fim_variant = line_contains_pattern.group(1)
-                fim_variant_found = 1
-    fim_variant_discovery_command.wait()
-    command_success = fim_variant_discovery_command.poll()
-    if (command_success == 0):
-        if (fim_variant_found):
-            logger.debug(f"FIM Variant search has returned successfully with return value {command_success}.")
-            logger.debug(f"FIM Variant is: {fim_variant}.")
+    fim_variant_pattern = r'File:\s*.*qip_gen.?\s*->\s*.*qip_gen_([-\w]+)'
+    if (os.path.exists(qip_gen_dir)):
+        fim_variant_discovery_command = subprocess.Popen(fim_variant_cmd_line.split(), stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
+        with fim_variant_discovery_command.stdout:
+            for line in iter(fim_variant_discovery_command.stdout.readline, ""):
+                line_contains_pattern = re.search(fim_variant_pattern,line)
+                if (line_contains_pattern):
+                    fim_variant = line_contains_pattern.group(1)
+                    fim_variant_found = 1
+        fim_variant_discovery_command.wait()
+        command_success = fim_variant_discovery_command.poll()
+        if (command_success == 0):
+            if (fim_variant_found):
+                logger.debug(f"FIM Variant search has returned successfully with return value {command_success}.")
+                logger.debug(f"FIM Variant is: {fim_variant}.")
+            else:
+                logger.error(f"ERROR: FIM Variant could not be found.")
+                logger.error(f"       Script {os.path.basename(__file__)} execution has been halted.") 
+                sys.exit(1)
         else:
-            logger.error(f"ERROR: FIM Variant could not be found.")
+            logger.error(f"ERROR: FIM Variant directory stat command has failed: {fim_variant_cmd_line}")
             logger.error(f"       Script {os.path.basename(__file__)} execution has been halted.") 
             sys.exit(1)
+        return fim_variant
     else:
-        logger.error(f"ERROR: FIM Variant directory stat command has failed: {fim_variant_cmd_line}")
-        logger.error(f"       Script {os.path.basename(__file__)} execution has been halted.") 
+        logger.error(f"ERROR: Simulation file generation has not been completed.")
+        logger.error(f"       This must be done before the script can proceed.              ")
+        logger.error(f"       Either run the gen_sim_files.sh script in the directory:      ")
+        logger.error(f"           ofs-common@commit/scripts/common/sim/gen_sim_files.sh     ")
+        logger.error(f"       Or add the --gen_sim_files option with this script.           ")
         sys.exit(1)
-    return fim_variant
 
 
 def find_files(filename, search_top_dir):
@@ -521,38 +579,17 @@ def create_test_list():
                 for test in working_test_list:
                     test_path_split = test.split("/")
                     pre_filtered_test_list.append(test_path_split[-1])                
-                if (fim_variant == "fseries-dk"):
-                    if not qsf_includes_pmci:
-                        test_remove_patterns.append(r'^pmci')
-                    if not qsf_includes_ddr4:
-                        test_remove_patterns.append(r'he_mem_lb')
-                        test_remove_patterns.append(r'^mem_')
-                    if not qsf_includes_hssi:
-                        test_remove_patterns.append(r'^he_null')
-                        test_remove_patterns.append(r'^hssi_')
-                    filtered_test_list = remove_matching_tests(pre_filtered_test_list,test_remove_patterns)
-                elif (fim_variant == "iseries-dk"):
-                    if not qsf_includes_pmci:
-                        test_remove_patterns.append(r'^pmci')
-                    if not qsf_includes_ddr4:
-                        test_remove_patterns.append(r'he_mem_lb')
-                        test_remove_patterns.append(r'^mem_')
-                    if not qsf_includes_hssi:
-                        test_remove_patterns.append(r'^he_null')
-                        test_remove_patterns.append(r'^hssi_')
-                    filtered_test_list = remove_matching_tests(pre_filtered_test_list,test_remove_patterns)
-                else:
-                    test_remove_patterns.append(r'pmci_multi_master')
-                    test_remove_patterns.append(r'pmci_qsfp_telemetry')
-                    if not qsf_includes_pmci:
-                        test_remove_patterns.append(r'^pmci')
-                    if not qsf_includes_ddr4:
-                        test_remove_patterns.append(r'he_mem_lb')
-                        test_remove_patterns.append(r'^mem_')
-                    if not qsf_includes_hssi:
-                        test_remove_patterns.append(r'^he_null')
-                        test_remove_patterns.append(r'^hssi_')
-                    filtered_test_list = remove_matching_tests(pre_filtered_test_list,test_remove_patterns)
+                test_remove_patterns.append(r'pmci_multi_master')
+                test_remove_patterns.append(r'pmci_qsfp_telemetry')
+                if not design_includes_pmci:
+                    test_remove_patterns.append(r'^pmci')
+                if not design_includes_local_mem:
+                    test_remove_patterns.append(r'he_mem_lb')
+                    test_remove_patterns.append(r'^mem_')
+                if not design_includes_hssi:
+                    test_remove_patterns.append(r'^he_null')
+                    test_remove_patterns.append(r'^hssi_')
+                filtered_test_list = remove_matching_tests(pre_filtered_test_list,test_remove_patterns)
             else:
                 test_dir_pattern = "\/(" + args.package + r'\w+)$'
                 logger.debug(f"Unit Test Search Pattern: {test_dir_pattern}")
@@ -767,15 +804,20 @@ def send_email_report():
     html_data += html_body_text_header
     html_data += f"    FIM Variant detected in sim generation........: {fim_variant}"
     html_data += html_body_text_ender
-    if (qsf_includes_ddr4):
+    for ddr_family_name in design_includes_ddr:
+        if (design_includes_ddr[ddr_family_name] == True):
+            html_data += html_body_text_header
+            html_data += f"    Design contains {ddr_family_name}..........................:   {ddr_family_name} Included"
+            html_data += html_body_text_ender
+    if (design_includes_local_mem):
         html_data += html_body_text_header
-        html_data += f"    Design contains DDR4..........................:   DDR4 Included"
+        html_data += f"    Design contains Local Memory..................:   Local Memory Included"
         html_data += html_body_text_ender
     else:
         html_data += html_body_text_header
-        html_data += f"    Design contains DDR4..........................:   None"
+        html_data += f"    Design contains Local Memory..................:   None"
         html_data += html_body_text_ender
-    if (qsf_includes_pmci):
+    if (design_includes_pmci):
         html_data += html_body_text_header
         html_data += f"    Design contains PMCI..........................:   PMCI Included"
         html_data += html_body_text_ender
@@ -783,7 +825,7 @@ def send_email_report():
         html_data += html_body_text_header
         html_data += f"    Design contains PMCI..........................:   None"
         html_data += html_body_text_ender
-    if (qsf_includes_hssi):
+    if (design_includes_hssi):
         html_data += html_body_text_header
         html_data += f"    Design contains HSSI..........................:   HSSI Included"
         html_data += html_body_text_ender
@@ -791,6 +833,9 @@ def send_email_report():
         html_data += html_body_text_header
         html_data += f"    Design contains HSSI..........................:   None"
         html_data += html_body_text_ender
+    html_data += html_body_text_header
+    html_data += f"    Last Sim File Generation Command Invoked......: {generation_cmd_line}"
+    html_data += html_body_text_ender
     html_data += html_body_text_header
     html_data += f"    Simulator used for run........................: {args.simulator}"
     html_data += html_body_text_ender
@@ -1260,7 +1305,7 @@ def sim_farm_process_normal(index, test, test_dir_top, simulator):
                             arc_job_status = line_contains_arc_job_status_pattern.group(1)
                             if (arc_job_status != arc_job_last_status):
                                 logger.info(f"   Farm process {index_string} for test <{test_name_extracted:.<{longest_test_name}}> process_status.......: {arc_job_status}")
-                                if (arc_job_status == "done") or (arc_job_status == "error") or (arc_job_status == "dying") or (arc_job_status == "killed"):
+                                if arc_job_status in ["done", "passed", "failed", "error", "dying", "killed", "collected", "expired"]:
                                     arc_job_done = True
                         if (line_contains_arc_job_start_time_pattern):
                             arc_job_start_time = line_contains_arc_job_start_time_pattern.group(1)
@@ -1273,7 +1318,10 @@ def sim_farm_process_normal(index, test, test_dir_top, simulator):
                             arc_job_return_code = line_contains_arc_job_return_code_pattern.group(1)
                 arc_job.wait()
                 arc_job_result = arc_job.poll()
-                time.sleep(1)
+                if arc_job_status in ["running", "queued"]:
+                    time.sleep(random.randrange(45,75)) # Randomize polling from one minute minus 15 seconds to one minute plus 15 seconds to keep from spamming ARC.  (Request from IT.)
+                else:
+                    time.sleep(1) # Otherwise poll each second during transitions.
             sim_end = datetime.datetime.now()
             sim_elapsed = sim_end - sim_start
             logger.info(f"   Farm process {index_string} for test <{test_name_extracted:.<{longest_test_name}}> date/time completed..: {sim_end}")
@@ -1354,7 +1402,7 @@ def sim_farm_process_pmci(index, test, test_dir_top, simulator):
                             arc_job_status = line_contains_arc_job_status_pattern.group(1)
                             if (arc_job_status != arc_job_last_status):
                                 logger.info(f"   Farm process {index_string} for test <{test_name_extracted:.<{longest_test_name}}> process_status.......: {arc_job_status}")
-                                if (arc_job_status == "done") or (arc_job_status == "error") or (arc_job_status == "dying") or (arc_job_status == "killed"):
+                                if arc_job_status in ["done", "passed", "failed", "error", "dying", "killed", "collected", "expired"]:
                                     arc_job_done = True
                         if (line_contains_arc_job_start_time_pattern):
                             arc_job_start_time = line_contains_arc_job_start_time_pattern.group(1)
@@ -1367,7 +1415,10 @@ def sim_farm_process_pmci(index, test, test_dir_top, simulator):
                             arc_job_return_code = line_contains_arc_job_return_code_pattern.group(1)
                 arc_job.wait()
                 arc_job_result = arc_job.poll()
-                time.sleep(1)
+                if arc_job_status in ["running", "queued"]:
+                    time.sleep(random.randrange(45,75)) # Randomize polling from one minute minus 15 seconds to one minute plus 15 seconds to keep from spamming ARC.  (Request from IT.)
+                else:
+                    time.sleep(1) # Otherwise poll each second during transitions.
             sim_end = datetime.datetime.now()
             sim_elapsed = sim_end - sim_start
             logger.info(f"   Farm process {index_string} for test <{test_name_extracted:.<{longest_test_name}}> date/time completed..: {sim_end}")
@@ -1393,9 +1444,10 @@ if __name__ == "__main__":
     test_times_dict = {}
     test_info_dict = {}
     test_results = []
-    qsf_includes_ddr4 = False
-    qsf_includes_pmci = False
-    qsf_includes_hssi = False
+    design_includes_ddr4 = False
+    design_includes_local_mem = False
+    design_includes_pmci = False
+    design_includes_hssi = False
     regression_run_start = datetime.datetime.now()
     msg_queue = multiprocessing.Queue()
     format = "%(asctime)s: %(message)s"
@@ -1442,29 +1494,12 @@ if __name__ == "__main__":
     hostname = get_hostname()
     linux_distro = get_linux_distro()
     gcc_version = get_gcc_version()
-    fim_variant = get_fim_variant()
-    qsf_includes_ddr4 = scan_qsf_for_include("INCLUDE_DDR4")
-    qsf_includes_pmci = scan_qsf_for_include("INCLUDE_PMCI")
-    qsf_includes_hssi = scan_qsf_for_include("INCLUDE_HSSI")
     if ((args.simulator == 'vcs') or (args.simulator == 'vcsmx')):
         simulator_version = get_vcs_version()
     else:
         simulator_version = get_msim_version()
     logger.info(f">>> Running Unit Test Regression Run Python Script: {os.path.basename(__file__)}")
     logger.info(f"    Begin running at date/time..............: {regression_run_start}")
-    logger.info(f"    FIM Variant detected in sim generation..: {fim_variant}")
-    if (qsf_includes_ddr4):
-        logger.info(f"      Design contains DDR4..................:   DDR4 Included")
-    else:
-        logger.info(f"      Design contains DDR4..................:   None")
-    if (qsf_includes_pmci):
-        logger.info(f"      Design contains PMCI..................:   PMCI Included")
-    else:
-        logger.info(f"      Design contains PMCI..................:   None")
-    if (qsf_includes_hssi):
-        logger.info(f"      Design contains HSSI..................:   HSSI Included")
-    else:
-        logger.info(f"      Design contains HSSI..................:   None")
     logger.info(f"    Simulator used for run..................: {args.simulator}")
     logger.info(f"    Simulator Version used for run..........: {simulator_version}")
     if args.run_regression_locally:
@@ -1503,6 +1538,34 @@ if __name__ == "__main__":
             sys.exit(1)
     if args.gen_sim_files:
         generate_sim_files()
+    fim_variant = get_fim_variant()
+    design_includes_ddr = {}
+    ddr_mem_families = range(3,9)
+    for ddr_family in ddr_mem_families:
+        ddr_family_name = f"DDR{ddr_family}"
+        ddr_scan_string = "INCLUDE_" + ddr_family_name
+        design_includes_ddr[ddr_family_name] = scan_verilog_macros_for_include(ddr_scan_string)
+    design_includes_local_mem = scan_verilog_macros_for_include("INCLUDE_LOCAL_MEM")
+    design_includes_pmci = scan_verilog_macros_for_include("INCLUDE_PMCI")
+    design_includes_hssi = scan_verilog_macros_for_include("INCLUDE_HSSI")
+    generation_cmd_line  = scan_last_generation_command()
+    logger.info(f"    FIM Variant detected in sim generation..: {fim_variant}")
+    for ddr_family_name in design_includes_ddr:
+        if (design_includes_ddr[ddr_family_name] == True):
+            logger.info(f"      Design contains {ddr_family_name}..................:   {ddr_family_name} Included")
+    if (design_includes_local_mem):
+        logger.info(f"      Design contains Local Memory..........:   Local Memory Included")
+    else:
+        logger.info(f"      Design contains Local Memory..........:   None")
+    if (design_includes_pmci):
+        logger.info(f"      Design contains PMCI..................:   PMCI Included")
+    else:
+        logger.info(f"      Design contains PMCI..................:   None")
+    if (design_includes_hssi):
+        logger.info(f"      Design contains HSSI..................:   HSSI Included")
+    else:
+        logger.info(f"      Design contains HSSI..................:   None")
+    logger.info(f"    Last Sim File Generation Command Invoked: {generation_cmd_line}")
     list_of_tests = create_test_list()
     pmci_problem_list_of_tests = pmci_problem_test_filter()
     all_tests = list_of_tests + pmci_problem_list_of_tests
