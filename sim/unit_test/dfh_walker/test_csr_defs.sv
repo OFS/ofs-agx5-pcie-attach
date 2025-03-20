@@ -34,13 +34,8 @@ import pg_csr_pkg::*;
       THERM_MNGM_DFH_IDX,
       GLBL_PERF_DFH_IDX,
       GLBL_ERROR_DFH_IDX,
-      QSFP0_DFH_IDX,
-      QSFP1_DFH_IDX,
-      HSSI_DFH_IDX,
       EMIF_DFH_IDX,
-      PMCI_DFH_IDX,
       ST2MM_DFH_IDX,
-      VUART_DFH_IDX,
       PG_PR_DFH_IDX,
       PG_PORT_DFH_IDX,
       PG_USER_CLK_DFH_IDX,
@@ -63,12 +58,7 @@ import pg_csr_pkg::*;
       dfh_names[THERM_MNGM_DFH_IDX]  = "THERM_MNGM_DFH";
       dfh_names[GLBL_PERF_DFH_IDX]   = "GLBL_PERF_DFH";
       dfh_names[GLBL_ERROR_DFH_IDX]  = "GLBL_ERROR_DFH";
-      dfh_names[QSFP0_DFH_IDX]       = "QSFP0_DFH";
-      dfh_names[QSFP1_DFH_IDX]       = "QSFP1_DFH";
-      dfh_names[PMCI_DFH_IDX]        = "PMCI_DFH";
       dfh_names[ST2MM_DFH_IDX]       = "ST2MM_DFH";
-      dfh_names[HSSI_DFH_IDX]        = "HSSI_DFH";
-      dfh_names[VUART_DFH_IDX]       = "VUART_DFH";
       dfh_names[EMIF_DFH_IDX]        = "EMIF_DFH";
       dfh_names[PG_PR_DFH_IDX]       = "PG_PR_DFH";
       dfh_names[PG_PORT_DFH_IDX]     = "PG_PORT_DFH";
@@ -94,26 +84,11 @@ import pg_csr_pkg::*;
       dfh_values[GLBL_ERROR_DFH_IDX] = 64'h3_00000_xxxxxx_1004;
       dfh_values[GLBL_ERROR_DFH_IDX][39:16] = fabric_width_pkg::fme_csr_glbl_error;
 
-      dfh_values[QSFP0_DFH_IDX]      = 64'h3_00000_xxxxxx_0000;
-      dfh_values[QSFP0_DFH_IDX][39:16] = fabric_width_pkg::bpf_qsfp0_slv_next_dfh_offset;
-
-      dfh_values[QSFP1_DFH_IDX]      = 64'h3_00000_xxxxxx_0000;
-      dfh_values[QSFP1_DFH_IDX][39:16] = fabric_width_pkg::bpf_qsfp1_slv_next_dfh_offset;
-
-      dfh_values[HSSI_DFH_IDX]       = 64'h3_00000_xxxxxx_1000;
-      dfh_values[HSSI_DFH_IDX][39:16] = fabric_width_pkg::bpf_hssi_slv_next_dfh_offset;
-
       dfh_values[EMIF_DFH_IDX]       = 64'h3_00000_xxxxxx_1000;
       dfh_values[EMIF_DFH_IDX][39:16] = fabric_width_pkg::bpf_emif_slv_next_dfh_offset;
 
-      dfh_values[PMCI_DFH_IDX]       = 64'h3_00000_xxxxxx_1000;
-      dfh_values[PMCI_DFH_IDX][39:16] = fabric_width_pkg::bpf_pmci_slv_next_dfh_offset;
-
       dfh_values[ST2MM_DFH_IDX]      = 64'h3_00000_xxxxxx_0014;
       dfh_values[ST2MM_DFH_IDX][39:16] = fabric_width_pkg::apf_st2mm_slv_next_dfh_offset;
-
-      dfh_values[VUART_DFH_IDX]      = 64'h3_00000_xxxxxx_0024;
-      dfh_values[VUART_DFH_IDX][39:16] = fabric_width_pkg::apf_uart_slv_next_dfh_offset;
 
       dfh_values[PG_PR_DFH_IDX]      = 64'h3_00000_xxxxxx_1005;
       dfh_values[PG_PR_DFH_IDX][39:16] = fabric_width_pkg::port_pg_pr_dfh;

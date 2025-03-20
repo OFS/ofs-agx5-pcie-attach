@@ -6,10 +6,6 @@
 //-----------------------------------------------------------------------------
 // AFU module instantiates User Logic
 //-----------------------------------------------------------------------------
-`ifdef INCLUDE_HSSI
-   `include "ofs_fim_eth_plat_defines.svh"
-`endif
-
 module afu_top
 #(
    parameter PCIE_NUM_LINKS = 1,
@@ -41,27 +37,8 @@ module afu_top
    ofs_fim_axi_lite_if.master            apf_bpf_slv_if,
    ofs_fim_axi_lite_if.slave             apf_bpf_mst_if,
 
-`ifdef INCLUDE_UART
-   // UART
-   ofs_uart_if.source	host_uart_if,
-`endif
-
 `ifdef INCLUDE_LOCAL_MEM
    ofs_fim_emif_axi_mm_if.user         ext_mem_if [AFU_MEM_CHANNEL-1:0],
-`endif
-
-`ifdef INCLUDE_HPS
-   //HPS Interfaces
-   ofs_fim_axi_mmio_if.slave            hps_axi4_mm_if ,
-   ofs_fim_ace_lite_if.master           hps_ace_lite_if,
-   input                                h2f_reset,
-`endif
-
-`ifdef INCLUDE_HSSI
-   ofs_fim_hssi_ss_tx_axis_if.client      hssi_ss_st_tx [ofs_fim_eth_if_pkg::MAX_NUM_ETH_CHANNELS-1:0],
-   ofs_fim_hssi_ss_rx_axis_if.client      hssi_ss_st_rx [ofs_fim_eth_if_pkg::MAX_NUM_ETH_CHANNELS-1:0],
-   ofs_fim_hssi_fc_if.client              hssi_fc [ofs_fim_eth_if_pkg::MAX_NUM_ETH_CHANNELS-1:0],
-   input logic [ofs_fim_eth_if_pkg::MAX_NUM_ETH_CHANNELS-1:0] i_hssi_clk_pll,
 `endif
 
    // PCIE AXI-S interfaces
@@ -163,8 +140,6 @@ ofs_fim_axi_lite_if #(.AWADDR_WIDTH(MM_ADDR_WIDTH), .ARADDR_WIDTH(MM_ADDR_WIDTH)
 ofs_fim_axi_lite_if #(.AWADDR_WIDTH(16), .ARADDR_WIDTH(16))                       apf_st2mm_slv_if (.clk(clk), .rst_n(rst_n[LINK_0]));
 ofs_fim_axi_lite_if #(.AWADDR_WIDTH(16), .ARADDR_WIDTH(16))                       apf_pgsk_slv_if  (.clk(clk), .rst_n(rst_n[LINK_0]));
 ofs_fim_axi_lite_if #(.AWADDR_WIDTH(MM_ADDR_WIDTH), .ARADDR_WIDTH(MM_ADDR_WIDTH)) apf_mctp_mst_if  (.clk(clk), .rst_n(rst_n[LINK_0]));
-ofs_fim_axi_lite_if #(.AWADDR_WIDTH(MM_ADDR_WIDTH), .ARADDR_WIDTH(MM_ADDR_WIDTH)) apf_uart_mst_if  (.clk(clk), .rst_n(rst_n[LINK_0]));
-ofs_fim_axi_lite_if #(.AWADDR_WIDTH(12), .ARADDR_WIDTH(12))                       apf_uart_slv_if  (.clk(clk), .rst_n(rst_n[LINK_0]));
 ofs_fim_axi_lite_if #(.AWADDR_WIDTH(16), .ARADDR_WIDTH(16))                       apf_achk_slv_if  (.clk(clk), .rst_n(rst_n[LINK_0]));
 ofs_fim_axi_lite_if #(.AWADDR_WIDTH(16), .ARADDR_WIDTH(16))                       apf_tod_slv_if   (.clk(clk), .rst_n(rst_n[LINK_0]));
 
@@ -504,9 +479,6 @@ st2mm #(
    .VF_ACTIVE       (0),
    .MM_ADDR_WIDTH   (MM_ADDR_WIDTH),
    .MM_DATA_WIDTH   (MM_DATA_WIDTH),
-   .PMCI_BASEADDR   (fabric_width_pkg::bpf_pmci_slv_baseaddress),
-   .TX_VDM_OFFSET   (16'h2000),
-   .RX_VDM_OFFSET   (16'h2000),
    .READ_ALLOWANCE  (1),
    .WRITE_ALLOWANCE (1),
    .FEAT_ID         (12'h14),
@@ -595,11 +567,6 @@ generate if(top_cfg_pkg::NUM_SR_PORTS > 0) begin : sr_afu
       .clk_csr           (clk_csr),
       .rst_n_csr         (rst_n_csr),
 
-`ifdef INCLUDE_HPS
-      .hps_axi4_mm_if    (hps_axi4_mm_if),
-      .hps_ace_lite_if   (hps_ace_lite_if),
-      .h2f_reset         (h2f_reset),
-`endif
       .afu_axi_rx_a_if     (sr_rx_a),
       .afu_axi_tx_a_if     (sr_tx_a),
       .afu_axi_rx_b_if     (sr_rx_b),
@@ -669,13 +636,6 @@ port_gasket #(
    .afu_mem_if         (ext_mem_if),             // Memory interface
 `endif
 
-`ifdef INCLUDE_HSSI                               // Instantiates HE-HSSI in PR region
-   .hssi_ss_st_tx      (hssi_ss_st_tx),           // HSSI Tx
-   .hssi_ss_st_rx      (hssi_ss_st_rx),           // HSSI Rx
-   .hssi_fc            (hssi_fc),                 // Flow control interface
-   .i_hssi_clk_pll     (i_hssi_clk_pll),          // HSSI clocks
-`endif
-
    .i_sel_mmio_rsp     (sel_mmio_rsp),
    .i_read_flush_done  (read_flush_done),
    .o_afu_softreset    (afu_softreset),
@@ -702,62 +662,18 @@ end // else: !if(PG_AFU_NUM_PORTS > 0)
 endgenerate
 
 //----------------------------------------------------------------
-// MCTP management interface
+// MCTP management interface : tied off
 //----------------------------------------------------------------
-always_comb
+always_ff @ (posedge clk_csr)
 begin
-   apf_mctp_mst_if.bready  = 1'b1;
-   apf_mctp_mst_if.rready  = 1'b1;
+   apf_mctp_mst_if.bvalid   <= apf_mctp_mst_if.wvalid;
+   apf_mctp_mst_if.rvalid   <= apf_mctp_mst_if.arvalid;
+   apf_mctp_mst_if.awready  <= 1'b1;
+   apf_mctp_mst_if.wready   <= 1'b1;
+   apf_mctp_mst_if.arready  <= 1'b1;
+   apf_mctp_mst_if.bready   <= 1'b1;
+   apf_mctp_mst_if.rready   <= 1'b1;
 end
-
-//----------------------------------------------------------------
-// vUART interface
-//----------------------------------------------------------------
-`ifdef INCLUDE_UART
-
-   vuart_top # (
-                              .ST2MM_DFH_MSIX_ADDR (20'h40000)
-   ) vuart_top (
-                              .clk_csr       (clk_csr),
-                              .rst_n_csr     (rst_n_csr[LINK_0]),
-                              .clk_50m       (clk_50m),
-                              .rst_n_50m     (rst_n_50m[LINK_0]),
-                              .pwr_good_csr_clk_n (pwr_good_csr_clk_n),
-
-                              .csr_lite_m_if (apf_uart_mst_if),
-                              .csr_lite_if   (apf_uart_slv_if),
-                              .host_uart_if  (host_uart_if)
-                              );
-
-`else
-dummy_csr #(
-   .FEAT_ID          (12'h24),
-   .FEAT_VER         (4'h0),
-   .NEXT_DFH_OFFSET  (fabric_width_pkg::apf_uart_slv_next_dfh_offset),
-   .END_OF_LIST      (fabric_width_pkg::apf_uart_slv_eol)
-) uart_dummy_csr (
-   .clk         (clk_csr),
-   .rst_n       (rst_n_csr[LINK_0]),
-   .csr_lite_if (apf_uart_slv_if)
-);
-
-always_comb
-begin
-  apf_uart_mst_if.awaddr   = 21'h0;
-  apf_uart_mst_if.awprot   = 3'h0;
-  apf_uart_mst_if.awvalid  = 1'b0;
-  apf_uart_mst_if.wdata    = 32'h0;
-  apf_uart_mst_if.wstrb    = 4'h0;
-  apf_uart_mst_if.wvalid   = 1'b0;
-  apf_uart_mst_if.bready   = 1'b0;
-  apf_uart_mst_if.araddr   = 21'h0;
-  apf_uart_mst_if.arprot   = 3'h0;
-  apf_uart_mst_if.arvalid  = 1'b0;
-  apf_uart_mst_if.rready   = 1'b0;
-end
-
-
-`endif
 
 
 //-----------------------------------------------------------------------------------------------
@@ -822,7 +738,7 @@ apf apf(
    .apf_bpf_mst_rvalid    (apf_bpf_mst_if.rvalid   ),
    .apf_bpf_mst_rready    (apf_bpf_mst_if.rready   ),
 
-   .apf_mctp_mst_awaddr   (apf_mctp_mst_if.awaddr  ),
+  /* .apf_mctp_mst_awaddr   (apf_mctp_mst_if.awaddr  ),
    .apf_mctp_mst_awprot   (apf_mctp_mst_if.awprot  ),
    .apf_mctp_mst_awvalid  (apf_mctp_mst_if.awvalid ),
    .apf_mctp_mst_awready  (apf_mctp_mst_if.awready ),
@@ -840,7 +756,7 @@ apf apf(
    .apf_mctp_mst_rdata    (apf_mctp_mst_if.rdata   ),
    .apf_mctp_mst_rresp    (apf_mctp_mst_if.rresp   ),
    .apf_mctp_mst_rvalid   (apf_mctp_mst_if.rvalid  ),
-   .apf_mctp_mst_rready   (apf_mctp_mst_if.rready  ),
+   .apf_mctp_mst_rready   (apf_mctp_mst_if.rready  ),*/
 
    .apf_pr_slv_awaddr     (apf_pgsk_slv_if.awaddr    ),
    .apf_pr_slv_awprot     (apf_pgsk_slv_if.awprot    ),
@@ -861,47 +777,6 @@ apf apf(
    .apf_pr_slv_rresp      (apf_pgsk_slv_if.rresp     ),
    .apf_pr_slv_rvalid     (apf_pgsk_slv_if.rvalid    ),
    .apf_pr_slv_rready     (apf_pgsk_slv_if.rready    ),
-
-   .apf_uart_mst_awaddr   (apf_uart_mst_if.awaddr  ),
-   .apf_uart_mst_awprot   (apf_uart_mst_if.awprot  ),
-   .apf_uart_mst_awvalid  (apf_uart_mst_if.awvalid ),
-   .apf_uart_mst_awready  (apf_uart_mst_if.awready ),
-   .apf_uart_mst_wdata    (apf_uart_mst_if.wdata   ),
-   .apf_uart_mst_wstrb    (apf_uart_mst_if.wstrb   ),
-   .apf_uart_mst_wvalid   (apf_uart_mst_if.wvalid  ),
-   .apf_uart_mst_wready   (apf_uart_mst_if.wready  ),
-   .apf_uart_mst_bresp    (apf_uart_mst_if.bresp   ),
-   .apf_uart_mst_bvalid   (apf_uart_mst_if.bvalid  ),
-   .apf_uart_mst_bready   (apf_uart_mst_if.bready  ),
-   .apf_uart_mst_araddr   (apf_uart_mst_if.araddr  ),
-   .apf_uart_mst_arprot   (apf_uart_mst_if.arprot  ),
-   .apf_uart_mst_arvalid  (apf_uart_mst_if.arvalid ),
-   .apf_uart_mst_arready  (apf_uart_mst_if.arready ),
-   .apf_uart_mst_rdata    (apf_uart_mst_if.rdata   ),
-   .apf_uart_mst_rresp    (apf_uart_mst_if.rresp   ),
-   .apf_uart_mst_rvalid   (apf_uart_mst_if.rvalid  ),
-   .apf_uart_mst_rready   (apf_uart_mst_if.rready  ),
-
-
-   .apf_uart_slv_awaddr   (apf_uart_slv_if.awaddr    ),
-   .apf_uart_slv_awprot   (apf_uart_slv_if.awprot    ),
-   .apf_uart_slv_awvalid  (apf_uart_slv_if.awvalid   ),
-   .apf_uart_slv_awready  (apf_uart_slv_if.awready   ),
-   .apf_uart_slv_wdata    (apf_uart_slv_if.wdata     ),
-   .apf_uart_slv_wstrb    (apf_uart_slv_if.wstrb     ),
-   .apf_uart_slv_wvalid   (apf_uart_slv_if.wvalid    ),
-   .apf_uart_slv_wready   (apf_uart_slv_if.wready    ),
-   .apf_uart_slv_bresp    (apf_uart_slv_if.bresp     ),
-   .apf_uart_slv_bvalid   (apf_uart_slv_if.bvalid    ),
-   .apf_uart_slv_bready   (apf_uart_slv_if.bready    ),
-   .apf_uart_slv_araddr   (apf_uart_slv_if.araddr    ),
-   .apf_uart_slv_arprot   (apf_uart_slv_if.arprot    ),
-   .apf_uart_slv_arvalid  (apf_uart_slv_if.arvalid   ),
-   .apf_uart_slv_arready  (apf_uart_slv_if.arready   ),
-   .apf_uart_slv_rdata    (apf_uart_slv_if.rdata     ),
-   .apf_uart_slv_rresp    (apf_uart_slv_if.rresp     ),
-   .apf_uart_slv_rvalid   (apf_uart_slv_if.rvalid    ),
-   .apf_uart_slv_rready   (apf_uart_slv_if.rready    ),
 
    .apf_st2mm_mst_awaddr  (apf_st2mm_mst_if.awaddr ),
    .apf_st2mm_mst_awprot  (apf_st2mm_mst_if.awprot ),
