@@ -9,14 +9,26 @@
 cp -f $OFS_ROOTDIR/ofs-common/src/common/fme_id_rom/fme_id.mif ./
 # <COPY_ROM_END>
 
-LIB_FILELIST="$QUARTUS_ROOTDIR/eda/sim_lib/altera_primitives.v \
-$QUARTUS_ROOTDIR/eda/sim_lib/220model.v \
+LIB_FILELIST="$QUARTUS_ROOTDIR/eda/sim_lib/220model.v \
 $QUARTUS_ROOTDIR/eda/sim_lib/sgate.v \
+$QUARTUS_ROOTDIR/../devices/sim_lib/tennm_agilex5_io96.sv \
+$QUARTUS_ROOTDIR/../devices/sim_lib/tennm_sm_hps.sv \
+$QUARTUS_ROOTDIR/eda/sim_lib/altera_primitives.v \
+$QUARTUS_ROOTDIR/../devices/sim_lib/tennm_hvio.sv \
+$QUARTUS_ROOTDIR/../devices/sim_lib/tennm_agilex5_hssi_a.sv \
+$QUARTUS_ROOTDIR/eda/sim_lib/tennm_atoms.sv \
+$QUARTUS_ROOTDIR/../devices/sim_lib/tennm_sm_hps_ncrypt.sv \
 $QUARTUS_ROOTDIR/eda/sim_lib/altera_mf.v \
 $QUARTUS_ROOTDIR/eda/sim_lib/altera_lnsim.sv \
-$QUARTUS_ROOTDIR/eda/sim_lib/tennm_atoms.sv \
+$QUARTUS_ROOTDIR/eda/sim_lib/simsf_dpi.cpp \
+$QUARTUS_ROOTDIR/../devices/sim_lib/tennm_hvio_ncrypt.sv  \
+$QUARTUS_ROOTDIR/../devices/sim_lib/tennm_agilex5_io96_ncrypt.sv \
 $QUARTUS_ROOTDIR/eda/sim_lib/mentor/tennm_atoms_ncrypt.sv \
+$QUARTUS_ROOTDIR/eda/sim_lib/mentor/fmica_atoms_ncrypt.sv \
+$QUARTUS_ROOTDIR/../devices/sim_lib/tennm_agilex5_hssi_a_ncrypt.sv \
 "
+#$QUARTUS_ROOTDIR/../devices/sim_lib/tennm_hvio_skeleton.sv \
+#$QUARTUS_ROOTDIR/../devices/sim_lib/tennm_revb_io96_iopll.sv \
 
 HSSI_LIB_FILELIST="$QUARTUS_ROOTDIR/eda/sim_lib/tennm_hssi_atoms.sv \
 $QUARTUS_ROOTDIR/eda/sim_lib/tennm_hssi_atoms_ncrypt.sv \
