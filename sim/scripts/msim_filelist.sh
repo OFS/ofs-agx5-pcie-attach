@@ -24,7 +24,7 @@ $QUARTUS_ROOTDIR/eda/sim_lib/simsf_dpi.cpp \
 $QUARTUS_ROOTDIR/../devices/sim_lib/tennm_hvio_ncrypt.sv  \
 $QUARTUS_ROOTDIR/../devices/sim_lib/tennm_agilex5_io96_ncrypt.sv \
 $QUARTUS_ROOTDIR/eda/sim_lib/mentor/tennm_atoms_ncrypt.sv \
-$QUARTUS_ROOTDIR/eda/sim_lib/mentor/fmica_atoms_ncrypt.sv \
+$QUARTUS_ROOTDIR/eda/sim_lib/fmica_atoms_ncrypt.sv \
 $QUARTUS_ROOTDIR/../devices/sim_lib/tennm_agilex5_hssi_a_ncrypt.sv \
 "
 #$QUARTUS_ROOTDIR/../devices/sim_lib/tennm_hvio_skeleton.sv \
