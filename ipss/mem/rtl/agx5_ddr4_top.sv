@@ -125,7 +125,8 @@ for (genvar c = 0; c < NUM_MEM_CHANNELS; c++) begin : axi_mm_map
    assign ss_axi_mm[c].awaddr   = afu_mem_if[c].awaddr;
    assign ss_axi_mm[c].awlen    = afu_mem_if[c].awlen;
    assign ss_axi_mm[c].awsize   = afu_mem_if[c].awsize;
-   assign ss_axi_mm[c].awburst  = afu_mem_if[c].awburst;
+   // Fixed burst type is not supported
+   assign ss_axi_mm[c].awburst  = (afu_mem_if[c].awburst == 0) ? 1 : afu_mem_if[c].awburst;
    assign ss_axi_mm[c].awlock   = afu_mem_if[c].awlock;
    assign ss_axi_mm[c].awcache  = afu_mem_if[c].awcache;
    assign ss_axi_mm[c].awprot   = afu_mem_if[c].awprot;
@@ -148,7 +149,8 @@ for (genvar c = 0; c < NUM_MEM_CHANNELS; c++) begin : axi_mm_map
    assign ss_axi_mm[c].araddr   = afu_mem_if[c].araddr;
    assign ss_axi_mm[c].arlen    = afu_mem_if[c].arlen;
    assign ss_axi_mm[c].arsize   = afu_mem_if[c].arsize;
-   assign ss_axi_mm[c].arburst  = afu_mem_if[c].arburst;
+   // Fixed burst type is not supported
+   assign ss_axi_mm[c].arburst  = (afu_mem_if[c].arburst == 0) ? 1 : afu_mem_if[c].arburst;
    assign ss_axi_mm[c].arlock   = afu_mem_if[c].arlock;
    assign ss_axi_mm[c].arcache  = afu_mem_if[c].arcache;
    assign ss_axi_mm[c].arprot   = afu_mem_if[c].arprot;
