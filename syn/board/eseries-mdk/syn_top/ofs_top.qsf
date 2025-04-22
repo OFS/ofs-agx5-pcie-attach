@@ -33,7 +33,7 @@ set_global_assignment -name REMOVE_DUPLICATE_REGISTERS OFF -to rst_n_sys_afu
 set_global_assignment -name REMOVE_DUPLICATE_REGISTERS OFF -to rst_n_sys_mem
 set_global_assignment -name REMOVE_DUPLICATE_REGISTERS OFF -to rst_n_sys_pcie
 
-set_global_assignment -name LAST_QUARTUS_VERSION "24.3.0 Pro Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION "25.1.0 Pro Edition"
 
 set_global_assignment -name FLOW_DISABLE_ASSEMBLER OFF
 set_global_assignment -name FLOW_ENABLE_INTERACTIVE_TIMING_ANALYZER OFF
@@ -85,7 +85,8 @@ set_global_assignment -name VERILOG_MACRO "CONFIG_ESERIES"           # E-Series 
 set_global_assignment -name VERILOG_MACRO "CONFIG_ESERIES_MDK"       # Specific board
 
 # INCLUDE_* macros enable features
-#set_global_assignment -name VERILOG_MACRO "INCLUDE_DDR4"             # Includes the MEM SS and the AXI-MM datapath
+set_global_assignment -name VERILOG_MACRO "INCLUDE_DDR4"             # Includes the MEM SS and the AXI-MM datapath
+set_global_assignment -name VERILOG_MACRO "USE_NULL_HE_MEM_TG"
 #set_global_assignment -name VERILOG_MACRO "INCLUDE_PMCI"             # Includes PMCI SS in the fim
 set_global_assignment -name VERILOG_MACRO "INCLUDE_PR"               # INCLUDE_PR removes PR IP instatiation in port_gasket. To disable PR, remove INCLUDE_PR & pr_assignments.tcl from .qsf  
 set_global_assignment -name VERILOG_MACRO "INCLUDE_USER_CLK"         # Includes the user clock system in port_gasket.

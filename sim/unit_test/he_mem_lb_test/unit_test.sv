@@ -764,7 +764,11 @@ task main_test;
       $display("HE local memory bus byte width: %0d\n", local_mem_bus_bytes);
 
      `ifdef INCLUDE_DDR4
-      wait(top_tb.DUT.local_mem_wrapper.mem_ss_top.mem_ss_cal_success[0] == 1'b1);
+       `ifdef CONFIG_AGILEX5
+         wait(top_tb.DUT.mem_ss_top.mem_ss_cal_success[0] == 1'b1);
+       `else
+         wait(top_tb.DUT.local_mem_wrapper.mem_ss_top.mem_ss_cal_success[0] == 1'b1);
+       `endif
      `endif
 
       test_emif_calibration (test_result);

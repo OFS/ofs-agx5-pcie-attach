@@ -31,12 +31,13 @@ module top
 // Local Memory technology interfaces
 `ifdef INCLUDE_LOCAL_MEM
 `ifdef INCLUDE_DDR4
-`ifdef OFS_FIM_IP_CFG_LOCAL_MEM_DEFINES_EMIF_DDR4_PARAM_GROUP_0
-                     ofs_fim_emif_ddr4_if.emif                 ddr4_mem          [NUM_GROUP_0_DDR4_CHANNELS-1:0],
-`endif // OFS_FIM_IP_CFG_LOCAL_MEM_DEFINES_EMIF_DDR4_PARAM_GROUP_0
-`ifdef OFS_FIM_IP_CFG_LOCAL_MEM_DEFINES_EMIF_DDR4_PARAM_GROUP_1
-                     ofs_fim_emif_ddr4_group_1_if.emif         ddr4_mem_group_1     [NUM_GROUP_1_DDR4_CHANNELS-1:0],
-`endif // OFS_FIM_IP_CFG_LOCAL_MEM_DEFINES_EMIF_DDR4_PARAM_GROUP_1
+                    ofs_fim_mem_ddr4_ref_clk_if.ip              ddr4_mem_ref_clk [NUM_DDR4_CHANNELS-1:0],
+ `ifdef HAS_IFC_AGX5_DDR4_SS_MEM_DDR4_IF
+                    agx5_ddr4_ss_mem_ddr4_if.ip                 ddr4_mem         [NUM_GROUP_0_DDR4_CHANNELS-1:0],
+ `endif
+ `ifdef HAS_IFC_AGX5_DDR4_SS_MEM_G1_DDR4_IF
+                    agx5_ddr4_ss_mem_g1_ddr4_if.ip              ddr4_mem_group_1 [NUM_GROUP_1_DDR4_CHANNELS-1:0],
+ `endif
 `endif // INCLUDE_DDR4
 `endif // INCLUDE_LOCAL_MEM
 
@@ -541,26 +542,28 @@ endgenerate
 // It provides a standard AXI interface to connect to workloads.
 //-----------------------------------------------------------------------------------------------
 `ifdef INCLUDE_LOCAL_MEM
-   local_mem_wrapper #(
+   agx5_ddr4_top #(
       .FEAT_ID          (12'h009),
       .FEAT_VER         (4'h1),
       .NEXT_DFH_OFFSET  (fabric_width_pkg::bpf_emif_slv_next_dfh_offset),
       .END_OF_LIST      (fabric_width_pkg::bpf_emif_slv_eol)
-   ) local_mem_wrapper (
-      .clk      (clk_sys),
-      .reset    (~rst_n_sys_mem),
+   ) mem_ss_top (
+      .SYS_REFCLK(SYS_REFCLK),
+      .clk       (clk_sys),
+      .reset     (~rst_n_sys_mem),
 
        // AFU ext mem interfaces
       .afu_mem_if   (afu_ext_mem_if),
-`ifdef INCLUDE_DDR4
-`ifdef OFS_FIM_IP_CFG_LOCAL_MEM_DEFINES_EMIF_DDR4_PARAM_GROUP_0
+
+      .ddr4_mem_if_ref_clk(ddr4_mem_ref_clk),
+ `ifdef HAS_IFC_AGX5_DDR4_SS_MEM_DDR4_IF
       .ddr4_mem_if  (ddr4_mem),
-`endif
-`ifdef OFS_FIM_IP_CFG_LOCAL_MEM_DEFINES_EMIF_DDR4_PARAM_GROUP_1
+ `endif
+ `ifdef HAS_IFC_AGX5_DDR4_SS_MEM_G1_DDR4_IF
       .ddr4_mem_if_group_1  (ddr4_mem_group_1),
-`endif
-`endif
-       // CSR interfaces
+ `endif
+
+      // CSR interfaces
       .clk_csr     (clk_csr),
       .rst_n_csr   (rst_n_csr[0]),
       .csr_lite_if (bpf_emif_slv_if)

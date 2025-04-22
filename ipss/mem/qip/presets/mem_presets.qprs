@@ -75896,5 +75896,13 @@
        io_standard=""
        exported_interface_name="mem2_status" />
   </preset>
+  <preset
+     name="eseries-mdk"
+     kind="mem_ss"
+     version="All"
+     description=""
+     board="default"
+     preset_category="">
+  </preset>
 </presets>
 </ip>

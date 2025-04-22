@@ -46,7 +46,7 @@ set_global_assignment -name SOURCE_TCL_SCRIPT_FILE $::env(BUILD_ROOT_REL)/ipss/r
 #set_global_assignment -name SOURCE_TCL_SCRIPT_FILE $::env(BUILD_ROOT_REL)/ofs-common/src/fpga_family/agilex/hssi_ss/hssi_wrapper_design_files.tcl
 set_global_assignment -name SOURCE_TCL_SCRIPT_FILE $::env(BUILD_ROOT_REL)/syn/shared_config/afu_design_files.tcl
 set_global_assignment -name SOURCE_TCL_SCRIPT_FILE $::env(BUILD_ROOT_REL)/src/pd_qsys/fabric/fabric_design_files.tcl
-#set_global_assignment -name SOURCE_TCL_SCRIPT_FILE $::env(BUILD_ROOT_REL)/ipss/mem/mem_design_files.tcl
+set_global_assignment -name SOURCE_TCL_SCRIPT_FILE $::env(BUILD_ROOT_REL)/ipss/mem/mem_design_files.tcl
 #set_global_assignment -name SOURCE_TCL_SCRIPT_FILE $::env(BUILD_ROOT_REL)/ipss/pmci/pmci_design_files.tcl
 #set_global_assignment -name SOURCE_TCL_SCRIPT_FILE $::env(BUILD_ROOT_REL)/ofs-common/src/fpga_family/agilex/hps/hps_design_files.tcl
 #set_global_assignment -name SOURCE_TCL_SCRIPT_FILE $::env(BUILD_ROOT_REL)/ofs-common/src/fpga_family/agilex/uart/uart_design_files.tcl
@@ -90,7 +90,7 @@ set_global_assignment -name SOURCE_TCL_SCRIPT_FILE ../setup/pr_assignments.tcl
 # Pins & Location Assignments
 ############################################################################################
 set_global_assignment -name SOURCE_TCL_SCRIPT_FILE ../setup/top_loc.tcl
-#set_global_assignment -name SOURCE_TCL_SCRIPT_FILE ../setup/emif_loc.tcl
+set_global_assignment -name SOURCE_TCL_SCRIPT_FILE ../setup/emif_loc.tcl
 #set_global_assignment -name SOURCE_TCL_SCRIPT_FILE ../setup/pmci_loc.tcl
 
 ############################################################################################

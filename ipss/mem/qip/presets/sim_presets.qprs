@@ -7943,5 +7943,13 @@
    <parameter name="MEM_DDRT_I2C_DIMM_0_SA" value="0" />
    <parameter name="MEM_DDRT_W_ODT0_4X4" value="on,on,off,off" />
   </preset>
+  <preset
+     name="eseries-mdk"
+     kind="altera_emif_mem_model"
+     version="All"
+     description=""
+     board="default"
+     preset_category="">
+  </preset>
  </presets>
 </ip>
