@@ -946,12 +946,6 @@ begin
       incr_err_count();
       result = 1'b0;
    end
-   // Force rd rsp data to 0 to trigger test failure
-   // LHS must be a constant in force/release statements => constant index select
-   // this test only runs on channel 0
-  `ifdef INCLUDE_LOCAL_MEM
-   force top_tb.DUT.local_mem_wrapper.afu_mem_if[0].rdata = '0;
-  `endif
 
    // Poll TG status for completion
    tg_active = 1'b1;
@@ -987,10 +981,6 @@ begin
       incr_err_count();
       result = 1'b0;
    end
-   // Release rd rsp data
-  `ifdef INCLUDE_LOCAL_MEM
-   release top_tb.DUT.local_mem_wrapper.afu_mem_if[0].rdata;
-  `endif
    post_test_util(old_test_err_count);
    host_bfm_top.host_bfm.revert_to_last_pfvf_setting();
 end

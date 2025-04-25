@@ -39,7 +39,7 @@ set_global_assignment -name SYSTEMVERILOG_FILE $::env(BUILD_ROOT_REL)/src/afu_to
 #--------------------
 # Common sources
 #--------------------
-#set_global_assignment -name SOURCE_TCL_SCRIPT_FILE $::env(BUILD_ROOT_REL)/ofs-common/src/common/mem_tg/mem_tg_design_files.tcl
+set_global_assignment -name SOURCE_TCL_SCRIPT_FILE $::env(BUILD_ROOT_REL)/ofs-common/src/common/mem_tg/mem_tg_design_files.tcl
 
 if { [::config_env::verilog_macro_defined CONFIG_AGILEX5] == 0 } {
     set_global_assignment -name SOURCE_TCL_SCRIPT_FILE $::env(BUILD_ROOT_REL)/ofs-common/src/common/mem_tg/mem_tg_design_files.tcl

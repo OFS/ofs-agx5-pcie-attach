@@ -86,7 +86,6 @@ set_global_assignment -name VERILOG_MACRO "CONFIG_ESERIES_MDK"       # Specific 
 
 # INCLUDE_* macros enable features
 set_global_assignment -name VERILOG_MACRO "INCLUDE_DDR4"             # Includes the MEM SS and the AXI-MM datapath
-set_global_assignment -name VERILOG_MACRO "USE_NULL_HE_MEM_TG"
 #set_global_assignment -name VERILOG_MACRO "INCLUDE_PMCI"             # Includes PMCI SS in the fim
 set_global_assignment -name VERILOG_MACRO "INCLUDE_PR"               # INCLUDE_PR removes PR IP instatiation in port_gasket. To disable PR, remove INCLUDE_PR & pr_assignments.tcl from .qsf  
 set_global_assignment -name VERILOG_MACRO "INCLUDE_USER_CLK"         # Includes the user clock system in port_gasket.
