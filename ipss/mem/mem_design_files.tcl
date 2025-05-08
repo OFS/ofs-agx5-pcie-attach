@@ -32,8 +32,6 @@ if {$include_ddr4 == 1} {
     # Qsys IP components
     set_global_assignment -name IP_FILE $::env(BUILD_ROOT_REL)/ipss/mem/qip/agx5_ddr4_ss/ip/agx5_ddr4_ss/axil_driver.ip
     set_global_assignment -name IP_FILE $::env(BUILD_ROOT_REL)/ipss/mem/qip/agx5_ddr4_ss/ip/agx5_ddr4_ss/reset_handler.ip
-    set_global_assignment -name IP_FILE $::env(BUILD_ROOT_REL)/ipss/mem/qip/agx5_ddr4_ss/ip/agx5_ddr4_ss/axi_bridge.ip
-    set_global_assignment -name IP_FILE $::env(BUILD_ROOT_REL)/ipss/mem/qip/agx5_ddr4_ss/ip/agx5_ddr4_ss/mm_bridge.ip
     set_global_assignment -name IP_FILE $::env(BUILD_ROOT_REL)/ipss/mem/qip/agx5_ddr4_ss/ip/agx5_ddr4_ss/s10_user_rst_clkgate.ip
     set_global_assignment -name IP_FILE $::env(BUILD_ROOT_REL)/ipss/mem/qip/agx5_ddr4_ss/ip/agx5_ddr4_ss/agx5_ddr4_ss_emif_a.ip
     set_global_assignment -name IP_FILE $::env(BUILD_ROOT_REL)/ipss/mem/qip/agx5_ddr4_ss/ip/agx5_ddr4_ss/agx5_ddr4_ss_emif_b.ip

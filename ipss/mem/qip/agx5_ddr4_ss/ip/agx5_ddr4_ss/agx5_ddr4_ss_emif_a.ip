@@ -2644,7 +2644,7 @@ https://fpgasoftware.intel.com/eula.-->
         <ipxact:parameter parameterId="MEM_AC_PARITY_EN" type="bit">
           <ipxact:name>MEM_AC_PARITY_EN</ipxact:name>
           <ipxact:displayName>Use AC Parity</ipxact:displayName>
-          <ipxact:value>false</ipxact:value>
+          <ipxact:value>true</ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="MEM_OPERATING_FREQ_MHZ_AUTOSET_EN" type="bit">
           <ipxact:name>MEM_OPERATING_FREQ_MHZ_AUTOSET_EN</ipxact:name>
@@ -2824,17 +2824,17 @@ https://fpgasoftware.intel.com/eula.-->
         <ipxact:parameter parameterId="MEM_AC_PARITY_LATENCY_MODE" type="real">
           <ipxact:name>MEM_AC_PARITY_LATENCY_MODE</ipxact:name>
           <ipxact:displayName>MEM_AC_PARITY_LATENCY_MODE</ipxact:displayName>
-          <ipxact:value>0.0</ipxact:value>
+          <ipxact:value>4.0</ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="MEM_CL_CYC" type="real">
           <ipxact:name>MEM_CL_CYC</ipxact:name>
           <ipxact:displayName>Read Latency</ipxact:displayName>
-          <ipxact:value>12.0</ipxact:value>
+          <ipxact:value>11.0</ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="MEM_CWL_CYC" type="real">
           <ipxact:name>MEM_CWL_CYC</ipxact:name>
           <ipxact:displayName>Write Latency</ipxact:displayName>
-          <ipxact:value>11.0</ipxact:value>
+          <ipxact:value>9.0</ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="MEM_AL_CYC" type="real">
           <ipxact:name>MEM_AL_CYC</ipxact:name>
@@ -2984,7 +2984,7 @@ https://fpgasoftware.intel.com/eula.-->
         <ipxact:parameter parameterId="MEM_TRFC_NS" type="real">
           <ipxact:name>MEM_TRFC_NS</ipxact:name>
           <ipxact:displayName>tRFC</ipxact:displayName>
-          <ipxact:value>350.0</ipxact:value>
+          <ipxact:value>550.0</ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="MEM_TDQSCK_MAX_MIN_NS" type="real">
           <ipxact:name>MEM_TDQSCK_MAX_MIN_NS</ipxact:name>
@@ -3039,22 +3039,22 @@ https://fpgasoftware.intel.com/eula.-->
         <ipxact:parameter parameterId="MEM_TRFC_DLR_NS" type="real">
           <ipxact:name>MEM_TRFC_DLR_NS</ipxact:name>
           <ipxact:displayName>tRFC_DLR</ipxact:displayName>
-          <ipxact:value>190.0</ipxact:value>
+          <ipxact:value>0.0</ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="MEM_TRRD_DLR_NS" type="real">
           <ipxact:name>MEM_TRRD_DLR_NS</ipxact:name>
           <ipxact:displayName>tRRD_DLR</ipxact:displayName>
-          <ipxact:value>5.0</ipxact:value>
+          <ipxact:value>0.0</ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="MEM_TFAW_DLR_NS" type="real">
           <ipxact:name>MEM_TFAW_DLR_NS</ipxact:name>
           <ipxact:displayName>tFAW_DLR</ipxact:displayName>
-          <ipxact:value>20.0</ipxact:value>
+          <ipxact:value>0.0</ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="MEM_TCCD_DLR_NS" type="real">
           <ipxact:name>MEM_TCCD_DLR_NS</ipxact:name>
           <ipxact:displayName>tCCD_DLR</ipxact:displayName>
-          <ipxact:value>5.0</ipxact:value>
+          <ipxact:value>0.0</ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="MEM_TXP_NS" type="real">
           <ipxact:name>MEM_TXP_NS</ipxact:name>
@@ -3064,7 +3064,7 @@ https://fpgasoftware.intel.com/eula.-->
         <ipxact:parameter parameterId="MEM_TXS_NS" type="real">
           <ipxact:name>MEM_TXS_NS</ipxact:name>
           <ipxact:displayName>tXS</ipxact:displayName>
-          <ipxact:value>360.0</ipxact:value>
+          <ipxact:value>560.0</ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="MEM_TXS_DLL_NS" type="real">
           <ipxact:name>MEM_TXS_DLL_NS</ipxact:name>
@@ -3109,7 +3109,7 @@ https://fpgasoftware.intel.com/eula.-->
         <ipxact:parameter parameterId="JEDEC_OVERRIDE_TABLE_PARAM_NAME" type="string">
           <ipxact:name>JEDEC_OVERRIDE_TABLE_PARAM_NAME</ipxact:name>
           <ipxact:displayName>JEDEC Parameter</ipxact:displayName>
-          <ipxact:value>MEM_CL_CYC,MEM_CWL_CYC,MEM_TRFC_NS,MEM_TRFC_DLR_NS,MEM_TRRD_DLR_NS,MEM_TFAW_DLR_NS,MEM_TCCD_DLR_NS</ipxact:value>
+          <ipxact:value></ipxact:value>
         </ipxact:parameter>
         <ipxact:parameter parameterId="DIAG_EXTRA_PARAMETERS" type="string">
           <ipxact:name>DIAG_EXTRA_PARAMETERS</ipxact:name>
@@ -4646,19 +4646,6 @@ https://fpgasoftware.intel.com/eula.-->
                     &lt;entry&gt;
                         &lt;key&gt;MAX_SLAVE_DATA_WIDTH&lt;/key&gt;
                         &lt;value&gt;256&lt;/value&gt;
-                    &lt;/entry&gt;
-                &lt;/consumedSystemInfos&gt;
-            &lt;/value&gt;
-        &lt;/entry&gt;
-        &lt;entry&gt;
-            &lt;key&gt;s0_axi4_clock_out&lt;/key&gt;
-            &lt;value&gt;
-                &lt;connectionPointName&gt;s0_axi4_clock_out&lt;/connectionPointName&gt;
-                &lt;suppliedSystemInfos/&gt;
-                &lt;consumedSystemInfos&gt;
-                    &lt;entry&gt;
-                        &lt;key&gt;CLOCK_RATE&lt;/key&gt;
-                        &lt;value&gt;0&lt;/value&gt;
                     &lt;/entry&gt;
                 &lt;/consumedSystemInfos&gt;
             &lt;/value&gt;

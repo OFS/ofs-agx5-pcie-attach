@@ -128,8 +128,9 @@ for (genvar c = 0; c < NUM_MEM_CHANNELS; c++) begin : axi_mm_map
    // Fixed burst type is not supported
    assign ss_axi_mm[c].awburst  = (afu_mem_if[c].awburst == 0) ? 1 : afu_mem_if[c].awburst;
    assign ss_axi_mm[c].awlock   = afu_mem_if[c].awlock;
-   assign ss_axi_mm[c].awcache  = afu_mem_if[c].awcache;
    assign ss_axi_mm[c].awprot   = afu_mem_if[c].awprot;
+   assign ss_axi_mm[c].awuser   = afu_mem_if[c].awuser;
+   assign ss_axi_mm[c].awqos    = afu_mem_if[c].awqos;
    // Write data channel
    assign afu_mem_if[c].wready  = ss_axi_mm[c].wready;
    assign ss_axi_mm[c].wvalid   = afu_mem_if[c].wvalid;
@@ -152,8 +153,9 @@ for (genvar c = 0; c < NUM_MEM_CHANNELS; c++) begin : axi_mm_map
    // Fixed burst type is not supported
    assign ss_axi_mm[c].arburst  = (afu_mem_if[c].arburst == 0) ? 1 : afu_mem_if[c].arburst;
    assign ss_axi_mm[c].arlock   = afu_mem_if[c].arlock;
-   assign ss_axi_mm[c].arcache  = afu_mem_if[c].arcache;
    assign ss_axi_mm[c].arprot   = afu_mem_if[c].arprot;
+   assign ss_axi_mm[c].aruser   = afu_mem_if[c].aruser;
+   assign ss_axi_mm[c].arqos    = afu_mem_if[c].arqos;
    // Read response channel
    assign ss_axi_mm[c].rready   = afu_mem_if[c].rready;
    assign afu_mem_if[c].rvalid  = ss_axi_mm[c].rvalid;
