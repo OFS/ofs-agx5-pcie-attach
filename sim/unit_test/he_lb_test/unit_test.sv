@@ -665,7 +665,7 @@ task main_test;
       $display("Entering %s.", unit_test_name);
       host_bfm_top.host_bfm.set_mmio_mode(PU_METHOD_TRANSACTION);
       host_bfm_top.host_bfm.set_dm_mode(DM_AUTO_TRANSACTION);
-      pfvf = '{2,0,0};
+      pfvf = '{0,0,1};
       host_bfm_top.host_bfm.set_pfvf_setting(pfvf);
 
       host_bfm_top.host_bfm.read64(test_csr_defs::INFO0, csr_info0);

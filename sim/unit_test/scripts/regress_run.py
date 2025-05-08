@@ -589,6 +589,12 @@ def create_test_list():
                 if not design_includes_hssi:
                     test_remove_patterns.append(r'^he_null')
                     test_remove_patterns.append(r'^hssi_')
+                    test_remove_patterns.append(r'qsfp_')
+                if not design_includes_userclk:
+                    test_remove_patterns.append(r'user_clk_test')
+                    test_remove_patterns.append(r'port_gasket_test')
+                if not design_includes_remote_stp:
+                    test_remove_patterns.append(r'remote_stp_test')
                 filtered_test_list = remove_matching_tests(pre_filtered_test_list,test_remove_patterns)
             else:
                 test_dir_pattern = "\/(" + args.package + r'\w+)$'
@@ -832,6 +838,22 @@ def send_email_report():
     else:
         html_data += html_body_text_header
         html_data += f"    Design contains HSSI..........................:   None"
+        html_data += html_body_text_ender
+    if (design_includes_userclk):
+        html_data += html_body_text_header
+        html_data += f"    Design contains User Clk..........................:   User Clk Included"
+        html_data += html_body_text_ender
+    else:
+        html_data += html_body_text_header
+        html_data += f"    Design contains User Clk..........................:   None"
+        html_data += html_body_text_ender
+    if (design_includes_remote_stp):
+        html_data += html_body_text_header
+        html_data += f"    Design contains Remote STP..........................:   Remote STP Included"
+        html_data += html_body_text_ender
+    else:
+        html_data += html_body_text_header
+        html_data += f"    Design contains Remote STP..........................:   None"
         html_data += html_body_text_ender
     html_data += html_body_text_header
     html_data += f"    Last Sim File Generation Command Invoked......: {generation_cmd_line}"
@@ -1448,6 +1470,8 @@ if __name__ == "__main__":
     design_includes_local_mem = False
     design_includes_pmci = False
     design_includes_hssi = False
+    design_includes_userclk = False
+    design_includes_remote_stp = False
     regression_run_start = datetime.datetime.now()
     msg_queue = multiprocessing.Queue()
     format = "%(asctime)s: %(message)s"
@@ -1486,7 +1510,7 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--sim', dest='simulator', type=str, nargs='?', default='vcs', choices=['vcs','msim','vcsmx'], help='Simulator used for regression test.  (Default: %(default)s)')
     parser.add_argument('-g', '--gen_sim_files', dest='gen_sim_files', action='store_true', help='Generate IP simulation files.  This should only be done once per repo update.  (Default: %(default)s)')
     parser.add_argument('-o', '--ofss', dest='ofss', nargs='+', help='Pass ofss file to configure IPs')
-    parser.add_argument('-b', '--board_name', dest='board_name', choices=['n6000','n6001','fseries-dk','iseries-dk'], default='n6001',  help='Board name. (Default: %(default)s)')
+    parser.add_argument('-b', '--board_name', dest='board_name', choices=['n6000','n6001','fseries-dk','iseries-dk','mseries-dk'], default='n6001',  help='Board name. (Default: %(default)s)')
     parser.add_argument('-e', '--email_list', dest='email_list', action='store_true', help='To send mail to multiple receipients')
     args = parser.parse_args()
     rootdir = get_rootdir()
@@ -1548,6 +1572,8 @@ if __name__ == "__main__":
     design_includes_local_mem = scan_verilog_macros_for_include("INCLUDE_LOCAL_MEM")
     design_includes_pmci = scan_verilog_macros_for_include("INCLUDE_PMCI")
     design_includes_hssi = scan_verilog_macros_for_include("INCLUDE_HSSI")
+    design_includes_remote_stp = scan_verilog_macros_for_include("INCLUDE_REMOTE_STP")
+    design_includes_userclk = scan_verilog_macros_for_include("INCLUDE_USER_CLK")
     generation_cmd_line  = scan_last_generation_command()
     logger.info(f"    FIM Variant detected in sim generation..: {fim_variant}")
     for ddr_family_name in design_includes_ddr:
@@ -1565,6 +1591,14 @@ if __name__ == "__main__":
         logger.info(f"      Design contains HSSI..................:   HSSI Included")
     else:
         logger.info(f"      Design contains HSSI..................:   None")
+    if (design_includes_userclk):
+        logger.info(f"      Design contains User Clk..................: User Clk Included")
+    else:
+        logger.info(f"      Design contains User Clk..................:   None")
+    if (design_includes_remote_stp):
+        logger.info(f"      Design contains Remote STP..................: Remote STP Included")
+    else:
+        logger.info(f"      Design contains Remote STP..................:   None")
     logger.info(f"    Last Sim File Generation Command Invoked: {generation_cmd_line}")
     list_of_tests = create_test_list()
     pmci_problem_list_of_tests = pmci_problem_test_filter()

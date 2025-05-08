@@ -610,7 +610,7 @@ task main_test;
       host_bfm_top.host_bfm.set_pfvf_setting(pfvf);
 
      `ifdef INCLUDE_DDR4
-      wait(top_tb.DUT.local_mem_wrapper.mem_ss_top.mem_ss_cal_success[0] == 1'b1); 
+      wait(top_tb.DUT.mem_ss_top.mem_ss_cal_success[0] == 1'b1); 
       test_emif_calibration ( test_result );
      `endif
      

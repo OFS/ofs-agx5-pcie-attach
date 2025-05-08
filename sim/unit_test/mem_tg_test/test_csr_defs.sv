@@ -36,7 +36,7 @@ package test_csr_defs;
    // ******************************************************************************************
    localparam EMIF_STATUS_OFFSET     = 64'h8;
    localparam EMIF_CAPABILITY_OFFSET = EMIF_STATUS_OFFSET + 64'h8;
-   localparam EMIF_DFH_VAL           = 64'h3_00000_00B000_1009;
+   localparam EMIF_DFH_VAL           = 64'h3000_0002_B000_1009;
 
    // ******************************************************************************************
    // MEM TG AFU registers
