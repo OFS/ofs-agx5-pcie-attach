@@ -2,9 +2,9 @@
 
 
 ## Board
-* eseries-dk
+* eseries-mdk
     ```bash
-        ./ofs-common/scripts/common/syn/build_top.sh eseries-dk:flat work_eseries-dk
+        ./ofs-common/scripts/common/syn/build_top.sh eseries-mdk work_eseries-mdk
     ```
 
 ## Directories

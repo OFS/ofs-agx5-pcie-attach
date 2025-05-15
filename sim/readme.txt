@@ -20,6 +20,8 @@ Initial Setup:
 
       fseries-dk 8x25G          - "gen_sim_files.sh fseries-dk"
 
+	  eseries-mdk               - "gen_sim_files.sh eseries-mdk"
+
       iseries-dk Gen5 2x8 8x25G - "gen_sim_files.sh --ofss $OFS_ROOTDIR/tools/ofss_config/pcie/pcie_host_2link.ofss iseries-dk"
       iseries-dk Gen5 2x8 200G  - "gen_sim_files.sh --ofss $OFS_ROOTDIR/tools/ofss_config/pcie/pcie_host_2link.ofss,tools/ofss_config/hssi/hssi_2x200_ftile.ofss iseries-dk"
       iseries-dk Gen5 2x8 400G  - "gen_sim_files.sh --ofss $OFS_ROOTDIR/tools/ofss_config/pcie/pcie_host_2link.ofss,tools/ofss_config/hssi/hssi_1x400_ftile.ofss iseries-dk"
