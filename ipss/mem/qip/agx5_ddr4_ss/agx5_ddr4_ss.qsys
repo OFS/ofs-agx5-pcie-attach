@@ -8370,7 +8370,7 @@ https://fpgasoftware.intel.com/eula.-->
                     &lt;parameterValueMap&gt;
                         &lt;entry&gt;
                             &lt;key&gt;clockRate&lt;/key&gt;
-                            &lt;value&gt;150000000&lt;/value&gt;
+                            &lt;value&gt;100000000&lt;/value&gt;
                         &lt;/entry&gt;
                         &lt;entry&gt;
                             &lt;key&gt;externallyDriven&lt;/key&gt;
@@ -8601,7 +8601,7 @@ https://fpgasoftware.intel.com/eula.-->
                 &lt;parameterValueMap&gt;
                     &lt;entry&gt;
                         &lt;key&gt;clockRate&lt;/key&gt;
-                        &lt;value&gt;150000000&lt;/value&gt;
+                        &lt;value&gt;100000000&lt;/value&gt;
                     &lt;/entry&gt;
                     &lt;entry&gt;
                         &lt;key&gt;externallyDriven&lt;/key&gt;
