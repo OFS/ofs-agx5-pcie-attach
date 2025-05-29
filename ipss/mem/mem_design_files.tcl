@@ -32,12 +32,12 @@ if {$include_ddr4 == 1} {
     # Qsys IP components
     set_global_assignment -name IP_FILE $::env(BUILD_ROOT_REL)/ipss/mem/qip/agx5_ddr4_ss/ip/agx5_ddr4_ss/axil_driver.ip
     set_global_assignment -name IP_FILE $::env(BUILD_ROOT_REL)/ipss/mem/qip/agx5_ddr4_ss/ip/agx5_ddr4_ss/reset_handler.ip
-    set_global_assignment -name IP_FILE $::env(BUILD_ROOT_REL)/ipss/mem/qip/agx5_ddr4_ss/ip/agx5_ddr4_ss/s10_user_rst_clkgate.ip
     set_global_assignment -name IP_FILE $::env(BUILD_ROOT_REL)/ipss/mem/qip/agx5_ddr4_ss/ip/agx5_ddr4_ss/agx5_ddr4_ss_emif_a.ip
     set_global_assignment -name IP_FILE $::env(BUILD_ROOT_REL)/ipss/mem/qip/agx5_ddr4_ss/ip/agx5_ddr4_ss/agx5_ddr4_ss_emif_b.ip
     set_global_assignment -name IP_FILE $::env(BUILD_ROOT_REL)/ipss/mem/qip/agx5_ddr4_ss/ip/agx5_ddr4_ss/agx5_ddr4_ss_clock_bridge.ip
     set_global_assignment -name IP_FILE $::env(BUILD_ROOT_REL)/ipss/mem/qip/agx5_ddr4_ss/ip/agx5_ddr4_ss/agx5_ddr4_ss_iopll_0.ip
-
+    set_global_assignment -name IP_FILE $::env(BUILD_ROOT_REL)/ipss/mem/qip/agx5_ddr4_ss/ip/agx5_ddr4_ss/ninit_done_bridge.ip
+    
     # Import the top-level memory project's interface into OFS
     dict set ::ofs_ip_cfg_db::ip_db $::env(BUILD_ROOT_REL)/ipss/mem/qip/agx5_ddr4_ss/agx5_ddr4_ss.qsys [list]
 }

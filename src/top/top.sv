@@ -551,6 +551,7 @@ endgenerate
       .SYS_REFCLK(SYS_REFCLK),
       .clk       (clk_sys),
       .reset     (~rst_n_sys_mem),
+      .ninit_done   (ninit_done),
 
        // AFU ext mem interfaces
       .afu_mem_if   (afu_ext_mem_if),

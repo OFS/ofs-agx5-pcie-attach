@@ -104,19 +104,19 @@ https://fpgasoftware.intel.com/eula.-->
          type = "int";
       }
    }
+   element ninit_done_bridge
+   {
+      datum _sortIndex
+      {
+         value = "5";
+         type = "int";
+      }
+   }
    element reset_handler
    {
       datum _sortIndex
       {
          value = "6";
-         type = "int";
-      }
-   }
-   element rrip
-   {
-      datum _sortIndex
-      {
-         value = "5";
          type = "int";
       }
    }
@@ -8830,6 +8830,277 @@ https://fpgasoftware.intel.com/eula.-->
       <altera:module altera:enabled="true" altera:auto_export="false">
         <altera:entity_info>
           <ipxact:vendor>Altera Corporation</ipxact:vendor>
+          <ipxact:library>ninit_done_bridge</ipxact:library>
+          <ipxact:name>altera_generic_component</ipxact:name>
+          <ipxact:version>1.0</ipxact:version>
+        </altera:entity_info>
+        <altera:altera_module_parameters>
+          <ipxact:parameters>
+            <ipxact:parameter parameterId="bspCpu" type="bit">
+              <ipxact:name>bspCpu</ipxact:name>
+              <ipxact:displayName>BSP CPU</ipxact:displayName>
+              <ipxact:value>false</ipxact:value>
+            </ipxact:parameter>
+            <ipxact:parameter parameterId="componentDefinition" type="string">
+              <ipxact:name>componentDefinition</ipxact:name>
+              <ipxact:displayName>Component definition</ipxact:displayName>
+              <ipxact:value>&lt;componentDefinition&gt;
+    &lt;boundary&gt;
+        &lt;interfaces&gt;
+            &lt;interface&gt;
+                &lt;name&gt;in_reset&lt;/name&gt;
+                &lt;type&gt;reset&lt;/type&gt;
+                &lt;isStart&gt;false&lt;/isStart&gt;
+                &lt;ports&gt;
+                    &lt;port&gt;
+                        &lt;name&gt;in_reset&lt;/name&gt;
+                        &lt;role&gt;reset&lt;/role&gt;
+                        &lt;direction&gt;Input&lt;/direction&gt;
+                        &lt;width&gt;1&lt;/width&gt;
+                        &lt;lowerBound&gt;0&lt;/lowerBound&gt;
+                        &lt;vhdlType&gt;STD_LOGIC&lt;/vhdlType&gt;
+                        &lt;terminationValue&gt;0&lt;/terminationValue&gt;
+                    &lt;/port&gt;
+                &lt;/ports&gt;
+                &lt;assignments&gt;
+                    &lt;assignmentValueMap/&gt;
+                &lt;/assignments&gt;
+                &lt;parameters&gt;
+                    &lt;parameterValueMap&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;associatedClock&lt;/key&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;synchronousEdges&lt;/key&gt;
+                            &lt;value&gt;NONE&lt;/value&gt;
+                        &lt;/entry&gt;
+                    &lt;/parameterValueMap&gt;
+                &lt;/parameters&gt;
+            &lt;/interface&gt;
+            &lt;interface&gt;
+                &lt;name&gt;out_reset&lt;/name&gt;
+                &lt;type&gt;reset&lt;/type&gt;
+                &lt;isStart&gt;true&lt;/isStart&gt;
+                &lt;ports&gt;
+                    &lt;port&gt;
+                        &lt;name&gt;out_reset&lt;/name&gt;
+                        &lt;role&gt;reset&lt;/role&gt;
+                        &lt;direction&gt;Output&lt;/direction&gt;
+                        &lt;width&gt;1&lt;/width&gt;
+                        &lt;lowerBound&gt;0&lt;/lowerBound&gt;
+                        &lt;vhdlType&gt;STD_LOGIC&lt;/vhdlType&gt;
+                        &lt;terminationValue&gt;0&lt;/terminationValue&gt;
+                    &lt;/port&gt;
+                &lt;/ports&gt;
+                &lt;assignments&gt;
+                    &lt;assignmentValueMap/&gt;
+                &lt;/assignments&gt;
+                &lt;parameters&gt;
+                    &lt;parameterValueMap&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;associatedClock&lt;/key&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;associatedDirectReset&lt;/key&gt;
+                            &lt;value&gt;in_reset&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;associatedResetSinks&lt;/key&gt;
+                            &lt;value&gt;in_reset&lt;/value&gt;
+                        &lt;/entry&gt;
+                        &lt;entry&gt;
+                            &lt;key&gt;synchronousEdges&lt;/key&gt;
+                            &lt;value&gt;NONE&lt;/value&gt;
+                        &lt;/entry&gt;
+                    &lt;/parameterValueMap&gt;
+                &lt;/parameters&gt;
+            &lt;/interface&gt;
+        &lt;/interfaces&gt;
+    &lt;/boundary&gt;
+    &lt;originalModuleInfo&gt;
+        &lt;className&gt;altera_reset_bridge&lt;/className&gt;
+        &lt;version&gt;19.2.0&lt;/version&gt;
+        &lt;displayName&gt;Reset Bridge Intel FPGA IP&lt;/displayName&gt;
+    &lt;/originalModuleInfo&gt;
+    &lt;systemInfoParameterDescriptors&gt;
+        &lt;descriptors&gt;
+            &lt;descriptor&gt;
+                &lt;parameterDefaultValue&gt;-1&lt;/parameterDefaultValue&gt;
+                &lt;parameterName&gt;AUTO_CLK_CLOCK_RATE&lt;/parameterName&gt;
+                &lt;parameterType&gt;java.lang.Long&lt;/parameterType&gt;
+                &lt;systemInfoArgs&gt;clk&lt;/systemInfoArgs&gt;
+                &lt;systemInfotype&gt;CLOCK_RATE&lt;/systemInfotype&gt;
+            &lt;/descriptor&gt;
+        &lt;/descriptors&gt;
+    &lt;/systemInfoParameterDescriptors&gt;
+    &lt;systemInfos&gt;
+        &lt;connPtSystemInfos/&gt;
+    &lt;/systemInfos&gt;
+&lt;/componentDefinition&gt;</ipxact:value>
+            </ipxact:parameter>
+            <ipxact:parameter parameterId="cpuInfo" type="string">
+              <ipxact:name>cpuInfo</ipxact:name>
+              <ipxact:displayName>Cpu Info</ipxact:displayName>
+              <ipxact:value></ipxact:value>
+            </ipxact:parameter>
+            <ipxact:parameter parameterId="defaultBoundary" type="string">
+              <ipxact:name>defaultBoundary</ipxact:name>
+              <ipxact:displayName>Default boundary</ipxact:displayName>
+              <ipxact:value>&lt;boundaryDefinition&gt;
+    &lt;interfaces&gt;
+        &lt;interface&gt;
+            &lt;name&gt;in_reset&lt;/name&gt;
+            &lt;type&gt;reset&lt;/type&gt;
+            &lt;isStart&gt;false&lt;/isStart&gt;
+            &lt;ports&gt;
+                &lt;port&gt;
+                    &lt;name&gt;in_reset&lt;/name&gt;
+                    &lt;role&gt;reset&lt;/role&gt;
+                    &lt;direction&gt;Input&lt;/direction&gt;
+                    &lt;width&gt;1&lt;/width&gt;
+                    &lt;lowerBound&gt;0&lt;/lowerBound&gt;
+                    &lt;vhdlType&gt;STD_LOGIC&lt;/vhdlType&gt;
+                    &lt;terminationValue&gt;0&lt;/terminationValue&gt;
+                &lt;/port&gt;
+            &lt;/ports&gt;
+            &lt;assignments&gt;
+                &lt;assignmentValueMap/&gt;
+            &lt;/assignments&gt;
+            &lt;parameters&gt;
+                &lt;parameterValueMap&gt;
+                    &lt;entry&gt;
+                        &lt;key&gt;associatedClock&lt;/key&gt;
+                    &lt;/entry&gt;
+                    &lt;entry&gt;
+                        &lt;key&gt;synchronousEdges&lt;/key&gt;
+                        &lt;value&gt;NONE&lt;/value&gt;
+                    &lt;/entry&gt;
+                &lt;/parameterValueMap&gt;
+            &lt;/parameters&gt;
+        &lt;/interface&gt;
+        &lt;interface&gt;
+            &lt;name&gt;out_reset&lt;/name&gt;
+            &lt;type&gt;reset&lt;/type&gt;
+            &lt;isStart&gt;true&lt;/isStart&gt;
+            &lt;ports&gt;
+                &lt;port&gt;
+                    &lt;name&gt;out_reset&lt;/name&gt;
+                    &lt;role&gt;reset&lt;/role&gt;
+                    &lt;direction&gt;Output&lt;/direction&gt;
+                    &lt;width&gt;1&lt;/width&gt;
+                    &lt;lowerBound&gt;0&lt;/lowerBound&gt;
+                    &lt;vhdlType&gt;STD_LOGIC&lt;/vhdlType&gt;
+                    &lt;terminationValue&gt;0&lt;/terminationValue&gt;
+                &lt;/port&gt;
+            &lt;/ports&gt;
+            &lt;assignments&gt;
+                &lt;assignmentValueMap/&gt;
+            &lt;/assignments&gt;
+            &lt;parameters&gt;
+                &lt;parameterValueMap&gt;
+                    &lt;entry&gt;
+                        &lt;key&gt;associatedClock&lt;/key&gt;
+                    &lt;/entry&gt;
+                    &lt;entry&gt;
+                        &lt;key&gt;associatedDirectReset&lt;/key&gt;
+                        &lt;value&gt;in_reset&lt;/value&gt;
+                    &lt;/entry&gt;
+                    &lt;entry&gt;
+                        &lt;key&gt;associatedResetSinks&lt;/key&gt;
+                        &lt;value&gt;in_reset&lt;/value&gt;
+                    &lt;/entry&gt;
+                    &lt;entry&gt;
+                        &lt;key&gt;synchronousEdges&lt;/key&gt;
+                        &lt;value&gt;NONE&lt;/value&gt;
+                    &lt;/entry&gt;
+                &lt;/parameterValueMap&gt;
+            &lt;/parameters&gt;
+        &lt;/interface&gt;
+    &lt;/interfaces&gt;
+&lt;/boundaryDefinition&gt;</ipxact:value>
+            </ipxact:parameter>
+            <ipxact:parameter parameterId="generationInfoDefinition" type="string">
+              <ipxact:name>generationInfoDefinition</ipxact:name>
+              <ipxact:displayName>Generation Behavior</ipxact:displayName>
+              <ipxact:value>&lt;generationInfoDefinition&gt;
+    &lt;hdlLibraryName&gt;ninit_done_bridge&lt;/hdlLibraryName&gt;
+    &lt;fileSets&gt;
+        &lt;fileSet&gt;
+            &lt;fileSetName&gt;ninit_done_bridge&lt;/fileSetName&gt;
+            &lt;fileSetFixedName&gt;ninit_done_bridge&lt;/fileSetFixedName&gt;
+            &lt;fileSetKind&gt;QUARTUS_SYNTH&lt;/fileSetKind&gt;
+            &lt;fileSetFiles/&gt;
+        &lt;/fileSet&gt;
+        &lt;fileSet&gt;
+            &lt;fileSetName&gt;ninit_done_bridge&lt;/fileSetName&gt;
+            &lt;fileSetFixedName&gt;ninit_done_bridge&lt;/fileSetFixedName&gt;
+            &lt;fileSetKind&gt;SIM_VERILOG&lt;/fileSetKind&gt;
+            &lt;fileSetFiles/&gt;
+        &lt;/fileSet&gt;
+        &lt;fileSet&gt;
+            &lt;fileSetName&gt;ninit_done_bridge&lt;/fileSetName&gt;
+            &lt;fileSetFixedName&gt;ninit_done_bridge&lt;/fileSetFixedName&gt;
+            &lt;fileSetKind&gt;SIM_VHDL&lt;/fileSetKind&gt;
+            &lt;fileSetFiles/&gt;
+        &lt;/fileSet&gt;
+        &lt;fileSet&gt;
+            &lt;fileSetName&gt;ninit_done_bridge&lt;/fileSetName&gt;
+            &lt;fileSetFixedName&gt;ninit_done_bridge&lt;/fileSetFixedName&gt;
+            &lt;fileSetKind&gt;CDC&lt;/fileSetKind&gt;
+            &lt;fileSetFiles/&gt;
+        &lt;/fileSet&gt;
+        &lt;fileSet&gt;
+            &lt;fileSetName&gt;ninit_done_bridge&lt;/fileSetName&gt;
+            &lt;fileSetFixedName&gt;ninit_done_bridge&lt;/fileSetFixedName&gt;
+            &lt;fileSetKind&gt;CDC_VHDL&lt;/fileSetKind&gt;
+            &lt;fileSetFiles/&gt;
+        &lt;/fileSet&gt;
+    &lt;/fileSets&gt;
+&lt;/generationInfoDefinition&gt;</ipxact:value>
+            </ipxact:parameter>
+            <ipxact:parameter parameterId="hdlParameters" type="string">
+              <ipxact:name>hdlParameters</ipxact:name>
+              <ipxact:displayName>HDL Parameters</ipxact:displayName>
+              <ipxact:value>&lt;hdlParameterDescriptorDefinitionList/&gt;</ipxact:value>
+            </ipxact:parameter>
+            <ipxact:parameter parameterId="hlsFile" type="string">
+              <ipxact:name>hlsFile</ipxact:name>
+              <ipxact:displayName>HLS file</ipxact:displayName>
+              <ipxact:value></ipxact:value>
+            </ipxact:parameter>
+            <ipxact:parameter parameterId="liveModuleName" type="string">
+              <ipxact:name>liveModuleName</ipxact:name>
+              <ipxact:displayName>Live Module Name</ipxact:displayName>
+              <ipxact:value>ninit_done_bridge</ipxact:value>
+            </ipxact:parameter>
+            <ipxact:parameter parameterId="logicalView" type="string">
+              <ipxact:name>logicalView</ipxact:name>
+              <ipxact:displayName>Logical view</ipxact:displayName>
+              <ipxact:value>ip/agx5_ddr4_ss/ninit_done_bridge.ip</ipxact:value>
+            </ipxact:parameter>
+            <ipxact:parameter parameterId="moduleAssignmentDefinition" type="string">
+              <ipxact:name>moduleAssignmentDefinition</ipxact:name>
+              <ipxact:displayName>Module Assignments</ipxact:displayName>
+              <ipxact:value>&lt;assignmentDefinition&gt;
+    &lt;assignmentValueMap/&gt;
+&lt;/assignmentDefinition&gt;</ipxact:value>
+            </ipxact:parameter>
+            <ipxact:parameter parameterId="svInterfaceDefinition" type="string">
+              <ipxact:name>svInterfaceDefinition</ipxact:name>
+              <ipxact:displayName>System Verilog Interface definition</ipxact:displayName>
+              <ipxact:value></ipxact:value>
+            </ipxact:parameter>
+            <ipxact:parameter parameterId="transformParameters" type="string">
+              <ipxact:name>transformParameters</ipxact:name>
+              <ipxact:displayName>Transform Parameters</ipxact:displayName>
+              <ipxact:value>&lt;transformParameterDescriptorDefinitionList/&gt;</ipxact:value>
+            </ipxact:parameter>
+          </ipxact:parameters>
+        </altera:altera_module_parameters>
+      </altera:module>
+      <altera:module altera:enabled="true" altera:auto_export="false">
+        <altera:entity_info>
+          <ipxact:vendor>Altera Corporation</ipxact:vendor>
           <ipxact:library>reset_handler</ipxact:library>
           <ipxact:name>altera_generic_component</ipxact:name>
           <ipxact:version>1.0</ipxact:version>
@@ -9222,214 +9493,6 @@ https://fpgasoftware.intel.com/eula.-->
           </ipxact:parameters>
         </altera:altera_module_parameters>
       </altera:module>
-      <altera:module altera:enabled="true" altera:auto_export="false">
-        <altera:entity_info>
-          <ipxact:vendor>Altera Corporation</ipxact:vendor>
-          <ipxact:library>rrip</ipxact:library>
-          <ipxact:name>altera_generic_component</ipxact:name>
-          <ipxact:version>1.0</ipxact:version>
-        </altera:entity_info>
-        <altera:altera_module_parameters>
-          <ipxact:parameters>
-            <ipxact:parameter parameterId="bspCpu" type="bit">
-              <ipxact:name>bspCpu</ipxact:name>
-              <ipxact:displayName>BSP CPU</ipxact:displayName>
-              <ipxact:value>false</ipxact:value>
-            </ipxact:parameter>
-            <ipxact:parameter parameterId="componentDefinition" type="string">
-              <ipxact:name>componentDefinition</ipxact:name>
-              <ipxact:displayName>Component definition</ipxact:displayName>
-              <ipxact:value>&lt;componentDefinition&gt;
-    &lt;boundary&gt;
-        &lt;interfaces&gt;
-            &lt;interface&gt;
-                &lt;name&gt;ninit_done&lt;/name&gt;
-                &lt;type&gt;reset&lt;/type&gt;
-                &lt;isStart&gt;true&lt;/isStart&gt;
-                &lt;ports&gt;
-                    &lt;port&gt;
-                        &lt;name&gt;ninit_done&lt;/name&gt;
-                        &lt;role&gt;reset&lt;/role&gt;
-                        &lt;direction&gt;Output&lt;/direction&gt;
-                        &lt;width&gt;1&lt;/width&gt;
-                        &lt;lowerBound&gt;0&lt;/lowerBound&gt;
-                        &lt;vhdlType&gt;STD_LOGIC&lt;/vhdlType&gt;
-                        &lt;terminationValue&gt;0&lt;/terminationValue&gt;
-                    &lt;/port&gt;
-                &lt;/ports&gt;
-                &lt;assignments&gt;
-                    &lt;assignmentValueMap/&gt;
-                &lt;/assignments&gt;
-                &lt;parameters&gt;
-                    &lt;parameterValueMap&gt;
-                        &lt;entry&gt;
-                            &lt;key&gt;associatedClock&lt;/key&gt;
-                        &lt;/entry&gt;
-                        &lt;entry&gt;
-                            &lt;key&gt;associatedDirectReset&lt;/key&gt;
-                        &lt;/entry&gt;
-                        &lt;entry&gt;
-                            &lt;key&gt;associatedResetSinks&lt;/key&gt;
-                            &lt;value&gt;none&lt;/value&gt;
-                        &lt;/entry&gt;
-                        &lt;entry&gt;
-                            &lt;key&gt;synchronousEdges&lt;/key&gt;
-                            &lt;value&gt;NONE&lt;/value&gt;
-                        &lt;/entry&gt;
-                    &lt;/parameterValueMap&gt;
-                &lt;/parameters&gt;
-            &lt;/interface&gt;
-        &lt;/interfaces&gt;
-    &lt;/boundary&gt;
-    &lt;originalModuleInfo&gt;
-        &lt;className&gt;altera_s10_user_rst_clkgate&lt;/className&gt;
-        &lt;version&gt;19.4.8&lt;/version&gt;
-        &lt;displayName&gt;Reset Release IP&lt;/displayName&gt;
-    &lt;/originalModuleInfo&gt;
-    &lt;systemInfoParameterDescriptors&gt;
-        &lt;descriptors&gt;
-            &lt;descriptor&gt;
-                &lt;parameterDefaultValue&gt;&lt;/parameterDefaultValue&gt;
-                &lt;parameterName&gt;DEVICE_FAMILY&lt;/parameterName&gt;
-                &lt;parameterType&gt;java.lang.String&lt;/parameterType&gt;
-                &lt;systemInfotype&gt;DEVICE_FAMILY&lt;/systemInfotype&gt;
-            &lt;/descriptor&gt;
-        &lt;/descriptors&gt;
-    &lt;/systemInfoParameterDescriptors&gt;
-    &lt;systemInfos&gt;
-        &lt;connPtSystemInfos/&gt;
-    &lt;/systemInfos&gt;
-&lt;/componentDefinition&gt;</ipxact:value>
-            </ipxact:parameter>
-            <ipxact:parameter parameterId="cpuInfo" type="string">
-              <ipxact:name>cpuInfo</ipxact:name>
-              <ipxact:displayName>Cpu Info</ipxact:displayName>
-              <ipxact:value></ipxact:value>
-            </ipxact:parameter>
-            <ipxact:parameter parameterId="defaultBoundary" type="string">
-              <ipxact:name>defaultBoundary</ipxact:name>
-              <ipxact:displayName>Default boundary</ipxact:displayName>
-              <ipxact:value>&lt;boundaryDefinition&gt;
-    &lt;interfaces&gt;
-        &lt;interface&gt;
-            &lt;name&gt;ninit_done&lt;/name&gt;
-            &lt;type&gt;reset&lt;/type&gt;
-            &lt;isStart&gt;true&lt;/isStart&gt;
-            &lt;ports&gt;
-                &lt;port&gt;
-                    &lt;name&gt;ninit_done&lt;/name&gt;
-                    &lt;role&gt;reset&lt;/role&gt;
-                    &lt;direction&gt;Output&lt;/direction&gt;
-                    &lt;width&gt;1&lt;/width&gt;
-                    &lt;lowerBound&gt;0&lt;/lowerBound&gt;
-                    &lt;vhdlType&gt;STD_LOGIC&lt;/vhdlType&gt;
-                    &lt;terminationValue&gt;0&lt;/terminationValue&gt;
-                &lt;/port&gt;
-            &lt;/ports&gt;
-            &lt;assignments&gt;
-                &lt;assignmentValueMap/&gt;
-            &lt;/assignments&gt;
-            &lt;parameters&gt;
-                &lt;parameterValueMap&gt;
-                    &lt;entry&gt;
-                        &lt;key&gt;associatedClock&lt;/key&gt;
-                    &lt;/entry&gt;
-                    &lt;entry&gt;
-                        &lt;key&gt;associatedDirectReset&lt;/key&gt;
-                    &lt;/entry&gt;
-                    &lt;entry&gt;
-                        &lt;key&gt;associatedResetSinks&lt;/key&gt;
-                        &lt;value&gt;none&lt;/value&gt;
-                    &lt;/entry&gt;
-                    &lt;entry&gt;
-                        &lt;key&gt;synchronousEdges&lt;/key&gt;
-                        &lt;value&gt;NONE&lt;/value&gt;
-                    &lt;/entry&gt;
-                &lt;/parameterValueMap&gt;
-            &lt;/parameters&gt;
-        &lt;/interface&gt;
-    &lt;/interfaces&gt;
-&lt;/boundaryDefinition&gt;</ipxact:value>
-            </ipxact:parameter>
-            <ipxact:parameter parameterId="generationInfoDefinition" type="string">
-              <ipxact:name>generationInfoDefinition</ipxact:name>
-              <ipxact:displayName>Generation Behavior</ipxact:displayName>
-              <ipxact:value>&lt;generationInfoDefinition&gt;
-    &lt;hdlLibraryName&gt;s10_user_rst_clkgate&lt;/hdlLibraryName&gt;
-    &lt;fileSets&gt;
-        &lt;fileSet&gt;
-            &lt;fileSetName&gt;s10_user_rst_clkgate&lt;/fileSetName&gt;
-            &lt;fileSetFixedName&gt;s10_user_rst_clkgate&lt;/fileSetFixedName&gt;
-            &lt;fileSetKind&gt;QUARTUS_SYNTH&lt;/fileSetKind&gt;
-            &lt;fileSetFiles/&gt;
-        &lt;/fileSet&gt;
-        &lt;fileSet&gt;
-            &lt;fileSetName&gt;s10_user_rst_clkgate&lt;/fileSetName&gt;
-            &lt;fileSetFixedName&gt;s10_user_rst_clkgate&lt;/fileSetFixedName&gt;
-            &lt;fileSetKind&gt;SIM_VERILOG&lt;/fileSetKind&gt;
-            &lt;fileSetFiles/&gt;
-        &lt;/fileSet&gt;
-        &lt;fileSet&gt;
-            &lt;fileSetName&gt;s10_user_rst_clkgate&lt;/fileSetName&gt;
-            &lt;fileSetFixedName&gt;s10_user_rst_clkgate&lt;/fileSetFixedName&gt;
-            &lt;fileSetKind&gt;SIM_VHDL&lt;/fileSetKind&gt;
-            &lt;fileSetFiles/&gt;
-        &lt;/fileSet&gt;
-        &lt;fileSet&gt;
-            &lt;fileSetName&gt;s10_user_rst_clkgate&lt;/fileSetName&gt;
-            &lt;fileSetFixedName&gt;s10_user_rst_clkgate&lt;/fileSetFixedName&gt;
-            &lt;fileSetKind&gt;CDC&lt;/fileSetKind&gt;
-            &lt;fileSetFiles/&gt;
-        &lt;/fileSet&gt;
-        &lt;fileSet&gt;
-            &lt;fileSetName&gt;s10_user_rst_clkgate&lt;/fileSetName&gt;
-            &lt;fileSetFixedName&gt;s10_user_rst_clkgate&lt;/fileSetFixedName&gt;
-            &lt;fileSetKind&gt;CDC_VHDL&lt;/fileSetKind&gt;
-            &lt;fileSetFiles/&gt;
-        &lt;/fileSet&gt;
-    &lt;/fileSets&gt;
-&lt;/generationInfoDefinition&gt;</ipxact:value>
-            </ipxact:parameter>
-            <ipxact:parameter parameterId="hdlParameters" type="string">
-              <ipxact:name>hdlParameters</ipxact:name>
-              <ipxact:displayName>HDL Parameters</ipxact:displayName>
-              <ipxact:value>&lt;hdlParameterDescriptorDefinitionList/&gt;</ipxact:value>
-            </ipxact:parameter>
-            <ipxact:parameter parameterId="hlsFile" type="string">
-              <ipxact:name>hlsFile</ipxact:name>
-              <ipxact:displayName>HLS file</ipxact:displayName>
-              <ipxact:value></ipxact:value>
-            </ipxact:parameter>
-            <ipxact:parameter parameterId="liveModuleName" type="string">
-              <ipxact:name>liveModuleName</ipxact:name>
-              <ipxact:displayName>Live Module Name</ipxact:displayName>
-              <ipxact:value>s10_user_rst_clkgate</ipxact:value>
-            </ipxact:parameter>
-            <ipxact:parameter parameterId="logicalView" type="string">
-              <ipxact:name>logicalView</ipxact:name>
-              <ipxact:displayName>Logical view</ipxact:displayName>
-              <ipxact:value>ip/agx5_ddr4_ss/s10_user_rst_clkgate.ip</ipxact:value>
-            </ipxact:parameter>
-            <ipxact:parameter parameterId="moduleAssignmentDefinition" type="string">
-              <ipxact:name>moduleAssignmentDefinition</ipxact:name>
-              <ipxact:displayName>Module Assignments</ipxact:displayName>
-              <ipxact:value>&lt;assignmentDefinition&gt;
-    &lt;assignmentValueMap/&gt;
-&lt;/assignmentDefinition&gt;</ipxact:value>
-            </ipxact:parameter>
-            <ipxact:parameter parameterId="svInterfaceDefinition" type="string">
-              <ipxact:name>svInterfaceDefinition</ipxact:name>
-              <ipxact:displayName>System Verilog Interface definition</ipxact:displayName>
-              <ipxact:value></ipxact:value>
-            </ipxact:parameter>
-            <ipxact:parameter parameterId="transformParameters" type="string">
-              <ipxact:name>transformParameters</ipxact:name>
-              <ipxact:displayName>Transform Parameters</ipxact:displayName>
-              <ipxact:value>&lt;transformParameterDescriptorDefinitionList/&gt;</ipxact:value>
-            </ipxact:parameter>
-          </ipxact:parameters>
-        </altera:altera_module_parameters>
-      </altera:module>
     </altera:modules>
     <altera:connections>
       <altera:connection altera:kind="avalon" altera:version="25.1" altera:start="axil_driver_ddr4a.axil_driver_axi4_lite" altera:end="ddr4a.s0_axi4lite">
@@ -9490,10 +9553,10 @@ https://fpgasoftware.intel.com/eula.-->
         <altera:connection_parameter altera:parameter_name="startPortLSB" altera:parameter_value="0"></altera:connection_parameter>
         <altera:connection_parameter altera:parameter_name="width" altera:parameter_value="0"></altera:connection_parameter>
       </altera:connection>
-      <altera:connection altera:kind="reset" altera:version="25.1" altera:start="rrip.ninit_done" altera:end="ddr4a.core_init_n"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="25.1" altera:start="rrip.ninit_done" altera:end="ddr4b.core_init_n"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="25.1" altera:start="rrip.ninit_done" altera:end="iopll_0.reset"></altera:connection>
-      <altera:connection altera:kind="reset" altera:version="25.1" altera:start="rrip.ninit_done" altera:end="reset_handler.reset_n_0"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="25.1" altera:start="ninit_done_bridge.out_reset" altera:end="ddr4a.core_init_n"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="25.1" altera:start="ninit_done_bridge.out_reset" altera:end="ddr4b.core_init_n"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="25.1" altera:start="ninit_done_bridge.out_reset" altera:end="iopll_0.reset"></altera:connection>
+      <altera:connection altera:kind="reset" altera:version="25.1" altera:start="ninit_done_bridge.out_reset" altera:end="reset_handler.reset_n_0"></altera:connection>
       <altera:connection altera:kind="reset" altera:version="25.1" altera:start="reset_handler.reset_n_out" altera:end="axil_driver_ddr4a.axil_driver_rst_n"></altera:connection>
       <altera:connection altera:kind="reset" altera:version="25.1" altera:start="reset_handler.reset_n_out" altera:end="axil_driver_ddr4b.axil_driver_rst_n"></altera:connection>
       <altera:connection altera:kind="reset" altera:version="25.1" altera:start="reset_handler.reset_n_out" altera:end="ddr4a.s0_axi4lite_reset_n"></altera:connection>
@@ -9525,6 +9588,7 @@ https://fpgasoftware.intel.com/eula.-->
       <altera:interface_mapping altera:name="mem1_ddr4_mem_oct" altera:internal="ddr4b.oct_0" altera:type="conduit" altera:dir="end"></altera:interface_mapping>
       <altera:interface_mapping altera:name="mem1_ddr4_mem_ref" altera:internal="ddr4b.ref_clk" altera:type="clock" altera:dir="end"></altera:interface_mapping>
       <altera:interface_mapping altera:name="mem1_ddr4_reset_n" altera:internal="ddr4b.mem_reset_n" altera:type="conduit" altera:dir="end"></altera:interface_mapping>
+      <altera:interface_mapping altera:name="ninit_done" altera:internal="ninit_done_bridge.in_reset" altera:type="reset" altera:dir="end"></altera:interface_mapping>
     </altera:altera_interface_boundary>
     <ipxact:components>
       <ipxact:component>

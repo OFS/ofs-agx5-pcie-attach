@@ -23,6 +23,7 @@ module agx5_ddr4_top
    input  wire                  SYS_REFCLK,
    input  wire                  clk,
    input  wire                  reset,
+   input  wire                  ninit_done,
 
    ofs_fim_emif_axi_mm_if.emif  afu_mem_if  [NUM_MEM_CHANNELS-1:0],
 
@@ -109,7 +110,8 @@ agx5_ddr4_ss_sv mem_ss_sv (
    .mem_ddr4_reset_n_mem_reset_n(mem_reset_n),
    .mem_ddr4_mem_oct_oct_rzqin(mem_oct_rzqin),
    .mem_ddr4_mem_ref_clk(mem_pll_ref_clk),
-   .iopll_refclk_clk(SYS_REFCLK)
+   .iopll_refclk_clk(SYS_REFCLK),
+   .ninit_done_reset(ninit_done)
 );
 
 
