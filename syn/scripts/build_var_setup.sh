@@ -144,7 +144,7 @@ fi
 ## e.g. ${WORK_DIR}/syn/${OFS_PROJECT}/${OFS_FIM}/${OFS_BOARD}/syn_top
 # use "." or "" for empty
 # for agilex ac on devkit:
-export OFS_PROJECT="ofs-agx7-pcie-attach"
+export OFS_PROJECT="ofs-agx5-pcie-attach"
 #export OFS_FIM="base_x16"
 export OFS_BOARD=${OFS_BOARD_CORE}
 
